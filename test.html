@@ -1,0 +1,1720 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Courier+Prime&display=swap');
+  :root {
+    --bg: #050505;
+    --panel: #111015;
+    --panel-hover: #1c1a22;
+    --border: #3b312b; 
+    --border-light: #5c4e44;
+    --text-main: #d1c7b7; 
+    --text-muted: #8c8273;
+    --accent: #d4af37; 
+    --hp: #991b1b;
+    --hp-bg: #2a0808;
+    --hp-glow: #ef4444;
+    --mp: #1e3a8a;
+    --mp-bg: #091124;
+    --mp-glow: #3b82f6;
+    --gold: #d4af37;
+    --xp: #065f46;
+    --xp-glow: #10b981;
+    --common: #a3a3a3;
+    --rare: #60a5fa;
+    --epic: #c084fc;
+    --legendary: #fbbf24;
+    --artefact: #f43f5e;
+    --shop: #34d399;
+  }
+  #wd-wrapper, #wd-wrapper * { box-sizing: border-box; margin: 0; padding: 0; }
+  #wd-wrapper { 
+    font-family: 'Lora', serif; 
+    background-color: var(--bg); 
+    color: var(--text-main); 
+    height: 800px; 
+    width: 100%;
+    display: flex; 
+    overflow: hidden; 
+    font-size: 15px; 
+    position: relative; 
+    background: radial-gradient(circle at center, rgba(17,16,21,1) 0%, rgba(0,0,0,1) 100%);
+  }
+  #wd-wrapper h1, #wd-wrapper h2, #wd-wrapper h3, #wd-wrapper h4, #wd-wrapper .btn-main-text, #wd-wrapper .tab-btn { font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 1px; }
+  #wd-wrapper ::-webkit-scrollbar { width: 8px; }
+  #wd-wrapper ::-webkit-scrollbar-track { background: #000; border-left: 1px solid var(--border); }
+  #wd-wrapper ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; }
+  #wd-wrapper ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  #wd-app { display: flex; width: 100%; height: 100%; box-shadow: inset 0 0 100px #000; }
+  #wd-sidebar-left { 
+    width: 300px; 
+    background: linear-gradient(to right, #0a0a0c, var(--panel)); 
+    border-right: 3px ridge var(--border); 
+    display: flex; flex-direction: column; padding: 25px 20px; z-index: 10; 
+    box-shadow: 10px 0 20px rgba(0,0,0,0.8);
+  }
+  .wd-hero-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+  .wd-hero-avatar { width: 65px; height: 65px; border-radius: 8px; background: #000; border: 2px solid var(--accent); display: grid; place-items: center; font-size: 2.2rem; box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2), 0 0 10px rgba(0,0,0,0.8); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+  .wd-hero-info h2 { font-size: 1.2rem; color: var(--accent); margin-bottom: 4px; text-shadow: 1px 1px 2px #000; }
+  .wd-hero-info p { color: var(--text-muted); font-size: 0.9rem; font-style: italic; }
+  .wd-stat-bar-container { margin-bottom: 18px; }
+  .wd-stat-bar-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .wd-bar-bg { width: 100%; height: 14px; background: #000; border-radius: 3px; overflow: hidden; border: 1px solid #222; box-shadow: inset 0 2px 5px rgba(0,0,0,0.8), 0 1px 1px rgba(255,255,255,0.05); }
+  .wd-bar-fill { height: 100%; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: inset 0 -3px 5px rgba(0,0,0,0.4), inset 0 3px 5px rgba(255,255,255,0.2); }
+  .wd-fill-hp { background: linear-gradient(90deg, #7f1d1d, var(--hp-glow)); } 
+  .wd-fill-mp { background: linear-gradient(90deg, #1e3a8a, var(--mp-glow)); } 
+  .wd-fill-xp { background: linear-gradient(90deg, #065f46, var(--xp-glow)); }
+  .wd-quick-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .wd-q-stat { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 4px; text-align: center; border: 1px ridge var(--border); box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+  .wd-q-stat span { display: block; font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 4px; }
+  .wd-q-stat strong { font-size: 1.1rem; text-shadow: 1px 1px 0 #000; }
+  #wd-status-effects { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; min-height: 24px; }
+  .wd-effect-chip { font-family: 'Cinzel', serif; font-size: 0.7rem; font-weight: bold; padding: 4px 10px; border-radius: 2px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 2px 4px rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 0.5px;}
+  #wd-main-stage { flex: 1; display: flex; flex-direction: column; position: relative; }
+  @keyframes wdTorchFlicker {
+    0%   { background: radial-gradient(circle at 50% 70%, rgba(200, 100, 30, 0.15) 0%, rgba(0,0,0,0.95) 70%); }
+    25%  { background: radial-gradient(circle at 52% 68%, rgba(200, 110, 20, 0.18) 0%, rgba(0,0,0,0.9) 72%); }
+    50%  { background: radial-gradient(circle at 48% 72%, rgba(220, 90, 40, 0.12) 0%, rgba(0,0,0,0.98) 68%); }
+    75%  { background: radial-gradient(circle at 51% 71%, rgba(190, 105, 25, 0.17) 0%, rgba(0,0,0,0.92) 71%); }
+    100% { background: radial-gradient(circle at 50% 70%, rgba(200, 100, 30, 0.15) 0%, rgba(0,0,0,0.95) 70%); }
+  }
+  #wd-visual-arena { 
+    flex: 0.5; 
+    display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; 
+    border-bottom: 4px ridge var(--border); 
+    animation: wdTorchFlicker 4s infinite alternate;
+    box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8);
+    transition: all 0.3s ease;
+  }
+  #wd-arena-title { position: absolute; top: 30px; font-family: 'Cinzel', serif; font-size: 1.5rem; color: rgba(255,255,255,0.2); letter-spacing: 8px; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,1); text-align: center; width: 100%;}
+  #wd-combat-stage { display: none; width: 100%; max-width: 600px; justify-content: space-between; align-items: flex-end; padding: 0 40px; margin-bottom: 20px;}
+  .wd-combatant { text-align: center; position: relative; }
+  .wd-combatant-sprite { 
+    font-size: 5.5rem; 
+    filter: drop-shadow(0 15px 10px rgba(0,0,0,0.8)); 
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s; 
+    position: relative;
+  }
+  .wd-combatant-hp { margin-top: 15px; background: rgba(0,0,0,0.8); padding: 6px 15px; border-radius: 4px; border: 1px ridge var(--border); font-weight: bold; font-family: 'Cinzel', serif; letter-spacing: 1px; color: var(--hp-glow); box-shadow: 0 5px 15px rgba(0,0,0,0.9); }
+  #wd-action-panel { padding: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; background: rgba(10,10,12,0.6); max-height: 280px; overflow-y: auto; box-shadow: inset 0 20px 20px -20px rgba(0,0,0,0.8); transition: all 0.3s ease; }
+  .wd-btn { 
+    background: linear-gradient(180deg, #242228 0%, #111015 100%);
+    border: 2px ridge var(--border-light); 
+    color: var(--text-main); 
+    padding: 14px 10px; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; 
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.05);
+  }
+  .wd-btn:hover:not(:disabled) { 
+    background: linear-gradient(180deg, #2c2a32 0%, #1a181f 100%);
+    border-color: var(--accent); 
+    transform: translateY(-3px); 
+    box-shadow: 0 8px 15px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.15), inset 0 1px 1px rgba(255,255,255,0.1); 
+    color: #fff;
+  }
+  .wd-btn:active:not(:disabled) { transform: translateY(1px); box-shadow: inset 0 2px 5px rgba(0,0,0,0.8); }
+  .wd-btn:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(1); box-shadow: none; border-color: var(--border); background: #0a0a0c;}
+  .wd-btn-main-text { font-size: 1.05rem; text-shadow: 1px 1px 2px #000; } 
+  .wd-btn-sub-text { font-family: 'Lora', serif; font-size: 0.75rem; color: var(--text-muted); font-style: italic; }
+  #wd-log-container { 
+    flex: 0.5; padding: 20px 25px; overflow-y: auto; 
+    background: rgba(5,5,5,0.85); 
+    border-top: 3px ridge var(--border); 
+    font-family: 'Courier Prime', 'Consolas', monospace; 
+    line-height: 1.6; font-size: 0.95rem;
+    box-shadow: inset 0 0 30px #000;
+  }
+  .wd-log-entry { margin-bottom: 8px; animation: wdFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 4px; border-bottom: 1px dotted rgba(255,255,255,0.05); text-shadow: 1px 1px 1px #000;}
+  .wd-log-info { color: var(--text-main); } 
+  .wd-log-good { color: var(--xp-glow); font-weight: bold; } 
+  .wd-log-bad { color: var(--hp-glow); font-weight: bold; } 
+  .wd-log-warn { color: var(--accent); } 
+  .wd-log-magic { color: #d8b4e2; font-style: italic; text-shadow: 0 0 5px rgba(192, 132, 252, 0.4); }
+  #wd-sidebar-right { 
+    width: 380px; 
+    background: linear-gradient(to left, #0a0a0c, var(--panel)); 
+    border-left: 3px ridge var(--border); 
+    display: flex; flex-direction: column; z-index: 10; 
+    box-shadow: -10px 0 20px rgba(0,0,0,0.8);
+  }
+  .wd-tabs { 
+    display: flex; gap: 4px; padding: 12px 12px 0 12px; background: rgba(0,0,0,0.8); border-bottom: 3px ridge var(--border); position: relative;
+  }
+  .wd-tab-btn { 
+    flex: 1; padding: 12px 4px; background: linear-gradient(180deg, #111015 0%, #050505 100%); border: 1px ridge var(--border); border-bottom: none; border-radius: 6px 6px 0 0; color: var(--text-muted); cursor: pointer; font-size: 0.7rem; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-transform: uppercase; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05); 
+  }
+  .wd-tab-btn:hover { color: var(--text-main); background: linear-gradient(180deg, #1c1a22 0%, #0a0a0c 100%); border-color: var(--border-light); }
+  .wd-tab-btn.active { color: var(--accent); border-color: var(--accent); background: linear-gradient(180deg, rgba(212,175,55,0.15) 0%, var(--panel) 100%); text-shadow: 0 0 8px rgba(212, 175, 55, 0.5); padding-bottom: 15px; margin-bottom: -3px; box-shadow: 0 -4px 10px rgba(212, 175, 55, 0.1), inset 0 1px 2px rgba(255,255,255,0.2); z-index: 2; position: relative; }
+  .wd-tab-content { padding: 20px; overflow-y: auto; flex: 1; display: none; } .wd-tab-content.active { display: block; animation: wdFadeIn 0.4s ease-out;}
+  #wd-sidebar-right h3 { margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+  .wd-eq-slot { background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 4px; padding: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); transition: transform 0.2s; }
+  .wd-eq-slot:hover { transform: translateX(2px); border-color: var(--border-light); }
+  .wd-eq-icon { width: 45px; height: 45px; background: #000; border-radius: 4px; display: grid; place-items: center; font-size: 1.4rem; border: 1px ridge var(--border-light); box-shadow: 2px 2px 5px rgba(0,0,0,0.8); }
+  .wd-eq-details h4 { font-size: 0.95rem; margin-bottom: 4px; } .wd-eq-details p { font-size: 0.8rem; color: var(--text-muted); font-style: italic;}
+  .wd-list-item { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 4px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.3); transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
+  .wd-list-item:hover { transform: translateX(4px) scale(1.01); border-color: var(--border-light); background: rgba(0,0,0,0.5); box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.3); }
+  .wd-list-info h4 { font-size: 0.95rem; margin-bottom: 4px;} .wd-list-info p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.3; }
+  .wd-list-actions { display: flex; gap: 6px; flex-direction: column; align-items: flex-end; }
+  .wd-mini-btn { background: linear-gradient(180deg, #242228 0%, #111015 100%); border: 1px ridge var(--border-light); color: var(--text-main); padding: 6px 12px; border-radius: 2px; cursor: pointer; font-size: 0.75rem; transition: 0.2s; white-space: nowrap; font-family: 'Cinzel', serif; font-weight: bold; letter-spacing: 0.5px; }
+  .wd-mini-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 5px rgba(212, 175, 55, 0.2); } 
+  .wd-mini-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .wd-index-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .wd-index-item { background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 2px; padding: 10px; font-size: 0.8rem; text-align: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); transition: all 0.2s; }
+  .wd-index-item:hover:not(.undiscovered) { transform: scale(1.05); border-color: var(--border-light); background: rgba(0,0,0,0.6); }
+  .wd-index-item.undiscovered { opacity: 0.2; filter: grayscale(1); }
+  .wd-index-item h4 { font-size: 0.8rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wd-index-item span { font-style: italic; font-size: 0.75rem;}
+  .r-common { color: var(--common); } .r-rare { color: var(--rare); } .r-epic { color: var(--epic); } .r-legendary { color: var(--legendary); text-shadow: 0 0 8px rgba(251, 191, 36, 0.4); } .r-artefact { color: var(--artefact); text-shadow: 0 0 8px rgba(244, 63, 94, 0.4); } .r-shop { color: var(--shop); }
+  
+  /* --- LOW HEALTH WARNING ANIMATION --- */
+  @keyframes wdDangerPulse {
+    0% { box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.3); }
+    100% { box-shadow: inset 0 0 70px rgba(239, 68, 68, 0.7), 0 0 20px rgba(239, 68, 68, 0.4); border-color: rgba(239, 68, 68, 0.9); }
+  }
+  .wd-danger-pulse {
+    animation: wdDangerPulse 0.8s infinite alternate !important;
+  }
+
+  /* --- TRANK ANIMATIONEN --- */
+  @keyframes wdPotionHpArena {
+    0% { box-shadow: inset 0 0 150px rgba(239, 68, 68, 0.8), inset 0 0 50px rgba(239, 68, 68, 0.5); }
+    100% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8); }
+  }
+  @keyframes wdPotionMpArena {
+    0% { box-shadow: inset 0 0 150px rgba(59, 130, 246, 0.8), inset 0 0 50px rgba(59, 130, 246, 0.5); }
+    100% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8); }
+  }
+  @keyframes wdPotionHpSprite {
+    0% { filter: drop-shadow(0 0 40px rgba(239, 68, 68, 1)) brightness(1.5); transform: scale(1.3); }
+    100% { filter: drop-shadow(0 15px 10px rgba(0,0,0,0.8)) brightness(1); transform: scale(1); }
+  }
+  @keyframes wdPotionMpSprite {
+    0% { filter: drop-shadow(0 0 40px rgba(59, 130, 246, 1)) brightness(1.5); transform: scale(1.3); }
+    100% { filter: drop-shadow(0 15px 10px rgba(0,0,0,0.8)) brightness(1); transform: scale(1); }
+  }
+  .wd-anim-potion-hp-arena { animation: wdPotionHpArena 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) !important; }
+  .wd-anim-potion-mp-arena { animation: wdPotionMpArena 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) !important; }
+  .wd-anim-potion-hp-sprite { animation: wdPotionHpSprite 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) !important; }
+  .wd-anim-potion-mp-sprite { animation: wdPotionMpSprite 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) !important; }
+
+  /* --- NEUE TALENT-TAB STYLES --- */
+  .wd-skill-tree-container {
+    position: relative; display: flex; flex-direction: column; gap: 35px; align-items: center;
+    background: radial-gradient(circle at center, rgba(30, 25, 45, 0.8) 0%, rgba(5, 5, 5, 0.95) 100%), repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 2px, transparent 2px, transparent 15px);
+    border: 2px solid var(--border-light); border-radius: 6px; padding: 35px 0; margin-bottom: 20px; box-shadow: inset 0 0 40px rgba(0,0,0,1), 0 5px 15px rgba(0,0,0,0.5); overflow: hidden;
+  }
+  .wd-skill-path { position: absolute; background: linear-gradient(to bottom, rgba(92, 78, 68, 0.3), rgba(212, 175, 55, 0.4), rgba(92, 78, 68, 0.3)); z-index: 1; width: 3px; border-radius: 2px; box-shadow: 0 0 10px rgba(212, 175, 55, 0.1); }
+  @keyframes wdNodePulse { 0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.3), inset 0 0 10px rgba(0,0,0,0.8); border-color: var(--gold); } 100% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.7), inset 0 0 15px rgba(212, 175, 55, 0.2); border-color: #fff; } }
+  .wd-skill-node { width: 62px; height: 62px; border-radius: 50%; background: linear-gradient(135deg, #1a1820 0%, #0a0a0c 100%); border: 2px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 5px 10px rgba(0,0,0,0.6); z-index: 2; }
+  .wd-skill-node:hover { transform: scale(1.05); border-color: var(--border-light); }
+  .wd-skill-node.locked { filter: grayscale(1); opacity: 0.5; }
+  .wd-skill-node.unlocked { background: linear-gradient(135deg, #0d2218, #050505); box-shadow: 0 0 15px rgba(52, 211, 153, 0.2), inset 0 0 10px rgba(0,0,0,0.8); border-color: var(--shop); }
+  .wd-skill-node.active { background: linear-gradient(135deg, #111a33, #050505); box-shadow: 0 0 20px rgba(96, 165, 250, 0.4), inset 0 0 10px rgba(0,0,0,0.8); border-color: var(--rare); }
+  .wd-skill-node.maxed { background: linear-gradient(135deg, #332a11, #050505); animation: wdNodePulse 2s infinite alternate; border-color: var(--gold); }
+  .wd-skill-node.selected { transform: scale(1.15) translateY(-4px); border-color: #fff; box-shadow: 0 15px 25px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.3), inset 0 0 15px rgba(255,255,255,0.1); outline: none; z-index: 10; }
+  .wd-skill-icon { font-size: 1.5rem; }
+  .wd-skill-rank { position: absolute; bottom: -5px; background: #000; border: 1px solid var(--border); font-size: 0.6rem; padding: 2px 5px; border-radius: 10px; font-weight: bold; font-family: 'Courier Prime', monospace; color: var(--text-muted); }
+  .wd-skill-node.maxed .wd-skill-rank { color: var(--gold); border-color: var(--gold); }
+  .wd-skill-detail-card { background: linear-gradient(to bottom, rgba(20, 18, 25, 0.95), rgba(10, 10, 12, 0.98)); border: 1px ridge var(--border-light); border-left: 4px solid var(--accent); border-radius: 4px; padding: 20px; box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 8px 16px rgba(0,0,0,0.5); position: relative; animation: wdFadeIn 0.3s ease-out; }
+
+  @keyframes wdFadeIn { from { opacity: 0; transform: translateX(-15px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes wdAttackRight { 0% { transform: translateX(0) scale(1) rotate(0); } 20% { transform: translateX(-15px) scale(0.95) rotate(-5deg); } 50% { transform: translateX(60px) scale(1.2) rotate(15deg); filter: drop-shadow(0 20px 15px rgba(0,0,0,0.9)); } 80% { transform: translateX(40px) scale(1.1) rotate(10deg); } 100% { transform: translateX(0) scale(1) rotate(0); } }
+  @keyframes wdAttackLeft { 0% { transform: translateX(0) scale(1) rotate(0); } 20% { transform: translateX(15px) scale(0.95) rotate(5deg); } 50% { transform: translateX(-60px) scale(1.2) rotate(-15deg); filter: drop-shadow(0 20px 15px rgba(0,0,0,0.9)); } 80% { transform: translateX(-40px) scale(1.1) rotate(-10deg); } 100% { transform: translateX(0) scale(1) rotate(0); } }
+  @keyframes wdTakeDamage { 0%, 100% { filter: brightness(1) drop-shadow(0 15px 10px rgba(0,0,0,0.8)); transform: translate(0, 0) rotate(0); } 15% { transform: translate(-10px, 6px) rotate(-6deg); filter: brightness(2) drop-shadow(0 0 35px red); } 30% { transform: translate(10px, -6px) rotate(6deg); filter: brightness(1.5); } 45% { transform: translate(-10px, -6px) rotate(-5deg); } 60% { transform: translate(10px, 6px) rotate(5deg); } 75% { transform: translate(-5px, 3px) rotate(-3deg); } }
+  .wd-anim-atk-right { animation: wdAttackRight 0.4s cubic-bezier(0.25, 1, 0.5, 1); } 
+  .wd-anim-atk-left { animation: wdAttackLeft 0.4s cubic-bezier(0.25, 1, 0.5, 1); } 
+  .wd-anim-hurt { animation: wdTakeDamage 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+  .wd-fct { position: absolute; font-family: 'Cinzel', serif; font-weight: 900; font-size: 2.2rem; pointer-events: none; animation: wdFloatUp 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards; text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0 5px 15px rgba(0,0,0,0.9); z-index: 50; letter-spacing: 2px;}
+  @keyframes wdFloatUp { 0% { opacity: 0; transform: translateY(0) scale(0.3); } 15% { opacity: 1; transform: translateY(-30px) scale(1.4); } 30% { transform: translateY(-35px) scale(1.1); } 100% { opacity: 0; transform: translateY(-100px) scale(0.9); } }
+  #wd-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+  .wd-modal { background: linear-gradient(135deg, #1a1515, #000); border: 2px ridge var(--border-light); padding: 40px; border-radius: 4px; text-align: center; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,1), inset 0 0 30px rgba(0,0,0,0.8); animation: wdFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);}
+  .wd-modal h2 { color: var(--hp-glow); margin-bottom: 20px; font-size: 2.2rem; text-shadow: 0 0 15px rgba(239, 68, 68, 0.5); letter-spacing: 4px; }
+  .wd-modal p { color: var(--text-main); margin-bottom: 25px; line-height: 1.6; font-size: 1.1rem; }
+  #wd-chest-open-overlay { position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.98) 100%); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1200; backdrop-filter: blur(10px); }
+  #wd-chest-open-overlay.show { display: flex; animation: wdFadeIn 0.3s ease-out;}
+  #wd-chest-open-container { display: flex; flex-direction: column; gap: 15px; width: 100%; align-items: center; max-height: 80vh; overflow-y: auto; padding: 20px 0; }
+  #wd-chest-open-container::-webkit-scrollbar { width: 6px; }
+  #wd-chest-open-container::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+  .wd-chest-open-card { width: 90%; max-width: 800px; border: 3px ridge var(--accent); background: linear-gradient(to bottom, #111, #050505); box-shadow: 0 15px 50px rgba(0,0,0,1), inset 0 0 30px rgba(0,0,0,0.9), 0 0 20px rgba(212, 175, 55, 0.1); padding: 15px 20px; text-align: center; position: relative; border-radius: 4px; }
+  .wd-chest-open-reel { height: 110px; background: #000; border: 2px inset var(--border); box-shadow: inset 0 10px 20px rgba(0,0,0,1); display: flex; align-items: center; justify-content: flex-start; overflow: hidden; position: relative; margin: 15px 0; border-radius: 2px; }
+  .wd-chest-open-reel::before, .wd-chest-open-reel::after { content: ""; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none; }
+  .wd-chest-open-reel::before { left: 0; background: linear-gradient(90deg, #000 10%, transparent); }
+  .wd-chest-open-reel::after { right: 0; background: linear-gradient(270deg, #000 10%, transparent); }
+  .wd-chest-open-centerline { position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; transform: translateX(-50%); background: linear-gradient(180deg, transparent, var(--accent), transparent); box-shadow: 0 0 20px var(--accent), 0 0 10px #fff; z-index: 4; border-radius: 999px; }
+  .wd-chest-open-track { display: flex; gap: 10px; align-items: center; will-change: transform; padding: 0; width: max-content; }
+  .wd-chest-open-item { min-width: 140px; max-width: 140px; height: 90px; display:flex; flex-direction: column; justify-content: center; padding: 10px 5px; background: linear-gradient(to bottom, #1a1a1a, #0a0a0a); border: 2px ridge var(--border); font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.85rem; color: var(--text-main); text-shadow: 0 2px 4px #000; box-shadow: inset 0 0 15px #000, 0 5px 10px rgba(0,0,0,0.8); transform: scale(0.9); transition: all 0.2s; border-radius: 4px; }
+  .wd-chest-open-item.r-common { border-color: var(--common); box-shadow: inset 0 0 10px rgba(163, 163, 163, 0.2); }
+  .wd-chest-open-item.r-rare { border-color: var(--rare); box-shadow: inset 0 0 15px rgba(96, 165, 250, 0.3); }
+  .wd-chest-open-item.r-epic { border-color: var(--epic); box-shadow: inset 0 0 20px rgba(192, 132, 252, 0.4); }
+  .wd-chest-open-item.r-legendary { border-color: var(--legendary); box-shadow: inset 0 0 25px rgba(251, 191, 36, 0.5), 0 0 15px rgba(251, 191, 36, 0.3); }
+  .wd-chest-open-item.reward-gold { border-color: var(--gold); box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.4); }
+  .wd-chest-open-item.reward-potion { border-color: var(--hp-glow); box-shadow: inset 0 0 15px rgba(239, 68, 68, 0.3); }
+  .wd-chest-open-item.reward-mana { border-color: var(--mp-glow); box-shadow: inset 0 0 15px rgba(59, 130, 246, 0.3); }
+  .wd-chest-open-item span:first-child { transition: text-shadow 0.3s; }
+  .wd-chest-open-item.r-legendary span:first-child { text-shadow: 0 0 10px var(--legendary), 0 0 20px #fff; color: #fff; }
+  .wd-chest-open-item span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wd-chest-open-item .wd-small { display: block; font-family: 'Lora', serif; font-size: 0.7rem; color: var(--text-muted); margin-top: 6px; letter-spacing: 1px; text-transform: uppercase; font-style: italic; font-weight: normal;}
+  @keyframes wdWinnerPulse { 0% { transform: scale(1.02); box-shadow: 0 0 30px rgba(251,191,36,0.6), inset 0 0 15px rgba(251,191,36,0.2); } 50% { transform: scale(1.08); box-shadow: 0 0 50px rgba(251,191,36,0.9), inset 0 0 25px rgba(251,191,36,0.4); border-color: #fff; } 100% { transform: scale(1.02); box-shadow: 0 0 30px rgba(251,191,36,0.6), inset 0 0 15px rgba(251,191,36,0.2); } }
+  .wd-chest-open-item.winner { border-color: var(--gold); z-index: 5; background: linear-gradient(to bottom, #2a2211, #0a0a0a); animation: wdWinnerPulse 1s infinite alternate; }
+  
+  .wd-quest-card { background: linear-gradient(135deg, rgba(20,15,10,0.8), rgba(5,5,5,0.9)); border: 1px solid var(--border-light); border-left: 3px solid var(--accent); border-radius: 4px; padding: 12px; margin-bottom: 12px; position: relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 0 4px 6px rgba(0,0,0,0.3); transition: all 0.2s;}
+  .wd-quest-card:hover { transform: translateX(4px); border-color: var(--accent); box-shadow: 0 6px 12px rgba(0,0,0,0.5), inset 0 0 10px rgba(212,175,55,0.1); }
+  .wd-quest-title { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--text-main); font-weight: bold; margin-bottom: 4px; }
+  .wd-quest-desc { font-size: 0.8rem; color: var(--text-muted); font-style: italic; margin-bottom: 10px; line-height: 1.4; }
+  .wd-quest-rewards { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.75rem; margin-bottom: 4px; }
+  .wd-reward-badge { background: rgba(0,0,0,0.6); padding: 3px 6px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 4px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+  .wd-active-quest-box { background: linear-gradient(to bottom, rgba(30,25,15,0.9), rgba(10,8,5,0.95)); border: 2px ridge var(--accent); border-radius: 6px; padding: 15px; box-shadow: 0 0 20px rgba(212,175,55,0.15), inset 0 0 20px rgba(0,0,0,0.8); text-align: center; position: relative; overflow: hidden; }
+  .wd-active-quest-box.ready { border-color: var(--xp-glow); box-shadow: 0 0 20px rgba(16,185,129,0.2), inset 0 0 20px rgba(0,0,0,0.8); }
+  .wd-aq-header { font-family: 'Cinzel', serif; color: var(--accent); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; display: inline-block; border-bottom: 1px solid var(--accent); padding-bottom: 4px; }
+  .wd-active-quest-box.ready .wd-aq-header { color: var(--xp-glow); border-color: var(--xp-glow); }
+
+  @media (max-width: 900px) {
+    #wd-wrapper { height: auto; min-height: 800px; }
+    #wd-app { flex-direction: column; overflow: auto; }
+    #wd-sidebar-left, #wd-sidebar-right { width: 100%; border: none; border-bottom: 3px ridge var(--border); box-shadow: none; }
+    #wd-main-stage { min-height: 60vh; }
+    #wd-action-panel { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+<div id="wd-wrapper">
+  <div id="wd-app">
+    <aside id="wd-sidebar-left">
+      <div class="wd-hero-header">
+        <div class="wd-hero-avatar" id="wd-ui-avatar">🧙</div>
+        <div class="wd-hero-info">
+          <h2 id="wd-ui-name">Niemand</h2>
+          <p id="wd-ui-class-level">Klasse · Lvl 1</p>
+        </div>
+      </div>
+      <div class="wd-stat-bar-container">
+        <div class="wd-stat-bar-label"><span>Lebenskraft</span><span id="wd-ui-hp-text">0 / 0</span></div>
+        <div class="wd-bar-bg"><div class="wd-bar-fill wd-fill-hp" id="wd-ui-hp-bar" style="width:0%"></div></div>
+      </div>
+      <div class="wd-stat-bar-container">
+        <div class="wd-stat-bar-label"><span>Mana / Fokus</span><span id="wd-ui-mp-text">0 / 0</span></div>
+        <div class="wd-bar-bg"><div class="wd-bar-fill wd-fill-mp" id="wd-ui-mp-bar" style="width:0%"></div></div>
+      </div>
+      <div class="wd-stat-bar-container">
+        <div class="wd-stat-bar-label"><span style="color:var(--text-muted)">Erfahrung</span><span id="wd-ui-xp-text" style="color:var(--text-muted)">0 / 100</span></div>
+        <div class="wd-bar-bg" style="height:6px"><div class="wd-bar-fill wd-fill-xp" id="wd-ui-xp-bar" style="width:0%"></div></div>
+      </div>
+      <div class="wd-quick-stats">
+        <div class="wd-q-stat"><span>Angriff</span><strong id="wd-ui-atk">0</strong></div>
+        <div class="wd-q-stat"><span>Rüstung</span><strong id="wd-ui-def">0</strong></div>
+        <div class="wd-q-stat"><span>Gold</span><strong id="wd-ui-gold" style="color:var(--gold)">0</strong></div>
+        <div class="wd-q-stat"><span>Ausweichen</span><strong id="wd-ui-dodge">0%</strong></div>
+        <div class="wd-q-stat"><span>Glück</span><strong id="wd-ui-luck" style="color:#34d399">0</strong></div>
+        <div class="wd-q-stat"><span>Ort</span><strong id="wd-ui-location" style="font-size:0.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Menü</strong></div>
+      </div>
+      <div id="wd-status-effects"></div>
+      <div style="margin-top:auto;padding-top:25px;border-top:1px solid var(--border)">
+         <button class="wd-btn" onclick="saveGame()" style="width:100%;margin-bottom:12px;padding:10px">💾 Codex sichern</button>
+         <button class="wd-btn" onclick="loadGame()" style="width:100%;padding:10px">📂 Codex lesen</button>
+      </div>
+    </aside>
+    <main id="wd-main-stage">
+      <div id="wd-visual-arena">
+        <div id="wd-arena-title">Web Dungeons</div>
+        <div class="wd-combat-stage" id="wd-combat-stage">
+          <div class="wd-combatant">
+            <div class="wd-combatant-sprite" id="wd-sprite-hero">🧙</div>
+          </div>
+          <div class="wd-combatant">
+            <div class="wd-combatant-sprite" id="wd-sprite-enemy">👹</div>
+            <div class="wd-combatant-hp" id="wd-ui-enemy-hp">HP: 100/100</div>
+          </div>
+        </div>
+      </div>
+      <div id="wd-action-panel"></div>
+      <div id="wd-log-container"></div>
+    </main>
+    <aside id="wd-sidebar-right">
+      <div class="wd-tabs">
+        <button class="wd-tab-btn active" onclick="switchTab('wd-tab-gear', this)">Ausrüstung</button>
+        <button class="wd-tab-btn" onclick="switchTab('wd-tab-inv', this)">Inventar</button>
+        <button class="wd-tab-btn" onclick="switchTab('wd-tab-skills', this)">Talente</button>
+        <button class="wd-tab-btn" onclick="switchTab('wd-tab-quests', this)">Pakte</button>
+        <button class="wd-tab-btn" onclick="switchTab('wd-tab-index', this)">Archiv</button>
+      </div>
+      <div id="wd-tab-gear" class="wd-tab-content active">
+        <h3>Aktiv ausgerüstet</h3>
+        <div class="wd-eq-slot" id="wd-eq-weapon"><div class="wd-eq-icon">🗡️</div><div class="wd-eq-details"><h4>Waffe</h4><p>Nichts</p></div></div>
+        <div class="wd-eq-slot" id="wd-eq-armor"><div class="wd-eq-icon">🛡️</div><div class="wd-eq-details"><h4>Rüstung</h4><p>Nichts</p></div></div>
+        <div class="wd-eq-slot" id="wd-eq-trinket"><div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="r-artefact">Artefakt</h4><p>Leerer Sockel</p></div></div>
+      </div>
+      <div id="wd-tab-inv" class="wd-tab-content">
+        <div style="display:flex;justify-content:space-between;margin-bottom:15px;padding:8px 12px;background:rgba(0,0,0,0.5);border:1px ridge var(--border);border-radius:4px">
+          <span style="color:var(--text-muted);font-size:0.85rem;text-transform:uppercase;letter-spacing:1px">Arkane Splitter</span>
+          <strong id="wd-ui-shards" style="color:#d8b4e2;font-size:1.1rem;text-shadow:0 0 8px rgba(192, 132, 252, 0.4)">0</strong>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:18px">
+           <button class="wd-mini-btn" style="flex:1" onclick="renderInventoryList('weapons')">Waffen</button>
+           <button class="wd-mini-btn" style="flex:1" onclick="renderInventoryList('armors')">Rüstung</button>
+           <button class="wd-mini-btn" style="flex:1" onclick="renderInventoryList('trinkets')">Artefakt</button>
+           <button class="wd-mini-btn" style="flex:1" onclick="renderInventoryList('consumables')">Beute</button>
+        </div>
+        <div id="wd-inv-list"></div>
+      </div>
+      <div id="wd-tab-skills" class="wd-tab-content">
+        <div style="background:rgba(0,0,0,0.5);padding:15px;border-radius:4px;margin-bottom:18px;border:1px ridge var(--border);box-shadow:inset 0 0 10px rgba(0,0,0,0.8);text-align:center">
+            <span style="font-family:'Cinzel', serif;letter-spacing:1px">Freie Skillpunkte:</span> <strong id="wd-ui-sp" style="color:var(--gold);font-size:1.2rem;margin-left:8px">0</strong>
+        </div>
+        <div id="wd-skill-list"></div>
+      </div>
+      <div id="wd-tab-quests" class="wd-tab-content">
+        <div id="wd-quest-active"></div>
+        <hr style="border:none;border-top:1px dashed var(--border);margin:20px 0" />
+        <h3>Verfügbare Pakte</h3>
+        <div id="wd-quest-board"></div>
+      </div>
+      <div id="wd-tab-index" class="wd-tab-content">
+        <div style="display:flex;gap:6px;margin-bottom:18px">
+           <button class="wd-mini-btn" style="flex:1" onclick="renderIndexList('weapons')">Waffen-Codex</button>
+           <button class="wd-mini-btn" style="flex:1" onclick="renderIndexList('armors')">Rüstungs-Codex</button>
+        </div>
+        <div id="wd-index-list" class="wd-index-grid"></div>
+      </div>
+    </aside>
+  </div>
+  <div id="wd-chest-open-overlay">
+    <div id="wd-chest-open-container"></div>
+    <button id="wd-chest-skip-btn" class="wd-btn" style="margin-top:15px;padding:10px 30px;flex-shrink:0" onclick="skipChestAnimation()">Animation überspringen</button>
+  </div>
+  <div id="wd-overlay">
+    <div class="wd-modal" id="wd-overlay-content"></div>
+  </div>
+</div>
+<script>
+/**
+ * WEB DUNGEONS: ECLIPSE - BALANCED ECONOMY & VISUAL CHEST EFFECTS & DYNAMIC QUESTS & MAHLSTROM
+ */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+document.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
+function playSound(type) {
+  if (!audioCtx || audioCtx.state === 'suspended') return; 
+  const t = audioCtx.currentTime;
+  const playOsc = (oscType, freq, startTime, dur, vol) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = oscType; osc.frequency.setValueAtTime(freq, startTime);
+    gain.gain.setValueAtTime(0, startTime); gain.gain.linearRampToValueAtTime(vol, startTime + 0.01); gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    return {osc, gain};
+  };
+  if (type === 'hover') { const {osc} = playOsc('sine', 400, t, 0.05, 0.02); osc.start(t); osc.stop(t+0.1); } 
+  else if (type === 'click') { const {osc} = playOsc('triangle', 600, t, 0.08, 0.05); osc.start(t); osc.stop(t+0.1); } 
+  else if (type === 'error') { const {osc} = playOsc('sawtooth', 150, t, 0.15, 0.05); osc.frequency.linearRampToValueAtTime(100, t+0.15); osc.start(t); osc.stop(t+0.2); } 
+  else if (type === 'hit') { const {osc} = playOsc('square', 150, t, 0.15, 0.08); osc.frequency.exponentialRampToValueAtTime(40, t+0.15); osc.start(t); osc.stop(t+0.2); } 
+  else if (type === 'crit') { const o1 = playOsc('square', 300, t, 0.25, 0.06); o1.osc.frequency.exponentialRampToValueAtTime(50, t+0.25); const o2 = playOsc('sine', 800, t, 0.3, 0.05); o1.osc.start(t); o1.osc.stop(t+0.3); o2.osc.start(t); o2.osc.stop(t+0.3); } 
+  else if (type === 'hurt') { const {osc} = playOsc('sawtooth', 100, t, 0.25, 0.08); osc.frequency.exponentialRampToValueAtTime(20, t+0.25); osc.start(t); osc.stop(t+0.3); } 
+  else if (type === 'heal') { const {osc} = playOsc('sine', 400, t, 0.4, 0.06); osc.frequency.linearRampToValueAtTime(800, t+0.4); osc.start(t); osc.stop(t+0.5); } 
+  else if (type === 'coin') { const o1 = playOsc('sine', 987, t, 0.1, 0.05); const o2 = playOsc('sine', 1318, t+0.08, 0.3, 0.05); o1.osc.start(t); o1.osc.stop(t+0.1); o2.osc.start(t+0.08); o2.osc.stop(t+0.4); } 
+  else if (type === 'tick') { const {osc} = playOsc('square', 800, t, 0.03, 0.02); osc.frequency.exponentialRampToValueAtTime(100, t+0.03); osc.start(t); osc.stop(t+0.05); } 
+  else if (type === 'magic') { const o1 = playOsc('sine', 300, t, 0.6, 0.05); o1.osc.frequency.linearRampToValueAtTime(450, t+0.6); const o2 = playOsc('triangle', 600, t, 0.6, 0.03); o1.osc.start(t); o1.osc.stop(t+0.7); o2.osc.start(t); o2.osc.stop(t+0.7); } 
+  else if (type === 'level') { const freqs = [261.63, 329.63, 392.00, 523.25]; freqs.forEach((f, i) => { const {osc} = playOsc('square', f, t + i*0.12, 0.4, 0.04); osc.start(t + i*0.12); osc.stop(t + i*0.12 + 0.5); }); } 
+  else if (type === 'death') { const {osc} = playOsc('sawtooth', 150, t, 1.5, 0.1); osc.frequency.exponentialRampToValueAtTime(10, t+1.5); osc.start(t); osc.stop(t+1.5); }
+}
+document.addEventListener('mouseover', e => { if (e.target.closest('.wd-btn') || e.target.closest('.wd-mini-btn') || e.target.closest('.wd-tab-btn') || e.target.closest('.wd-skill-node')) { if(!e.target.closest(':disabled') && !e.target.closest('.locked')) playSound('hover'); } });
+document.addEventListener('mousedown', e => { let btn = e.target.closest('.wd-btn') || e.target.closest('.wd-mini-btn') || e.target.closest('.wd-tab-btn'); if (btn) { if(btn.disabled) playSound('error'); else playSound('click'); } });
+const SAVE_SLOTS = 3;
+const CLASSES = {
+  Ritter: { avatar: "🛡️", maxHp: 150, maxMp: 40, baseAtk: 12, defW: "Trainingsschwert", defDmg: 4, defA: "Kettenwams", defDef: 3, skill: "Schildsturm", cost: 20, ult: "Heiliger Zorn", uCost: 45, crit: 0.1 },
+  Magier: { avatar: "🧙‍♂️", maxHp: 90, maxMp: 140, baseAtk: 9, defW: "Arkanstab", defDmg: 5, defA: "Zauberrobe", defDef: 1, skill: "Flammenfokus", cost: 25, ult: "Meteorhagel", uCost: 55, crit: 0.15 },
+  Schurke: { avatar: "🥷", maxHp: 110, maxMp: 80, baseAtk: 14, defW: "Schattenklinge", defDmg: 4, defA: "Lederwams", defDef: 2, skill: "Hinterhalt", cost: 25, ult: "Schattentanz", uCost: 50, crit: 0.22 },
+  Paladin: { avatar: "⚜️", maxHp: 140, maxMp: 90, baseAtk: 11, defW: "Weihklinge", defDmg: 4, defA: "Lichtpanzer", defDef: 3, skill: "Lichtstoß", cost: 25, ult: "Urteil", uCost: 50, crit: 0.12 },
+  Waldläufer: { avatar: "🏹", maxHp: 115, maxMp: 85, baseAtk: 13, defW: "Kurzbogen", defDmg: 4, defA: "Pfadweste", defDef: 2, skill: "Mehrfachschuss", cost: 22, ult: "Jägersturm", uCost: 48, crit: 0.18 }
+};
+const SKILL_TREE = [
+  { id: "t_hp1", icon: "❤️", name: "Zähigkeit I", desc: "+15 Max HP", max: 5, req: {}, type: "hp", val: 15 },
+  { id: "t_atk1", icon: "⚔️", name: "Macht I", desc: "+2 Angriff", max: 5, req: {}, type: "atk", val: 2 },
+  { id: "t_def1", icon: "🛡️", name: "Eisenhaut", desc: "+2 Rüstung", max: 4, req: { "t_hp1": 3 }, type: "def", val: 2 },
+  { id: "t_mp1", icon: "🔮", name: "Fokus", desc: "+15 Max MP", max: 3, req: { "t_atk1": 2 }, type: "mp", val: 15 },
+  { id: "t_dodge1", icon: "🍃", name: "Reflexe", desc: "+2% Ausweichen", max: 5, req: { "t_def1": 2 }, type: "dodge", val: 2 },
+  { id: "t_luck1", icon: "🍀", name: "Schicksal I", desc: "+1 Glück", max: 5, req: { "t_mp1": 2 }, type: "luck", val: 1 },
+  { id: "t_hp2", icon: "🩸", name: "Titanenblut", desc: "+40 Max HP", max: 3, req: { "t_dodge1": 3, "t_hp1": 5 }, type: "hp", val: 40 },
+  { id: "t_atk2", icon: "🔥", name: "Kriegsherr", desc: "+5 Angriff", max: 3, req: { "t_luck1": 3, "t_atk1": 5 }, type: "atk", val: 5 },
+  { id: "t_dodge2", icon: "👻", name: "Geistertanz", desc: "+4% Ausweichen", max: 3, req: { "t_dodge1": 5, "t_hp2": 2 }, type: "dodge", val: 4 },
+  { id: "t_luck2", icon: "👑", name: "Midas Aura", desc: "+3 Glück", max: 3, req: { "t_luck1": 5, "t_atk2": 2 }, type: "luck", val: 3 }
+];
+const SKILL_TIERS = [
+  ["t_hp1", "t_atk1"],
+  ["t_def1", "t_mp1"],
+  ["t_dodge1", "t_luck1"],
+  ["t_hp2", "t_atk2"],
+  ["t_dodge2", "t_luck2"]
+];
+const TRINKETS = [
+  { id: 't_vamp', name: "Blutkristall", desc: "Heilt 20% des Schadens.", effect: "lifesteal", rarity: "r-artefact" },
+  { id: 't_focus', name: "Auge des Adlers", desc: "+20% Kritische Treffer.", effect: "crit", rarity: "r-artefact" },
+  { id: 't_stone', name: "Herz des Golems", desc: "+25% Gesamte Rüstung.", effect: "armor", rarity: "r-artefact" },
+  { id: 't_mana', name: "Aether-Phiole", desc: "Regeneriert 10% MP/Runde.", effect: "manareg", rarity: "r-artefact" }
+];
+const AREAS = {
+  Forest: { name: "Düsterwald", diff: 1, enemies: [{n:"Wolf",h:50,a:8,s:"🐺",xp:15},{n:"Schleim",h:45,a:10,s:"🟢",xp:15},{n:"Wegelagerer",h:65,a:12,s:"🗡️",xp:20}] },
+  Ruins: { name: "Sonnenruinen", diff: 1.6, enemies: [{n:"Steinwächter",h:120,a:22,s:"🗿",xp:40},{n:"Sandgeist",h:90,a:28,s:"🌪️",xp:35},{n:"Skarabäus",h:140,a:18,s:"🪲",xp:45}] },
+  Volcano: { name: "Aschental", diff: 2.4, enemies: [{n:"Lavawicht",h:200,a:38,s:"🔥",xp:80},{n:"Feuergolem",h:280,a:32,s:"🧱",xp:100},{n:"Aschenwolf",h:180,a:45,s:"🐺",xp:90}] }
+};
+const DUNGEONS = {
+  D1: { name: "Katakomben", diff: 1.2, loot: 1.0, boss: { n: "Torwächter Varg", s: "🛡️", h: 220, a: 20, chest: "iron", xp: 100 } },
+  D2: { name: "Schattenfestung", diff: 1.8, loot: 1.5, boss: { n: "Knochentyrann", s: "☠️", h: 380, a: 35, chest: "mystic", xp: 200 } },
+  D3: { name: "Der Abgrund", diff: 2.8, loot: 2.2, boss: { n: "Nullkaiser", s: "🌑", h: 650, a: 60, chest: "mystic", xp: 400 } },
+  D4: { name: "Der Mahlstrom", diff: 3.5, loot: 3.0, boss: { n: "Chaos-Nexus", s: "🌌", h: 750, a: 70, chest: "mystic", xp: 800 } } // Angepasst: HP von 1000 auf 750, ATK von 80 auf 70
+};
+const MUTATORS = [
+  { id: 'vampiric', name: "Vampirisch", desc: "Gegner heilt 20% seines Schadens." },
+  { id: 'thorns', name: "Dornen", desc: "Reflektiert 10% deines Schadens." },
+  { id: 'brute', name: "Titanisch", desc: "+50% HP für den Gegner." },
+  { id: 'frenzy', name: "Raserei", desc: "+30% Angriff für den Gegner." }
+];
+const DUNGEON_ENEMIES = [ {n:"Skelett",h:80,a:15,s:"💀",xp:20},{n:"Nekromant",h:70,a:25,s:"🧟",xp:25},{n:"Gargoyle",h:130,a:18,s:"🪨",xp:30} ];
+const CHEST_DEFS = {
+  wooden: { label: "Holzkiste", icon: "🪵", rewardMult: 0.8, weights: {weapon:32, armor:33, gold:20, potions:15} },
+  iron: { label: "Eisenkiste", icon: "🧰", rewardMult: 1.2, weights: {weapon:35, armor:35, gold:20, potions:10} },
+  mystic: { label: "Arkankiste", icon: "✨", rewardMult: 1.8, weights: {weapon:45, armor:45, gold:10, potions:0} }
+};
+const WEAPON_POOLS = {
+  Ritter: { 
+    common: ["Schildspitze", "Ordensklinge", "Rostiges Schwert", "Knappenklinge", "Milizspeer", "Soldatenschwert", "Eisenflegel", "Stumpfe Axt"], 
+    rare: ["Bastionsäbel", "Silberwacht", "Stahlschwert", "Gardistenaxt", "Turnierlanze", "Schwerer Morgenstern", "Offiziersklinge"], 
+    epic: ["Sonnenzorn", "Eidbrecher", "Blutklinge", "Löwenpranke", "Kriegsherren-Axt", "Drachenzahn-Schwert", "Titanspalter"], 
+    legendary: ["Löwenschwur", "Himmelsbrecher", "Königsherz", "Drachentöter", "Weltenbrecher", "Klingensturm", "Leviathan-Axt", "Aegis-Klinge"] 
+  },
+  Magier: { 
+    common: ["Runenfokus", "Aschenstab", "Lehrlingsstab", "Kristallzweig", "Holzzepter", "Novizenfokus", "Kupferstab"], 
+    rare: ["Frostsigel", "Aetherstab", "Glutstab", "Schattenrute", "Silberzepter", "Stab des Adepten", "Illusionszweig"], 
+    epic: ["Arkanherz", "Flammenkrone", "Sturmrufer", "Leerenstab", "Eisiger Griff", "Donnerzepter", "Seelenfokus"], 
+    legendary: ["Weltfunke", "Erzkomet", "Sternenfall", "Chronosstab", "Auge des Kosmos", "Dimensionsspalter", "Stab der Ewigkeit"] 
+  },
+  Schurke: { 
+    common: ["Krähenzahn", "Nachtstahl", "Rostdolch", "Schlitzer", "Straßenmesser", "Knochenstecher", "Eisendolch"], 
+    rare: ["Nebelklinge", "Schwarzfeder", "Giftdolch", "Schattendorn", "Meuchelmesser", "Silberfang", "Diebesklinge"], 
+    epic: ["Leerenkralle", "Blutmond", "Seelenreißer", "Mörderklinge", "Phantomschnitt", "Vipernzahn", "Nachtschatten"], 
+    legendary: ["Nachtfürst", "Rabenurteil", "Witwenmacher", "Schattentod", "Flüstern der Leere", "Klinge des Assassinen", "Seelenfresser"] 
+  },
+  Paladin: { 
+    common: ["Weihschwert", "Segenshammer", "Pilgerstreitkolben", "Kirchenklinge", "Eisenmorgenstern", "Knappenhammer"], 
+    rare: ["Sonnenklinge", "Glaubenswacht", "Lichtbringer", "Inquisitorenhammer", "Silberner Streitkolben", "Gerechtigkeitsklinge"], 
+    epic: ["Aurora", "Heiligzorn", "Morgentau", "Seraphimklinge", "Hammer des Richters", "Sonnenfeuer-Streitkolben", "Himmelswacht"], 
+    legendary: ["Dawnbreaker", "Ewiger Eid", "Götterhammer", "Excalibur", "Urteil des Lichts", "Sternenschmiede", "Gnade der Engel"] 
+  },
+  Waldläufer: { 
+    common: ["Jagdspieß", "Waldbogen", "Kurzbogen", "Holzspeer", "Einfacher Bogen", "Wildnisspeer", "Kupferpfeile"], 
+    rare: ["Habichtzahn", "Eibenbogen", "Falkenauge", "Späherbogen", "Verstärkter Langbogen", "Pirscherspeer", "Windbogen"], 
+    epic: ["Sturmfeder", "Wolfsfang", "Windreiter", "Nachtjäger", "Bogen des Waldläufers", "Schattensehne", "Donnerspeer"], 
+    legendary: ["Alderheart", "Königsjagd", "Drachenbogen", "Flüsterwind", "Sturmrufer-Bogen", "Zorn der Natur", "Sonnenfinsternis"] 
+  }
+};
+const ARMOR_POOLS = {
+  Ritter: { 
+    common: ["Eisenpanzer", "Kettenhemd", "Knappenrüstung", "Rostige Platte", "Soldatenwams", "Milizbrustpanzer"], 
+    rare: ["Schildmantel", "Plattenrock", "Stahlwams", "Silberrüstung", "Gardistenpanzer", "Verstärktes Kettenhemd"], 
+    epic: ["Königswache", "Drachenschuppe", "Heldenpanzer", "Kriegsherrenrüstung", "Mithrilhemd", "Schwerer Titanpanzer"], 
+    legendary: ["Titanwall", "Aegis", "Götterwacht", "Rüstung des Champions", "Unbezwingbarer Panzer", "Drachenherz-Rüstung"] 
+  },
+  Magier: { 
+    common: ["Leinenrobe", "Schülergewand", "Novizenrobe", "Stofftunika", "Einfacher Umhang", "Flickengewand"], 
+    rare: ["Kristallrobe", "Zaubertunika", "Elementarmantel", "Seidenrobe", "Adeptengewand", "Silberfadenrobe"], 
+    epic: ["Leerenrobe", "Erzmagierrobe", "Astralgewand", "Runenverzierte Tunika", "Sturmmantel", "Schattenzwirnrobe"], 
+    legendary: ["Kosmosgewand", "Zeitweberrobe", "Aetherpanzer", "Robe der Ewigkeit", "Sternenstaubmantel", "Dimensionsgewand"] 
+  },
+  Schurke: { 
+    common: ["Lederwams", "Straßenkleidung", "Diebesweste", "Fellrüstung", "Leichte Tunika", "Schmugglergewand"], 
+    rare: ["Schwarzleder", "Schleicheranzug", "Nebelmantel", "Verstärktes Leder", "Schattenläuferweste", "Banditenrüstung"], 
+    epic: ["Phantomhaut", "Blutgewand", "Schattenpanzer", "Meisterdieb-Leder", "Vipernschuppe", "Nachtschattengewand"], 
+    legendary: ["Rabenhaut", "Meuchelmörderkutte", "Gewand class der Leere", "Flüsterpanzer", "Drachenlederweste", "Umhang des Phantoms"] 
+  },
+  Paladin: { 
+    common: ["Pilgerpanzer", "Klerikerwams", "Ordensweste", "Kupferrüstung", "Einfacher Brustpanzer", "Eisenwams"], 
+    rare: ["Heiligplatte", "Tempelritterrüstung", "Kreuzfahrerpanzer", "Silberwacht-Rüstung", "Geweihter Panzer"], 
+    epic: ["Seraphhaut", "Sonnenwall", "Erzengelpanzer", "Rüstung of des Richters", "Mithrilpanzer des Lichts", "Inquisitorenrüstung"], 
+    legendary: ["Ewiglicht", "Himmelsfestung", "Götterwacht", "Panzer der Dämmerung", "Heiliger Gralspanzer", "Rüstung der Erlösung"] 
+  },
+  Waldläufer: { 
+    common: ["Pfadmantel", "Fellrüstung", "Jägerweste", "Lederharnisch", "Wildnistunika", "Raues Leder"], 
+    rare: ["Eichenhaut", "Wildnisleder", "Späherpanzer", "Waldläufer-Wams", "Bärenfellrüstung", "Verstärkte Jägerweste"], 
+    epic: ["Nebelfell", "Sturmmantel", "Schattenjägergewand", "Drachenschuppen-Leder", "Phantomjäger-Rüstung", "Windläuferpanzer"], 
+    legendary: ["Herbststurm", "Waldläuferkönig-Panzer", "Naturmacht", "Rüstung des Urwaldes", "Sturmreiter-Gewand", "Umhang der Bestie"] 
+  }
+};
+const SHOP_WEAPONS = {
+  Ritter: [{name:"Breitschwert",dmg:13,cost:150}, {name:"Bastion-Axt",dmg:22,cost:360}, {name:"Ritter-Großschwert",dmg:35,cost:650}],
+  Magier: [{name:"Runenstab",dmg:13,cost:150}, {name:"Fokuszepter",dmg:22,cost:360}, {name:"Meisterstab",dmg:35,cost:650}],
+  Schurke: [{name:"Eisendolch",dmg:13,cost:150}, {name:"Nachtklinge",dmg:22,cost:360}, {name:"Korsarendolch",dmg:35,cost:650}],
+  Paladin: [{name:"Glaubensklinge",dmg:12,cost:150}, {name:"Lichtstreitkolben",dmg:22,cost:360}, {name:"Richtschwert",dmg:34,cost:650}],
+  Waldläufer: [{name:"Jagdbogen",dmg:12,cost:150}, {name:"Stachelset",dmg:22,cost:360}, {name:"Meisterbogen",dmg:34,cost:650}]
+};
+const SHOP_ARMORS = {
+  Ritter: [{name:"Turmschild-Panzer",def:5,cost:140}, {name:"Ordensharnisch",def:8,cost:330}, {name:"Plattenrüstung",def:15,cost:600}],
+  Magier: [{name:"Runenrobe",def:3,cost:140}, {name:"Astralmantel",def:5,cost:330}, {name:"Seidenrobe",def:10,cost:600}],
+  Schurke: [{name:"Jägerleder",def:4,cost:140}, {name:"Schattenweste",def:6,cost:330}, {name:"Meisterleder",def:12,cost:600}],
+  Paladin: [{name:"Kapellenpanzer",def:4,cost:140}, {name:"Sonnensegel",def:7,cost:330}, {name:"Inquisitorenrüstung",def:14,cost:600}],
+  Waldläufer: [{name:"Pfadleder",def:4,cost:140}, {name:"Jägerhaut",def:6,cost:330}, {name:"Drachenleder",def:12,cost:600}]
+};
+let p = null; 
+let state = { mode: 'menu', area: null, enemy: null, room: 0, dungeon: { active: false, type: 'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }, lock: false, tab: 'weapons', discovery: { weapons: [], armors: [] }, availQuests: [], selectedSkill: null };
+let isSkippingChest = false;
+const $ = id => document.getElementById(id);
+const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function makeId(prefix) { return prefix + '_' + Math.random().toString(36).substr(2, 6); }
+function getWepEmoji(n) { const l=(n||'').toLowerCase(); return l.includes('stab')?'🪄':l.includes('bogen')?'🏹':l.includes('axt')?'🪓':'🗡️'; }
+function getArmEmoji(n) { const l=(n||'').toLowerCase(); return l.includes('robe')?'🥼':l.includes('panzer')?'🛡️':'👕'; }
+function pickByWeights(weights) { let t=0; for(let k in weights) t+=weights[k]; let r=Math.random()*t; for(let k in weights){r-=weights[k]; if(r<=0) return k;} }
+function calculateSellValue(statValue, rarityId, type) {
+  let rarityMult = 1;
+  switch(rarityId) {
+    case 'r-common': rarityMult = 1.0; break;
+    case 'r-rare': rarityMult = 1.5; break;
+    case 'r-shop': rarityMult = 2.0; break;
+    case 'r-epic': rarityMult = 2.5; break;
+    case 'r-legendary': rarityMult = 4.0; break;
+    case 'r-artefact': rarityMult = 5.0; break;
+    default: rarityMult = 1.0;
+  }
+  const baseMult = (type === 'weapon') ? 2.5 : 2.0;
+  const scalingFactor = 1 + (statValue * 0.02); 
+  return Math.floor((statValue * baseMult * rarityMult) * scalingFactor);
+}
+function calculateShardValue(rarityId) {
+  switch(rarityId) {
+    case 'r-common': return 1;
+    case 'r-rare': return 3;
+    case 'r-shop': return 2;
+    case 'r-epic': return 10;
+    case 'r-legendary': return 25;
+    case 'r-artefact': return 50;
+    default: return 1;
+  }
+}
+function rollRarity(chestType) {
+  const luckBonus = (p && p.baseLuck) ? (p.baseLuck * 0.001) : 0;
+  const r = Math.random() + luckBonus;
+  if (chestType === 'wooden') { 
+    if(r >= 0.998) return 'legendary';
+    if(r >= 0.950) return 'epic';
+    if(r >= 0.750) return 'rare';
+    return 'common';
+  } 
+  else if (chestType === 'iron') { 
+    if(r >= 0.995) return 'legendary';
+    if(r >= 0.900) return 'epic';
+    if(r >= 0.600) return 'rare';
+    return 'common';
+  } 
+  else { 
+    if(r >= 0.990) return 'legendary';
+    if(r >= 0.850) return 'epic';
+    if(r >= 0.450) return 'rare';
+    return 'common';
+  }
+}
+function discover(type, name) { if(!state.discovery[type].includes(name)) state.discovery[type].push(name); }
+function switchTab(tabId, element) {
+  document.querySelectorAll('.wd-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.wd-tab-content').forEach(c => c.classList.remove('active'));
+  if(element) element.classList.add('active');
+  $(tabId).classList.add('active');
+  if(tabId === 'wd-tab-inv') renderInventoryList(state.tab);
+  if(tabId === 'wd-tab-skills') renderSkills();
+  if(tabId === 'wd-tab-quests') renderQuests();
+  if(tabId === 'wd-tab-index') renderIndexList('weapons');
+}
+function updateHUD() {
+  if (!p) return;
+  $('wd-ui-name').textContent = p.name;
+  $('wd-ui-class-level').textContent = `${p.cls} · Level ${p.lvl}`;
+  $('wd-ui-avatar').textContent = CLASSES[p.cls].avatar;
+  $('wd-ui-hp-text').textContent = `${Math.max(0, p.hp)} / ${p.maxHp}`;
+  $('wd-ui-hp-bar').style.width = `${Math.max(0, (p.hp/p.maxHp)*100)}%`;
+  $('wd-ui-mp-text').textContent = `${p.mp} / ${p.maxMp}`;
+  $('wd-ui-mp-bar').style.width = `${(p.mp/p.maxMp)*100}%`;
+  $('wd-ui-xp-text').textContent = `${p.xp} / ${p.maxXp}`;
+  $('wd-ui-xp-bar').style.width = `${(p.xp/p.maxXp)*100}%`;
+  $('wd-ui-atk').textContent = p.baseAtk + (p.eq.weapon ? p.eq.weapon.val : 0);
+  let totalDef = p.baseDef + (p.eq.armor ? p.eq.armor.val : 0);
+  if (p.eq.trinket && p.eq.trinket.effect === 'armor') totalDef = Math.floor(totalDef * 1.25);
+  let defPct = Math.floor(Math.min(0.85, totalDef / (totalDef + 40)) * 100);
+  $('wd-ui-def').textContent = `${totalDef} (${defPct}%)`;
+  $('wd-ui-gold').textContent = p.gold;
+  $('wd-ui-shards').textContent = p.inv.shards;
+  $('wd-ui-dodge').textContent = `${p.baseDodge}%`;
+  $('wd-ui-luck').textContent = p.baseLuck;
+  if (state.dungeon.active) {
+    $('wd-ui-location').textContent = `${DUNGEONS[state.dungeon.type].name} E${state.dungeon.floor}`;
+  } else {
+    $('wd-ui-location').textContent = state.area ? AREAS[state.area].name : "Dorf";
+  }
+  $('wd-ui-sp').textContent = p.sp;
+  $('wd-eq-weapon').innerHTML = p.eq.weapon ? `<div class="wd-eq-icon">${getWepEmoji(p.eq.weapon.name)}</div><div class="wd-eq-details"><h4 class="${p.eq.weapon.rarity}">${p.eq.weapon.name}</h4><p>+${p.eq.weapon.val} ATK</p></div>` : `<div class="wd-eq-icon">🗡️</div><div class="wd-eq-details"><h4>Waffe</h4><p>Nichts</p></div>`;
+  $('wd-eq-armor').innerHTML = p.eq.armor ? `<div class="wd-eq-icon">${getArmEmoji(p.eq.armor.name)}</div><div class="wd-eq-details"><h4 class="${p.eq.armor.rarity}">${p.eq.armor.name}</h4><p>+${p.eq.armor.val} RÜS</p></div>` : `<div class="wd-eq-icon">🛡️</div><div class="wd-eq-details"><h4>Rüstung</h4><p>Nichts</p></div>`;
+  $('wd-eq-trinket').innerHTML = p.eq.trinket ? `<div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="${p.eq.trinket.rarity}">${p.eq.trinket.name}</h4><p>${p.eq.trinket.desc}</p></div><button class="wd-mini-btn" style="margin-left:auto" onclick="unequipTrinket()">Ablegen</button>` : `<div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="r-artefact">Artefakt</h4><p>Leerer Sockel</p></div>`;
+  let fxHtml = '';
+  if(p.fx.shield > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--rare)">Schild (${p.fx.shield})</span>`;
+  if(p.fx.dodge > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--xp-glow)">Waldläufer-Ausw. (${p.fx.dodge})</span>`;
+  if(p.fx.combo > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--hp-glow)">Combo (${p.fx.combo})</span>`;
+  if(p.fx.bossBuff) fxHtml += `<span class="wd-effect-chip" style="color:var(--gold)">Boss-Segen</span>`;
+  $('wd-status-effects').innerHTML = fxHtml;
+  renderQuests();
+
+  // --- Low Health Warning ---
+  const arena = $('wd-visual-arena');
+  const panel = $('wd-action-panel');
+  if (state.enemy && p.hp > 0 && (p.hp / p.maxHp) <= 0.25) {
+    if(arena) arena.classList.add('wd-danger-pulse');
+    if(panel) panel.classList.add('wd-danger-pulse');
+  } else {
+    if(arena) arena.classList.remove('wd-danger-pulse');
+    if(panel) panel.classList.remove('wd-danger-pulse');
+  }
+}
+function log(text, type='info') {
+  const c = $('wd-log-container');
+  const div = document.createElement('div');
+  div.className = `wd-log-entry wd-log-${type}`;
+  div.innerHTML = text;
+  c.appendChild(div);
+  c.scrollTop = c.scrollHeight;
+}
+function clearLog() { $('wd-log-container').innerHTML = ''; }
+function setActions(buttons) {
+  const c = $('wd-action-panel');
+  c.innerHTML = '';
+  buttons.forEach(b => {
+    const btn = document.createElement('button');
+    btn.className = 'wd-btn';
+    btn.disabled = b.disabled || state.lock;
+    btn.onclick = b.onclick;
+    btn.innerHTML = `<span class="wd-btn-main-text">${b.label}</span>${b.sub ? `<span class="wd-btn-sub-text">${b.sub}</span>` : ''}`;
+    c.appendChild(btn);
+  });
+}
+function showCombatStage(show) {
+  $('wd-combat-stage').style.display = show ? 'flex' : 'none';
+  $('wd-arena-title').textContent = state.enemy ? state.enemy.n : (state.area ? (state.area==='Dungeon'?DUNGEONS[state.dungeon.type].name:AREAS[state.area].name) : "Dorfplatz");
+  if(show && state.enemy) {
+    $('wd-ui-enemy-hp').textContent = `HP: ${Math.max(0, state.enemy.h)}/${state.enemy.maxH}`;
+    $('wd-sprite-enemy').textContent = state.enemy.s;
+    $('wd-sprite-hero').textContent = CLASSES[p.cls].avatar;
+  }
+}
+function initGame() {
+  $('wd-overlay').style.display = 'none'; p = null; state.area = null; state.enemy = null; state.selectedSkill = null;
+  clearLog(); showCombatStage(false); $('wd-arena-title').textContent = "Web Dungeons: Eclipse";
+  log("Willkommen bei Web Dungeons. Wähle deine Klasse:", "info");
+  const actions = [];
+  for(let c in CLASSES) actions.push({ label: `${CLASSES[c].avatar} ${c}`, sub: `Klicken für Details`, onclick: () => createPlayer(c) });
+  actions.push({ label: "🏆 Highscores", sub: "Halle der Gefallenen", onclick: showHighscores });
+  setActions(actions);
+}
+
+function createPlayer(cls, existingPrestige = null, preserveName = null) {
+  const name = preserveName || (prompt("Wie lautet dein Name?") || "Namenloser");
+  const c = CLASSES[cls];
+  const prestige = existingPrestige || { level: 0, dust: 0, buffs: { xp: 0, gold: 0, stats: 0 } };
+  
+  const maxHpBase = c.maxHp + (prestige.buffs.stats * 15);
+  const baseAtkBonus = (prestige.buffs.stats * 2);
+
+  p = {
+    name, cls, lvl: 1, xp: 0, maxXp: 100, sp: 0, gold: 90,
+    hp: maxHpBase, maxHp: maxHpBase, mp: c.maxMp, maxMp: c.maxMp, 
+    baseAtk: c.baseAtk + baseAtkBonus, baseDef: 0,
+    baseDodge: 0, baseLuck: 0,
+    eq: { 
+      weapon: { id: makeId('w'), type: 'weapon', name: c.defW, val: c.defDmg, rarity: 'r-common', sell: calculateSellValue(c.defDmg, 'r-common', 'weapon') }, 
+      armor: { id: makeId('a'), type: 'armor', name: c.defA, val: c.defDef, rarity: 'r-common', sell: calculateSellValue(c.defDef, 'r-common', 'armor') }, 
+      trinket: null 
+    },
+    inv: { weapons: [], armors: [], trinkets: [], potions: { hp: 2, mp: 1 }, chests: { wooden: 1, iron: 0, mystic: 0 }, shards: 0 },
+    fx: { shield: 0, dodge: 0, combo: 0, bossBuff: false },
+    talents: {}, quest: null, runStats: { kills: 0 },
+    prestige: prestige
+  };
+  
+  if (name === "CodetNiemalsHigh") {
+    p.gold = 99999999;
+    p.inv.chests = { wooden: 50, iron: 50, mystic: 50 };
+  }
+  p.inv.weapons.push(p.eq.weapon); p.inv.armors.push(p.eq.armor);
+  state.discovery = { weapons: [p.eq.weapon.name], armors: [p.eq.armor.name] };
+  state.selectedSkill = "t_hp1"; 
+  generateQuestBoard(); playSound('magic');
+  log(`Die Reise beginnt, ${name} der ${cls}.`, "good");
+  if (name === "CodetNiemalsHigh") {
+    log("Götter-Modus aktiviert: Die Kassen sind voll und die Truhen bersten!", "magic");
+  }
+  goToTown();
+}
+function goToTown() {
+  state.area = null; state.enemy = null; state.room = 0; state.dungeon.active = false;
+  updateHUD(); showCombatStage(false); clearLog();
+  log("Du befindest dich im Dorf. Bereite dich gut vor.", "info");
+  
+  const actions = [
+    { label: "🗺️ Expedition", sub: "Ressourcen farmen", onclick: showExpeditionSelection },
+    { label: "🏰 Dungeons", sub: "Endloser Boss-Modus", onclick: showDungeonSelection },
+    { label: "⚖️ Händlerviertel", sub: "Schmied & Alchemist", onclick: openShopMenu },
+    { label: "📜 Questbrett", sub: "Aufträge annehmen", onclick: () => switchTab('wd-tab-quests', document.querySelectorAll('.wd-tab-btn')[3]) }
+  ];
+
+  if (p.lvl >= 25 || (p.prestige && p.prestige.level > 0)) {
+    actions.push({ label: "🌌 Astral-Altar", sub: "Wiedergeburt", onclick: showPrestigeMenu });
+  }
+
+  setActions(actions);
+}
+
+function showPrestigeMenu() {
+  clearLog();
+  log("Der Astral-Altar summt vor kosmischer Energie. Hier kannst du deine weltliche Macht für permanenten Astralstaub opfern.", "magic");
+  
+  const canPrestige = p.lvl >= 25;
+  const dustReward = 5; 
+
+  setActions([
+    { 
+      label: "Wiedergeburt", 
+      sub: canPrestige ? `+${dustReward} Astralstaub` : "Ab Lvl 25", 
+      disabled: !canPrestige, 
+      onclick: () => doPrestige(dustReward) 
+    },
+    { label: "Erfahrungs-Echo", sub: `1 Staub (+10% XP) [Lvl ${p.prestige.buffs.xp}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('xp') },
+    { label: "Goldsog", sub: `1 Staub (+10% Gold) [Lvl ${p.prestige.buffs.gold}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('gold') },
+    { label: "Macht des Kosmos", sub: `1 Staub (+15 HP, +2 ATK) [Lvl ${p.prestige.buffs.stats}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('stats') },
+    { label: "Zurück", onclick: goToTown }
+  ]);
+}
+
+function buyPrestigeBuff(type) {
+  p.prestige.dust -= 1;
+  p.prestige.buffs[type] += 1;
+  
+  if (type === 'stats') {
+      p.maxHp += 15;
+      p.hp += 15;
+      p.baseAtk += 2;
+  }
+  
+  playSound('level');
+  updateHUD();
+  log(`Permanenter Buff verstärkt! Deine Macht überdauert den Tod.`, "magic");
+  showPrestigeMenu();
+}
+
+function doPrestige(dustReward) {
+  if(!confirm("WARNUNG: Du verlierst dein aktuelles Level, Gold, Inventar und Ausrüstung! Deine permanenten Buffs und dein Astralstaub bleiben erhalten. Fortfahren?")) return;
+  
+  playSound('magic');
+  const savedPrestige = JSON.parse(JSON.stringify(p.prestige));
+  savedPrestige.dust += dustReward;
+  savedPrestige.level += 1;
+  
+  const clsName = p.cls;
+  const pName = p.name;
+  createPlayer(clsName, savedPrestige, pName); 
+  
+  log(`WIEDERGEBURT ERFOLGREICH! Du startest neu, aber mächtiger als zuvor. (+${dustReward} Astralstaub)`, "warn");
+}
+
+function showExpeditionSelection() {
+  clearLog(); log("Die Tore stehen offen. Wohin führt dein Weg?", "info");
+  setActions([
+    { label: "🌲 "+AREAS.Forest.name, sub: "Geringe Gefahr", onclick: () => startExploration('Forest') },
+    { label: "🏛️ "+AREAS.Ruins.name, sub: "Mittlere Gefahr", onclick: () => startExploration('Ruins') },
+    { label: "🌋 "+AREAS.Volcano.name, sub: "Hohe Gefahr", onclick: () => startExploration('Volcano') },
+    { label: "Zurück", onclick: goToTown }
+  ]);
+}
+function showDungeonSelection() {
+  clearLog(); log("Wähle einen Dungeon. Jeder Raum bedeutet Kampf, jede Etage einen Boss.", "warn");
+  setActions([
+    { label: "Katakomben (Leicht)", sub: "Basis-Loot", onclick: () => startDungeonRun('D1') },
+    { label: "Schattenfestung (Mittel)", sub: "1.5x Loot Chance", onclick: () => startDungeonRun('D2') },
+    { label: "Abgrund (Schwer)", sub: "2.2x Loot Chance", onclick: () => startDungeonRun('D3') },
+    { label: "Mahlstrom (Endlos)", sub: "Mutatoren ab Lvl 20", disabled: (p.lvl < 20 && (!p.prestige || p.prestige.level === 0)), onclick: () => startDungeonRun('D4') },
+    { label: "Zurück", onclick: goToTown }
+  ]);
+}
+function openShopMenu() {
+  clearLog(); log("Der Schmied hämmert, die Arkanschmiede knistert.", "info");
+  setActions([
+    { label: "Waffenschmied", sub: "Ausrüstung kaufen", onclick: visitBlacksmith },
+    { label: "Rüstungsschmied", sub: "Schutz verbessern", onclick: visitArmorer },
+    { label: "Arkanschmiede", sub: "Ausrüstung aufwerten", onclick: visitForge },
+    { label: "Alchemist", sub: "Tränke & Kisten", onclick: visitAlchemist },
+    { label: "Taverne", sub: "Heilung & Buffs", onclick: visitTavern },
+    { label: "Zurück ins Dorf", onclick: goToTown }
+  ]);
+}
+function visitBlacksmith() {
+  const acts = SHOP_WEAPONS[p.cls].map(o => ({ label: `${o.name} (+${o.dmg})`, sub: `${o.cost} G`, onclick: () => buyGear(o, 'weapon') }));
+  acts.push({ label: "Zurück", onclick: openShopMenu }); setActions(acts);
+}
+function visitArmorer() {
+  const acts = SHOP_ARMORS[p.cls].map(o => ({ label: `${o.name} (+${o.def})`, sub: `${o.cost} G`, onclick: () => buyGear(o, 'armor') }));
+  acts.push({ label: "Zurück", onclick: openShopMenu }); setActions(acts);
+}
+
+function visitForge() {
+  clearLog(); log(`Die magischen Flammen der Arkanschmiede benötigen Splitter. Du besitzt ${p.inv.shards}.`, "magic");
+  const wCost = Math.floor(p.eq.weapon.val * 1.5) + 5;
+  const aCost = Math.floor(p.eq.armor.val * 1.5) + 5;
+  const wBonus = Math.max(2, Math.floor(p.eq.weapon.val * 0.15));
+  const aBonus = Math.max(1, Math.floor(p.eq.armor.val * 0.15));
+  setActions([
+    { label: "Waffe aufwerten", sub: `${wCost} Splitter (+${wBonus} ATK)`, disabled: p.inv.shards < wCost, onclick: () => upgradeGear('weapon', wCost, wBonus) },
+    { label: "Rüstung aufwerten", sub: `${aCost} Splitter (+${aBonus} RÜS)`, disabled: p.inv.shards < aCost, onclick: () => upgradeGear('armor', aCost, aBonus) },
+    { label: "Zurück", onclick: openShopMenu }
+  ]);
+}
+
+function upgradeGear(type, cost, bonus) {
+  if(p.inv.shards < cost) return;
+  p.inv.shards -= cost;
+  playSound('level');
+  
+  if(type === 'weapon') {
+      p.eq.weapon.val += bonus;
+      p.eq.weapon.name = p.eq.weapon.name.includes('+') ? p.eq.weapon.name.replace(/\+\d+/, `+${parseInt(p.eq.weapon.name.match(/\+(\d+)/)[1]) + 1}`) : p.eq.weapon.name + ' +1';
+      p.eq.weapon.sell = calculateSellValue(p.eq.weapon.val, p.eq.weapon.rarity, 'weapon');
+      
+      let invItem = p.inv.weapons.find(i => i.id === p.eq.weapon.id);
+      if (invItem && invItem !== p.eq.weapon) {
+          invItem.val = p.eq.weapon.val;
+          invItem.name = p.eq.weapon.name;
+          invItem.sell = p.eq.weapon.sell;
+      }
+      
+      log(`${p.eq.weapon.name} glüht vor Energie!`, "good");
+  } else {
+      p.eq.armor.val += bonus;
+      p.eq.armor.name = p.eq.armor.name.includes('+') ? p.eq.armor.name.replace(/\+\d+/, `+${parseInt(p.eq.armor.name.match(/\+(\d+)/)[1]) + 1}`) : p.eq.armor.name + ' +1';
+      p.eq.armor.sell = calculateSellValue(p.eq.armor.val, p.eq.armor.rarity, 'armor');
+      
+      let invItem = p.inv.armors.find(i => i.id === p.eq.armor.id);
+      if (invItem && invItem !== p.eq.armor) {
+          invItem.val = p.eq.armor.val;
+          invItem.name = p.eq.armor.name;
+          invItem.sell = p.eq.armor.sell;
+      }
+      
+      log(`${p.eq.armor.name} glüht vor Energie!`, "good");
+  }
+  updateHUD();
+  visitForge();
+}
+
+function buyGear(item, type) {
+  if (p.gold < item.cost) { return; } 
+  playSound('coin'); p.gold -= item.cost;
+  if(type === 'weapon') { 
+    const w = { id: makeId('w'), type: 'weapon', name: item.name, val: item.dmg, rarity: 'r-shop', sell: calculateSellValue(item.dmg, 'r-shop', 'weapon') };
+    p.inv.weapons.unshift(w); p.eq.weapon = w; discover('weapons', w.name);
+  } else { 
+    const a = { id: makeId('a'), type: 'armor', name: item.name, val: item.def, rarity: 'r-shop', sell: calculateSellValue(item.def, 'r-shop', 'armor') };
+    p.inv.armors.unshift(a); p.eq.armor = a; discover('armors', a.name);
+  }
+  log(`${item.name} gekauft und ausgerüstet.`, "good"); updateHUD(); type === 'weapon' ? visitBlacksmith() : visitArmorer();
+}
+function visitAlchemist() {
+  setActions([
+    { label: "Heiltrank", sub: "25 G (+50 HP)", onclick: () => buyItem('hp', 25) },
+    { label: "Manatrank", sub: "20 G (+40 MP)", onclick: () => buyItem('mp', 20) },
+    { label: "Holzkiste", sub: "150 G (Basics)", onclick: () => buyItem('wooden', 150) },
+    { label: "Eisenkiste", sub: "300 G (Mehr Epics)", onclick: () => buyItem('iron', 300) },
+    { label: "Arkankiste", sub: "600 G (Leg-Chance)", onclick: () => buyItem('mystic', 600) },
+    { label: "Zurück", onclick: openShopMenu }
+  ]);
+}
+function buyItem(type, cost) {
+  if (p.gold < cost) { return; }
+  playSound('coin'); p.gold -= cost;
+  if(type === 'hp') { p.inv.potions.hp++; log("Heiltrank gekauft.", "good"); }
+  else if(type === 'mp') { p.inv.potions.mp++; log("Manatrank gekauft.", "good"); }
+  else { p.inv.chests[type]++; log(`${CHEST_DEFS[type].label} gekauft.`, "magic"); playSound('magic'); }
+  updateHUD(); visitAlchemist();
+}
+function visitTavern() {
+  setActions([
+    { label: "Kleine Rast", sub: "18 G (Heilt 35%)", onclick: () => tavernRest(18, 0.35) },
+    { label: "Große Rast", sub: `${48+p.lvl*8} G (Heilt 100%)`, onclick: () => tavernRest(48+p.lvl*8, 1.0) },
+    { label: "Abendsegen", sub: "65 G (Boss-Ulti Buff)", onclick: () => { if(p.gold>=65){ playSound('magic'); p.gold-=65; p.fx.bossBuff=true; log("Segen empfangen!", "magic"); updateHUD(); visitTavern(); }}},
+    { label: "Zurück", onclick: openShopMenu }
+  ]);
+}
+function tavernRest(cost, pct) {
+  if (p.gold < cost) { return; }
+  playSound('heal'); p.gold -= cost; p.hp = Math.min(p.maxHp, p.hp + Math.floor(p.maxHp*pct)); p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp*pct));
+  log("Wunden geheilt.", "good"); updateHUD(); visitTavern();
+}
+function startExploration(area) {
+  state.area = area; state.room = 0; clearLog(); log(`Du betrittst das Gebiet: ${AREAS[area].name}.`, "info"); enterRoom();
+}
+function enterRoom() {
+  state.room++; updateHUD(); showCombatStage(false);
+  setActions([
+    { label: "Linker Pfad", sub: "Gefahr & Beute", onclick: () => resolveRoom(1.2) },
+    { label: "Geradeaus", sub: "Ausgewogen", onclick: () => resolveRoom(1.0) },
+    { label: "Rechter Pfad", sub: "Sicherer", onclick: () => resolveRoom(0.8) },
+    { label: "Stadt (Rückzug)", sub: "Beute sichern", onclick: goToTown }
+  ]);
+}
+async function resolveRoom(dangerMult) {
+  if(state.lock) return; state.lock = true; setActions([]); log("Du gehst tiefer...", "muted"); await sleep(400);
+  const roll = Math.random(); const combatChance = 0.5 * dangerMult;
+  if (roll < combatChance) { spawnEnemy(dangerMult); }
+  else if (roll < combatChance + 0.05) { 
+    playSound('magic'); p.inv.chests[Math.random()<0.1?'mystic':(Math.random()<0.4?'iron':'wooden')]++; 
+    log("Truhe gefunden!", "magic"); await sleep(800); state.lock = false; enterRoom(); 
+  }
+  else if (roll < combatChance + 0.25) { 
+    playSound('hurt'); visualDamage('hero', 0, false); 
+    const dmg=Math.floor(rand(10,25)*dangerMult); p.hp-=dmg; log(`Falle! ${dmg} Schaden.`, "bad"); checkDeath(); 
+    if(p.hp>0){await sleep(800); state.lock=false; enterRoom();} 
+  }
+  else { 
+    playSound('heal'); const heal=Math.floor(p.maxHp*0.2); p.hp=Math.min(p.maxHp,p.hp+heal); p.mp=Math.min(p.maxMp,p.mp+Math.floor(p.maxMp*0.2)); 
+    log(`Rast: +${heal} HP/MP.`, "good"); await sleep(800); state.lock=false; enterRoom(); 
+  }
+}
+function startDungeonRun(type) {
+  state.area = 'Dungeon'; 
+  state.dungeon = { 
+    active: true, 
+    type: type, 
+    floor: 1, 
+    roomsCleared: 0, 
+    roomsPerFloor: 3, 
+    bossPending: false, 
+    rests: 1,
+    firstEnemyDefeated: false
+  };
+  clearLog(); log(`Du betrittst ${DUNGEONS[type].name}. Das Feuer brennt, aber du findest erst Ruhe, wenn der erste Feind bezwungen ist!`, "warn");
+  showDungeonMenu();
+}
+function showDungeonMenu() {
+  updateHUD(); showCombatStage(false); const d = state.dungeon; const acts = [];
+  if (d.bossPending) {
+    log(`Das Tor zum Boss liegt vor dir.`, "bad");
+    acts.push({ label: "Boss-Tor öffnen", sub: "Bereite dich vor", onclick: () => spawnEnemy(1.2, true) });
+  } else {
+    log(`Ebene ${d.floor} · Räume geklärt: ${d.roomsCleared} / ${d.roomsPerFloor}`, "info");
+    acts.push({ label: "Nächster Raum (Kampf)", sub: "Gegner besiegen, um voranzukommen", onclick: triggerDungeonRoom });
+  }
+  
+  const canRest = d.rests > 0 && d.firstEnemyDefeated;
+  acts.push({ 
+    label: "Am Feuer rasten", 
+    sub: d.firstEnemyDefeated ? `+20% HP/MP (${d.rests} übrig)` : "Erst Gegner besiegen!", 
+    disabled: !canRest, 
+    onclick: dungeonRest 
+  });
+  
+  acts.push({ label: "Dungeon verlassen", sub: "Zurück ins Dorf", onclick: goToTown });
+  setActions(acts);
+}
+async function triggerDungeonRoom() {
+  if(state.lock) return; state.lock = true; setActions([]); log("Eine schwere Eisentür öffnet sich...", "muted"); await sleep(400); spawnEnemy(1 + state.dungeon.floor * 0.1);
+}
+function dungeonRest() {
+  if(!state.dungeon.firstEnemyDefeated || state.dungeon.rests <= 0) return; 
+  state.dungeon.rests--; playSound('heal');
+  p.hp = Math.min(p.maxHp, p.hp + Math.floor(p.maxHp * 0.2)); p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp * 0.2));
+  log("Du rastest kurz am Feuer.", "good"); updateHUD(); showDungeonMenu();
+}
+function spawnEnemy(mult, forceBoss=false) {
+  let isBoss = forceBoss; let t; let diff = 1; let lootMult = 1; const levelScale = 1 + (p.lvl * 0.05);
+  if(isBoss && state.area === 'Dungeon') { t = DUNGEONS[state.dungeon.type].boss; diff = DUNGEONS[state.dungeon.type].diff + (state.dungeon.floor * 0.2); lootMult = DUNGEONS[state.dungeon.type].loot; } 
+  else { diff = state.area === 'Dungeon' ? DUNGEONS[state.dungeon.type].diff + (state.dungeon.floor*0.1) : AREAS[state.area].diff; lootMult = state.area === 'Dungeon' ? DUNGEONS[state.dungeon.type].loot : 1; const pool = state.area === 'Dungeon' ? DUNGEON_ENEMIES : AREAS[state.area].enemies; t = pool[rand(0, pool.length-1)]; }
+  const h = Math.floor(t.h * diff * mult * levelScale); const a = Math.floor(t.a * diff * mult * levelScale);
+  const xpLevelScale = 1 + (p.lvl * 0.15); const xp = Math.floor((t.xp || 20) * Math.pow(diff, 1.3) * mult * (isBoss ? 5 : 1) * xpLevelScale);
+  
+  state.enemy = { n: (isBoss?"BOSS: ":"")+t.n, s: t.s, h, maxH: h, a, xp, boss: isBoss, lootMult };
+
+  if (state.area === 'Dungeon' && state.dungeon.type === 'D4') {
+    const mutator = MUTATORS[rand(0, MUTATORS.length - 1)];
+    state.enemy.mutator = mutator;
+    state.enemy.n = `[${mutator.name}] ${state.enemy.n}`;
+    
+    if (mutator.id === 'brute') {
+      state.enemy.maxH = Math.floor(state.enemy.maxH * 1.5);
+      state.enemy.h = state.enemy.maxH;
+    }
+    if (mutator.id === 'frenzy') {
+      state.enemy.a = Math.floor(state.enemy.a * 1.3);
+    }
+    log(`Mahlstrom-Effekt aktiv: ${mutator.desc}`, "magic");
+  }
+
+  log(`${state.enemy.n} greift an!`, "bad"); showCombatStage(true); state.lock = false; renderCombatActions();
+}
+function renderCombatActions() {
+  const c = CLASSES[p.cls];
+  setActions([
+    { label: "Angriff", sub: "Standard", onclick: () => doAttack('basic') },
+    { label: c.skill, sub: `${c.cost} MP`, disabled: p.mp < c.cost, onclick: () => doAttack('skill') },
+    { label: c.ult, sub: `${c.uCost} MP`, disabled: p.mp < c.uCost, onclick: () => doAttack('ult') },
+    { label: "Trank", sub: `${p.inv.potions.hp}x HP`, disabled: p.inv.potions.hp <= 0, onclick: () => usePotion('hp') },
+    { label: "Fliehen", sub: "50% Chance", disabled: state.enemy.boss, onclick: tryFlee }
+  ]);
+  updateHUD();
+}
+async function tryFlee() {
+  if(state.lock) return; state.lock = true; log("Fluchtversuch...", "info"); await sleep(400);
+  if(Math.random() < 0.5) { log("Erfolgreich entkommen!", "good"); state.enemy = null; state.lock = false; updateHUD(); if(state.dungeon.active) showDungeonMenu(); else enterRoom(); } 
+  else { log("Flucht fehlgeschlagen! Der Gegner schlägt zu.", "bad"); await sleep(400); enemyTurn(); }
+}
+async function doAttack(type) {
+  if(state.lock) return; state.lock = true; const c = CLASSES[p.cls];
+  let dmg = p.baseAtk + (p.eq.weapon ? p.eq.weapon.val : 0);
+  let luckCritBonus = p.baseLuck * 0.005; 
+  let critChance = c.crit + (p.eq.trinket && p.eq.trinket.effect==='crit' ? 0.2 : 0) + (p.fx.combo*0.05) + luckCritBonus;
+  let isCrit = Math.random() < critChance;
+  if(type === 'skill') { p.mp -= c.cost; dmg = Math.floor(dmg * 1.5); }
+  if(type === 'ult') { 
+    p.mp -= c.uCost; 
+    dmg = Math.floor(dmg * 2.8); 
+    if(p.fx.bossBuff && state.enemy.boss) { dmg=Math.floor(dmg*1.3); p.fx.bossBuff=false; log("Boss-Segen!","magic"); playSound('magic'); }
+    progressQuest('ult');
+  }
+  if(isCrit) dmg = Math.floor(dmg * 1.8);
+  if(p.cls==='Ritter' && type==='skill') p.fx.shield=2; if(p.cls==='Schurke') p.fx.combo=Math.min(3,p.fx.combo+1); if(p.cls==='Waldläufer' && type==='skill') p.fx.dodge=1;
+  visualHit('hero', 'right'); await sleep(200); playSound(isCrit ? 'crit' : 'hit');
+  
+  state.enemy.h -= dmg; visualDamage('enemy', dmg, isCrit);
+  log(`Treffer für ${dmg}! ${isCrit?'(Krit)':''}`, isCrit?'warn':'info');
+  
+  if (state.enemy.mutator && state.enemy.mutator.id === 'thorns' && state.enemy.h > 0) {
+    let thornsDmg = Math.max(1, Math.floor(dmg * 0.1));
+    p.hp -= thornsDmg;
+    visualDamage('hero', thornsDmg, false);
+    log(`Dornenrüstung wirft ${thornsDmg} Schaden zurück!`, "bad");
+  }
+
+  if(p.eq.trinket && p.eq.trinket.effect === 'lifesteal') { p.hp = Math.min(p.maxHp, p.hp + Math.floor(dmg * 0.2)); }
+  updateHUD(); if(state.enemy.h <= 0) { await winCombat(); return; }
+  await sleep(600); await enemyTurn();
+}
+async function enemyTurn() {
+  const dodgeChance = (p.baseDodge * 0.01) + (p.fx.dodge > 0 ? 0.4 : 0);
+  if(Math.random() < dodgeChance) { 
+    if(p.fx.dodge > 0) p.fx.dodge--; 
+    log("Du weichst geschickt aus!", "good"); playSound('hover'); 
+  } 
+  else {
+    visualHit('enemy', 'left'); await sleep(200);
+    let eDmg = state.enemy.a;
+    let def = p.baseDef + (p.eq.armor ? p.eq.armor.val : 0);
+    if(p.eq.trinket && p.eq.trinket.effect==='armor') def = Math.floor(def * 1.25);
+    let mitigation = Math.min(0.85, def / (def + 40)); 
+    eDmg = Math.max(1, Math.floor(eDmg * (1 - mitigation)));
+    if(p.fx.shield > 0) { eDmg = Math.floor(eDmg * 0.5); p.fx.shield--; }
+    playSound('hurt'); p.hp -= eDmg; visualDamage('hero', eDmg, false); log(`${state.enemy.n} trifft für ${eDmg}.`, "bad");
+
+    if (state.enemy.mutator && state.enemy.mutator.id === 'vampiric' && p.hp > 0) {
+      let healAmt = Math.floor(eDmg * 0.2);
+      state.enemy.h = Math.min(state.enemy.maxH, state.enemy.h + healAmt);
+      log(`${state.enemy.n} heilt sich um ${healAmt}!`, "warn");
+    }
+  }
+  
+  if(p.eq.trinket && p.eq.trinket.effect === 'manareg') p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp * 0.1));
+  updateHUD(); if(p.hp <= 0) { checkDeath(); return; }
+  state.lock = false; renderCombatActions();
+}
+async function winCombat() {
+  $('wd-sprite-enemy').textContent = '☠️'; await sleep(500);
+  const luckGoldMult = 1 + (p.baseLuck * 0.03);
+  
+  const prestigeGoldBuff = 1 + ((p.prestige?.buffs?.gold || 0) * 0.1);
+  const prestigeXpBuff = 1 + ((p.prestige?.buffs?.xp || 0) * 0.1);
+
+  const gold = Math.floor(rand(10, 30) * state.enemy.lootMult * (state.enemy.boss?5:1) * luckGoldMult * prestigeGoldBuff);
+  const gainedXp = Math.floor(state.enemy.xp * prestigeXpBuff);
+  
+  p.gold += gold; p.xp += gainedXp; p.runStats.kills++;
+  playSound('coin'); log(`Sieg! +${gold} Gold, +${gainedXp} XP.`, "good");
+  progressQuest(state.enemy.boss ? 'boss' : 'kill');
+  
+  const luckChestChance = p.baseLuck * 0.01;
+  if (state.dungeon.active) {
+    state.dungeon.firstEnemyDefeated = true;
+    if (state.enemy.boss) { 
+      p.inv.chests['mystic']++; 
+      log("Boss-Drop: Arkankiste!", "magic"); 
+      
+      let artChance = state.dungeon.type === 'D4' ? 0.02 : (state.dungeon.type === 'D3' ? 0.0133 : (state.dungeon.type === 'D2' ? 0.0115 : 0.01));
+      if (Math.random() < artChance + (p.baseLuck * 0.0005)) {
+        const tBase = TRINKETS[rand(0, TRINKETS.length-1)];
+        const t = Object.assign({}, tBase);
+        t.id = makeId('t'); 
+        t.type = 'trinket'; 
+        t.sell = 1500;
+        p.inv.trinkets.push(t);
+        playSound('level');
+        log(`MÄCHTIGE BEUTE: Artefakt '${t.name}' gefunden!`, "magic");
+      }
+    } 
+    else {
+       state.dungeon.roomsCleared++;
+       if (state.dungeon.roomsCleared >= state.dungeon.roomsPerFloor) state.dungeon.bossPending = true;
+       if (Math.random() < (0.15 * state.enemy.lootMult) + luckChestChance) { p.inv.chests[Math.random()<0.3?'iron':'wooden']++; log("Gegner ließ eine Kiste fallen!", "magic"); }
+    }
+  } else { 
+      if (Math.random() < 0.08 + luckChestChance) { p.inv.chests.wooden++; log("Holzkiste gefunden!", "magic"); } 
+  }
+  
+  if(p.xp >= p.maxXp) { playSound('level'); p.xp -= p.maxXp; p.lvl++; p.maxXp = Math.floor(p.maxXp * 1.5); p.maxHp += 15; p.hp = p.maxHp; p.sp += 1; log(`LEVEL UP! Stufe ${p.lvl}. (+1 Talent)`, "warn"); }
+  if(state.enemy.boss && state.dungeon.active) {
+    state.dungeon.floor++; state.dungeon.roomsCleared = 0; state.dungeon.roomsPerFloor = Math.min(8, 3 + Math.floor(state.dungeon.floor / 2)); state.dungeon.bossPending = false; state.dungeon.rests = 1;
+    log(`Dungeon Ebene ${state.dungeon.floor} betreten!`, "magic"); state.enemy = null; state.lock = false; updateHUD(); showDungeonMenu(); return;
+  }
+  state.enemy = null; state.lock = false; updateHUD();
+  if(state.dungeon.active) showDungeonMenu(); else enterRoom();
+}
+function checkDeath() {
+  updateHUD();
+  if(p.hp <= 0) {
+    playSound('death'); state.lock = true; let score = saveHighscore();
+    $('wd-overlay').style.display = 'flex';
+    $('wd-overlay-content').innerHTML = `<h2>Gefallen</h2><p>Die Dunkelheit verschlingt dich.</p><p style="color:var(--gold); font-size:1.2rem; margin-bottom: 20px; font-weight:bold; font-family:'Cinzel', serif;">Dein Vermächtnis: ${score}</p><button class="wd-btn" style="width: 100%;" onclick="initGame()">Zurück ins Licht</button>`;
+  }
+}
+
+function usePotion(type) {
+  if(p.inv.potions[type] <= 0 || state.lock) return;
+  playSound('heal'); p.inv.potions[type]--;
+  
+  let healAmt = 0;
+  if(type === 'hp') { 
+    healAmt = 50; 
+    p.hp = Math.min(p.maxHp, p.hp + 50); 
+    log("Heiltrank: +50 HP", "good"); 
+  } else { 
+    healAmt = 40; 
+    p.mp = Math.min(p.maxMp, p.mp + 40); 
+    log("Manatrank: +40 MP", "good"); 
+  }
+  
+  updateHUD(); renderInventoryList('consumables');
+  
+  const arena = $('wd-visual-arena');
+  const sprite = $('wd-sprite-hero');
+  if(arena && sprite) {
+    arena.classList.remove('wd-anim-potion-hp-arena', 'wd-anim-potion-mp-arena');
+    sprite.classList.remove('wd-anim-potion-hp-sprite', 'wd-anim-potion-mp-sprite');
+    void arena.offsetWidth;
+    void sprite.offsetWidth;
+    
+    if(type === 'hp') {
+      arena.classList.add('wd-anim-potion-hp-arena');
+      sprite.classList.add('wd-anim-potion-hp-sprite');
+    } else {
+      arena.classList.add('wd-anim-potion-mp-arena');
+      sprite.classList.add('wd-anim-potion-mp-sprite');
+    }
+
+    const rect = sprite.getBoundingClientRect(); 
+    const fct = document.createElement('div'); 
+    fct.className = 'wd-fct'; 
+    fct.textContent = `+${healAmt} ${type.toUpperCase()}`; 
+    fct.style.color = type === 'hp' ? 'var(--hp-glow)' : 'var(--mp-glow)'; 
+    fct.style.left = `${rect.left + rect.width/2}px`; 
+    fct.style.top = `${rect.top - 20}px`; 
+    $('wd-wrapper').appendChild(fct); 
+    setTimeout(() => fct.remove(), 1200);
+  }
+
+  if(state.enemy) { state.lock=true; setTimeout(enemyTurn, 600); }
+}
+
+function visualHit(target, dir) {
+  const el = $(`wd-sprite-${target}`); if(!el) return; el.classList.remove('wd-anim-atk-right', 'wd-anim-atk-left'); void el.offsetWidth; el.classList.add(dir === 'right' ? 'wd-anim-atk-right' : 'wd-anim-atk-left');
+}
+function visualDamage(target, amt, crit) {
+  const el = $(`wd-sprite-${target}`); if(target === 'enemy') $('wd-ui-enemy-hp').textContent = `HP: ${Math.max(0, state.enemy.h)}/${state.enemy.maxH}`;
+  if(!el) return; el.classList.remove('wd-anim-hurt'); void el.offsetWidth; el.classList.add('wd-anim-hurt');
+  if (amt > 0) {
+    const rect = el.getBoundingClientRect(); const fct = document.createElement('div'); fct.className = 'wd-fct'; fct.textContent = `-${amt}${crit?'!':''}`; fct.style.color = crit ? 'var(--gold)' : 'var(--hp-glow)'; fct.style.left = `${rect.left + rect.width/2}px`; fct.style.top = `${rect.top}px`; $('wd-wrapper').appendChild(fct); setTimeout(() => fct.remove(), 1200);
+  }
+}
+function renderInventoryList(type) {
+  state.tab = type; const c = $('wd-inv-list'); c.innerHTML = '';
+  if(type === 'consumables') {
+    c.innerHTML = `<div class="wd-list-item"><div class="wd-list-info"><h4>Heiltränke</h4><p>Stellt 50 HP her</p></div><div class="wd-list-actions"><span style="font-weight:bold">${p.inv.potions.hp}x</span><button class="wd-mini-btn" onclick="usePotion('hp')">Nutzen</button></div></div>
+                   <div class="wd-list-item"><div class="wd-list-info"><h4>Manatränke</h4><p>Stellt 40 MP her</p></div><div class="wd-list-actions"><span style="font-weight:bold">${p.inv.potions.mp}x</span><button class="wd-mini-btn" onclick="usePotion('mp')">Nutzen</button></div></div>`;
+    Object.keys(CHEST_DEFS).forEach(k => {
+      const amt = p.inv.chests[k];
+      c.innerHTML += `<div class="wd-list-item"><div class="wd-list-info"><h4>${CHEST_DEFS[k].icon} ${CHEST_DEFS[k].label}</h4></div><div class="wd-list-actions"><span style="font-weight:bold; color:var(--gold)">${amt}x</span><div style="display:flex; gap:4px;"><button class="wd-mini-btn" ${amt<=0 || state.enemy || state.lock ? 'disabled':''} onclick="openChest('${k}', 1)">1x</button><button class="wd-mini-btn" ${amt<3 || state.enemy || state.lock ? 'disabled':''} onclick="openChest('${k}', 3)">3x</button></div></div></div>`;
+    });
+    return;
+  }
+  const items = p.inv[type];
+  if(items.length === 0) { c.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding: 20px; font-style:italic;">Leer.</p>'; return; }
+  items.forEach(i => {
+    const isEq = (p.eq.weapon?.id === i.id) || (p.eq.armor?.id === i.id) || (p.eq.trinket?.id === i.id);
+    const div = document.createElement('div'); div.className = 'wd-list-item'; if(isEq) { div.style.borderColor = 'var(--gold)'; div.style.boxShadow = 'inset 0 0 15px rgba(212, 175, 55, 0.2)'; }
+    let statText = i.type==='weapon' ? `+${i.val} ATK` : i.type==='armor' ? `+${i.val} RÜS` : i.desc;
+    div.innerHTML = `<div class="wd-list-info"><h4 class="${i.rarity}">${i.name}</h4><p>${statText} | Wert: ${i.sell}G</p></div>
+      <div class="wd-list-actions">${!isEq ? `<button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="equipItem('${type}', '${i.id}')">Ausrüsten</button><button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="sellItem('${type}', '${i.id}')">Verkaufen</button><button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="dismantleItem('${type}', '${i.id}')">Zerlegen</button>` : `<span style="font-size:0.75rem; color:var(--gold); font-family:'Cinzel', serif; font-weight:bold;">Aktiv</span>`}</div>`;
+    c.appendChild(div);
+  });
+}
+function equipItem(type, id) { const item = p.inv[type].find(i => i.id === id); if(type === 'weapons') p.eq.weapon = item; else if(type === 'armors') p.eq.armor = item; else if(type === 'trinkets') p.eq.trinket = item; updateHUD(); renderInventoryList(type); }
+function unequipTrinket() { p.eq.trinket = null; updateHUD(); renderInventoryList('trinkets'); }
+function sellItem(type, id) { const idx = p.inv[type].findIndex(i => i.id === id); p.gold += p.inv[type][idx].sell; p.inv[type].splice(idx, 1); playSound('coin'); updateHUD(); renderInventoryList(type); }
+function dismantleItem(type, id) { 
+  const idx = p.inv[type].findIndex(i => i.id === id); 
+  const item = p.inv[type][idx];
+  const shards = calculateShardValue(item.rarity);
+  if(p.inv.shards === undefined) p.inv.shards = 0;
+  p.inv.shards += shards;
+  progressQuest('dismantle');
+  p.inv[type].splice(idx, 1);
+  playSound('magic');
+  log(`${item.name} zerschlagen! +${shards} Arkane Splitter.`, "magic");
+  updateHUD(); renderInventoryList(type); 
+}
+function chestRewardVisualClass(rewardText, rewardClass='') {
+  const text = (rewardText||'').toLowerCase(); 
+  if (text.includes('mana')) return 'reward-mana'; if (text.includes('trank')) return 'reward-potion'; if (text.includes('gold')) return 'reward-gold'; 
+  return rewardClass || 'r-common';
+}
+function skipChestAnimation() { isSkippingChest = true; }
+async function playChestOpeningAnimation(type, results) {
+  const overlay = $('wd-chest-open-overlay'); const container = $('wd-chest-open-container'); const def = CHEST_DEFS[type]; isSkippingChest = false;
+  const filler = [
+    {title:'Rostiges Schwert', sub:'Gewöhnlich', cls:'r-common'}, {title:'Stabile Klinge', sub:'Selten', cls:'r-rare'}, {title:'Arkantrank', sub:'Mana', cls:'reward-mana'}, {title:'Heiltrank', sub:'Leben', cls:'reward-potion'}, {title:'Königsreif', sub:'Episch', cls:'r-epic'}, {title:'Goldschatz', sub:'Gold', cls:'reward-gold'}, {title:'Götterklinge', sub:'Legendär', cls:'r-legendary'}
+  ];
+  container.innerHTML = '';
+  const tracks = []; const winnerEls = []; const resultEls = [];
+  const totalItems = 75; const winnerIndex = 65;
+  results.forEach((res, index) => {
+    const rewardText = res.rewardText; const rewardClass = res.rewardClass; const rewardVisual = chestRewardVisualClass(rewardText, rewardClass);
+    const card = document.createElement('div'); card.className = 'wd-chest-open-card';
+    const title = document.createElement('div');
+    title.style.cssText = "font-family:'Cinzel', serif;color:var(--accent);font-weight:bold;font-size:1.2rem;margin-bottom:8px;letter-spacing:2px;text-shadow:0 0 10px rgba(212, 175, 55, 0.4)";
+    title.textContent = def.label + (results.length > 1 ? ` #${index+1}` : '') + ' wird entsiegelt...';
+    const reel = document.createElement('div'); reel.className = 'wd-chest-open-reel';
+    const centerLine = document.createElement('div'); centerLine.className = 'wd-chest-open-centerline';
+    const track = document.createElement('div'); track.className = 'wd-chest-open-track';
+    for(let i=0; i<totalItems; i++) {
+      const div = document.createElement('div');
+      if(i === winnerIndex) {
+        div.className = 'wd-chest-open-item ' + rewardVisual;
+        div.innerHTML = `<span>${rewardText}</span><span class="wd-small">Loot</span>`;
+      } else {
+        const item = filler[rand(0, filler.length-1)];
+        div.className = 'wd-chest-open-item ' + item.cls;
+        div.innerHTML = `<span>${item.title}</span><span class="wd-small">${item.sub}</span>`;
+      }
+      track.appendChild(div);
+    }
+    const resDiv = document.createElement('div'); resDiv.className = 'wd-chest-open-result';
+    reel.appendChild(centerLine); reel.appendChild(track); card.appendChild(title); card.appendChild(reel); card.appendChild(resDiv); container.appendChild(card);
+    tracks.push(track); winnerEls.push(track.children[winnerIndex]); resultEls.push({ div: resDiv, text: rewardText, cls: rewardClass || rewardVisual });
+  });
+  overlay.classList.add('show'); await sleep(50);
+  const targets = [];
+  tracks.forEach((track, idx) => {
+    track.style.transition = 'none'; track.style.transform = 'translateX(0px)';
+    const winnerEl = winnerEls[idx]; const reelWidth = track.parentElement.clientWidth || 800; const itemWidth = winnerEl.offsetWidth || 140;
+    const centerLine = reelWidth / 2; const randomOffset = rand(-Math.floor(itemWidth/2 - 15), Math.floor(itemWidth/2 - 15));
+    const target = Math.round(centerLine - (winnerEl.offsetLeft + itemWidth/2) + randomOffset);
+    targets.push(target);
+  });
+  await sleep(50);
+  tracks.forEach((track, idx) => {
+    track.style.transition = 'transform 6.5s cubic-bezier(0.1, 0.85, 0.15, 1)';
+    track.style.transform = `translateX(${targets[idx]}px)`;
+  });
+  for(let i=0; i<65; i++) {
+    if(isSkippingChest) {
+      tracks.forEach((track, idx) => { track.style.transition = 'none'; track.style.transform = `translateX(${targets[idx]}px)`; });
+      break;
+    }
+    playSound('tick'); await sleep(100);
+  }
+  winnerEls.forEach(el => el.classList.add('winner')); playSound('level');
+  resultEls.forEach(res => { res.div.innerHTML = `Erbeutet: <span class="${res.cls}">${res.text}</span>`; });
+  await sleep(isSkippingChest ? 800 : 2000); overlay.classList.remove('show');
+}
+function generateChestReward(type) {
+  const def = CHEST_DEFS[type]; let rewardText = "", rewardClass = "";
+  const category = pickByWeights(def.weights);
+  if(category === 'trinket') {
+    const t = Object.assign({}, TRINKETS[rand(0, TRINKETS.length-1)]); t.id = makeId('t'); t.type = 'trinket'; t.sell = 100;
+    p.inv.trinkets.push(t); rewardText = t.name; rewardClass = "r-artefact";
+  } else if (category === 'weapon') {
+    const rarity = rollRarity(type); const pool = WEAPON_POOLS[p.cls][rarity]; const name = pool[rand(0, pool.length-1)];
+    const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
+    const val = Math.floor((rand(4, 10) + p.lvl * 1.5) * def.rewardMult * rarityMult);
+    const w = { id: makeId('w'), type:'weapon', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'weapon') };
+    p.inv.weapons.push(w); discover('weapons', w.name); rewardText = w.name + ` (+${val})`; rewardClass = 'r-'+rarity;
+  } else if (category === 'armor') {
+    const rarity = rollRarity(type); const pool = ARMOR_POOLS[p.cls][rarity]; const name = pool[rand(0, pool.length-1)];
+    const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
+    const val = Math.floor((rand(2, 6) + p.lvl) * def.rewardMult * rarityMult);
+    const a = { id: makeId('a'), type:'armor', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') };
+    p.inv.armors.push(a); discover('armors', a.name); rewardText = a.name + ` (+${val})`; rewardClass = 'r-'+rarity;
+  } else if (category === 'potions') {
+    p.inv.potions.hp += 2; p.inv.potions.mp += 1; rewardText = `Tränke (HP/MP)`; rewardClass = 'reward-potion';
+  } else {
+    const g = Math.floor(rand(50, 150) * def.rewardMult); p.gold += g; rewardText = `${g} Gold`; rewardClass = 'reward-gold';
+  }
+  return { rewardText, rewardClass };
+}
+async function openChest(type, count = 1) {
+  if(p.inv.chests[type] < count || state.lock || state.enemy) return;
+  state.lock = true; p.inv.chests[type] -= count;
+  let results = [];
+  for(let i=0; i<count; i++) {
+    progressQuest('chest');
+    results.push(generateChestReward(type));
+  }
+  updateHUD(); renderInventoryList('consumables');
+  await playChestOpeningAnimation(type, results);
+  if (count === 1) { log(`Kiste geöffnet: ${results[0].rewardText}`, "good"); } 
+  else { log(`${count} Kisten geöffnet!`, "good"); }
+  state.lock = false; renderInventoryList('consumables'); 
+}
+function rarityLabel(r) { const labels = { common: 'Gewöhnlich', rare: 'Selten', epic: 'Episch', legendary: 'Legendär' }; return labels[r] || r; }
+function renderIndexList(type) {
+  const c = $('wd-index-list'); c.innerHTML = '';
+  const items = type === 'weapons' ? WEAPON_POOLS[p.cls] : ARMOR_POOLS[p.cls];
+  const discovered = state.discovery[type] || [];
+  for(let rarity in items) {
+    items[rarity].forEach(name => {
+      const isKnown = discovered.includes(name);
+      c.innerHTML += `
+        <div class="wd-index-item ${isKnown ? '' : 'undiscovered'}" style="border-color: ${isKnown ? `var(--${rarity})` : 'var(--border)'}">
+          <h4 style="color: ${isKnown ? `var(--${rarity})` : 'var(--text-muted)'}">${isKnown ? name : '???'}</h4>
+          <span style="color:var(--text-muted)">${rarityLabel(rarity)}</span>
+        </div>
+      `;
+    });
+  }
+}
+function selectSkill(id) {
+  state.selectedSkill = id;
+  playSound('click');
+  renderSkills();
+}
+function renderSkills() {
+  const c = $('wd-skill-list');
+  c.innerHTML = ``;
+  
+  let treeHtml = `<div class="wd-skill-tree-container">`;
+  treeHtml += `
+    <div class="wd-skill-path" style="left:30%; top:50px; bottom:50px;"></div>
+    <div class="wd-skill-path" style="left:70%; top:50px; bottom:50px;"></div>
+    <div class="wd-skill-path" style="left:50%; top:50px; bottom:50px; width:1px; background: rgba(255,255,255,0.05); box-shadow:none; border-left: 1px dashed rgba(255,255,255,0.1);"></div>
+  `;
+  
+  SKILL_TIERS.forEach(tier => {
+    treeHtml += `<div style="display:flex; justify-content:space-around; width:100%; position:relative; z-index:2;">`;
+    tier.forEach(skillId => {
+       const t = SKILL_TREE.find(s => s.id === skillId);
+       const rank = p.talents[skillId] || 0;
+       
+       let locked = false;
+       for (let reqId in t.req) {
+         if ((p.talents[reqId] || 0) < t.req[reqId]) locked = true;
+       }
+       
+       let nodeClass = "wd-skill-node";
+       if (locked) nodeClass += " locked";
+       else if (rank >= t.max) nodeClass += " maxed";
+       else if (rank > 0) nodeClass += " active";
+       else nodeClass += " unlocked";
+       
+       if (state.selectedSkill === skillId) nodeClass += " selected";
+       
+       treeHtml += `
+         <div class="${nodeClass}" onclick="selectSkill('${skillId}')" title="${t.name}">
+           <div class="wd-skill-icon">${t.icon}</div>
+           <div class="wd-skill-rank">${rank}/${t.max}</div>
+         </div>
+       `;
+    });
+    treeHtml += `</div>`;
+  });
+  treeHtml += `</div>`;
+  c.innerHTML += treeHtml;
+  
+  if (state.selectedSkill) {
+     const t = SKILL_TREE.find(s => s.id === state.selectedSkill);
+     const rank = p.talents[state.selectedSkill] || 0;
+     const pct = (rank / t.max) * 100;
+     
+     let locked = false;
+     let reqText = [];
+     for (let reqId in t.req) {
+       const reqRank = p.talents[reqId] || 0;
+       if (reqRank < t.req[reqId]) {
+         locked = true;
+         const reqNode = SKILL_TREE.find(n => n.id === reqId);
+         reqText.push(`${reqNode.name} (Lvl ${t.req[reqId]})`);
+       }
+     }
+     
+     let detailsHtml = `
+        <div class="wd-skill-detail-card" style="border-left-color: ${locked ? 'var(--hp-glow)' : (rank >= t.max ? 'var(--gold)' : 'var(--rare)')};">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+             <div>
+               <h4 style="color:var(--text-main); font-size:1.3rem; margin:0; font-family:'Cinzel', serif; text-shadow: 0 2px 4px #000;">
+                 ${t.icon} ${t.name}
+               </h4>
+               <span style="color:var(--accent); font-size:0.8rem; letter-spacing: 1px; text-transform:uppercase;">Rang ${rank} von ${t.max}</span>
+             </div>
+          </div>
+          
+          <div class="wd-bar-bg" style="height:4px; margin-bottom:15px; border-color:var(--border);">
+            <div class="wd-bar-fill" style="width:${pct}%; background: ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'}; box-shadow: 0 0 8px ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'};"></div>
+          </div>
+          
+          <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.5; margin-bottom:15px; font-style:italic;">"${t.desc}"</p>
+     `;
+     
+     if (locked) {
+       detailsHtml += `<p style="background: rgba(153, 27, 27, 0.2); padding: 8px; border-left: 2px solid var(--hp-glow); color:var(--hp-glow); font-size:0.8rem; margin-bottom:15px; font-weight:bold;">❌ Erfordert: ${reqText.join(', ')}</p>`;
+     } else if (rank >= t.max) {
+       detailsHtml += `<p style="color:var(--gold); font-size:0.8rem; margin-bottom:15px; font-weight:bold; text-shadow: 0 0 5px rgba(212,175,55,0.4);">✔️ Ultimative Meisterschaft erreicht</p>`;
+     }
+     
+     detailsHtml += `
+          <button class="wd-btn" style="width:100%; padding:12px; font-size: 1rem;" ${p.sp <= 0 || rank >= t.max || locked ? 'disabled' : ''} onclick="buyTalent('${t.id}')">
+            ${locked ? 'Wissen versiegelt' : (rank >= t.max ? 'Maximiert' : 'Talent studieren (1 SP)')}
+          </button>
+        </div>
+     `;
+     c.innerHTML += detailsHtml;
+  }
+}
+function buyTalent(id) {
+  const t = SKILL_TREE.find(x => x.id === id); const rank = p.talents[id] || 0;
+  if(p.sp <= 0 || rank >= t.max) return; 
+  for (let reqId in t.req) if ((p.talents[reqId] || 0) < t.req[reqId]) return;
+  playSound('magic'); p.sp--; p.talents[id] = rank + 1;
+  if(t.type === 'hp') { p.maxHp += t.val; p.hp += t.val; } 
+  if(t.type === 'mp') { p.maxMp += t.val; p.mp += t.val; }
+  if(t.type === 'atk') { p.baseAtk += t.val; } 
+  if(t.type === 'def') { p.baseDef += t.val; } 
+  if(t.type === 'dodge') { p.baseDodge += t.val; } 
+  if(t.type === 'luck') { p.baseLuck += t.val; } 
+  updateHUD(); renderSkills();
+}
+function getRandomQuest() {
+  const lvl = p ? p.lvl : 1;
+  const maxXp = p ? p.maxXp : 100;
+  
+  const xpEasy = Math.floor(maxXp * 0.15); 
+  const xpMed = Math.floor(maxXp * 0.25);  
+  const xpHard = Math.floor(maxXp * 0.40); 
+
+  const questPool = [
+    { 
+      id: "q1_"+makeId(), title: "Säuberung", 
+      desc: `Besiege ${4 + lvl} Gegner im Kampf.`, goal: 4 + lvl, req: "kill", 
+      rewardGold: 50 + lvl * 15, rewardXP: xpEasy, extra: null 
+    },
+    { 
+      id: "q2_"+makeId(), title: "Gieriger Blick", 
+      desc: `Öffne ${2 + Math.floor(lvl/4)} Truhen.`, goal: 2 + Math.floor(lvl/4), req: "chest", 
+      rewardGold: 80 + lvl * 20, rewardXP: xpMed, extra: {type: 'hp', text: '1x Heiltrank', val: 1} 
+    },
+    { 
+      id: "q3_"+makeId(), title: "Kopfgeld", 
+      desc: `Besiege 1 Boss-Monster.`, goal: 1, req: "boss", 
+      rewardGold: 150 + lvl * 40, rewardXP: xpHard, extra: {type: 'shards', text: `${5 + lvl*2} Arkane Splitter`, val: 5 + lvl*2} 
+    },
+    { 
+      id: "q4_"+makeId(), title: "Machtdemonstration", 
+      desc: `Nutze deine ultimative Fähigkeit ${3 + Math.floor(lvl/2)} mal.`, goal: 3 + Math.floor(lvl/2), req: "ult", 
+      rewardGold: 60 + lvl * 15, rewardXP: xpEasy, extra: {type: 'mp', text: '1x Manatrank', val: 1} 
+    },
+    { 
+      id: "q5_"+makeId(), title: "Schmiedekunst", 
+      desc: `Zerschlage ${2 + Math.floor(lvl/3)} Items für Splitter.`, goal: 2 + Math.floor(lvl/3), req: "dismantle", 
+      rewardGold: 70 + lvl * 20, rewardXP: xpMed, extra: {type: 'chest_wooden', text: '1x Holzkiste', val: 1} 
+    },
+    { 
+      id: "q6_"+makeId(), title: "Der unerbittliche Jäger", 
+      desc: `Besiege ${8 + lvl*2} Gegner.`, goal: 8 + lvl*2, req: "kill", 
+      rewardGold: 180 + lvl * 40, rewardXP: xpHard, extra: {type: 'chest_iron', text: '1x Eisenkiste', val: 1} 
+    }
+  ];
+  return questPool[Math.floor(Math.random() * questPool.length)];
+}
+function generateQuestBoard() {
+  state.availQuests = [getRandomQuest(), getRandomQuest(), getRandomQuest()];
+}
+function renderQuests() {
+  const board = $('wd-quest-board'); 
+  const active = $('wd-quest-active'); 
+  if(!board) return;
+  if(p.quest) {
+    const ready = p.quest.progress >= p.quest.goal;
+    const pct = Math.min(100, (p.quest.progress / p.quest.goal) * 100);
+    let extraHTML = p.quest.extra ? `<div class="wd-reward-badge" style="color:#d8b4e2; border-color:rgba(192,132,252,0.3)">🎁 ${p.quest.extra.text}</div>` : '';
+    active.innerHTML = `
+    <div class="wd-active-quest-box ${ready ? 'ready' : ''}">
+      <div class="wd-aq-header">${ready ? 'Pakt Erfüllt!' : 'Aktiver Pakt'}</div>
+      <h4 style="color:var(--text-main); font-size:1.1rem; margin-bottom:5px;">${p.quest.title}</h4>
+      <p style="font-size:0.85rem; color:var(--text-muted); font-style:italic; margin-bottom:12px;">${p.quest.desc}</p>
+      <div class="wd-quest-rewards" style="justify-content:center; margin-bottom:12px;">
+        <div class="wd-reward-badge" style="color:var(--gold)">🪙 ${p.quest.rewardGold} G</div>
+        <div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${p.quest.rewardXP} XP</div>
+        ${extraHTML}
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); font-weight:bold; margin-bottom:6px; font-family:'Cinzel', serif;">
+        <span>Fortschritt</span>
+        <span style="color:${ready ? 'var(--xp-glow)' : 'var(--accent)'}">${p.quest.progress} / ${p.quest.goal}</span>
+      </div>
+      <div class="wd-bar-bg" style="height:8px; margin-bottom:15px; border-color:var(--border-light)">
+        <div class="wd-bar-fill" style="width:${pct}%; background:${ready ? 'linear-gradient(90deg, #065f46, var(--xp-glow))' : 'linear-gradient(90deg, #78350f, var(--accent))'}; box-shadow: 0 0 10px ${ready ? 'var(--xp-glow)' : 'var(--accent)'};"></div>
+      </div>
+      ${ready 
+        ? `<button class="wd-btn" style="width:100%; padding:10px; border-color:var(--xp-glow); color:var(--xp-glow); text-shadow: 0 0 5px rgba(16,185,129,0.5);" onclick="claimQuest()">Belohnung einfordern</button>` 
+        : `<button class="wd-mini-btn" style="width:100%; border-style:dashed; opacity:0.7;" onclick="p.quest=null; updateHUD();">Pakt abbrechen</button>`
+      }
+    </div>`;
+  } else {
+     active.innerHTML = `<div style="text-align:center; padding:25px 20px; border:1px dashed var(--border); border-radius:4px; color:var(--text-muted); font-style:italic; background:rgba(0,0,0,0.3)">Kein aktiver Pakt. Wähle unten einen Auftrag vom Brett.</div>`;
+  }
+  board.innerHTML = '';
+  state.availQuests.forEach(q => {
+    let extraHTML = q.extra ? `<div class="wd-reward-badge" style="color:#d8b4e2">🎁 ${q.extra.text}</div>` : '';
+    board.innerHTML += `
+    <div class="wd-quest-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="flex:1; padding-right:15px;">
+          <div class="wd-quest-title">${q.title}</div>
+          <div class="wd-quest-desc">${q.desc}</div>
+          <div class="wd-quest-rewards">
+            <div class="wd-reward-badge" style="color:var(--gold)">🪙 ${q.rewardGold}</div>
+            <div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${q.rewardXP}</div>
+            ${extraHTML}
+          </div>
+        </div>
+        <button class="wd-mini-btn" style="padding:10px 15px; height:fit-content;" ${p.quest?'disabled':''} onclick="acceptQuest('${q.id}')">Pakt<br>besiegeln</button>
+      </div>
+    </div>`;
+  });
+}
+function acceptQuest(id) { 
+  const q = state.availQuests.find(x => x.id === id); 
+  p.quest = JSON.parse(JSON.stringify(q)); 
+  p.quest.progress = 0; 
+  playSound('magic'); 
+  log(`Pakt geschlossen: ${q.title}`, "warn"); 
+  updateHUD(); 
+}
+function progressQuest(reqType) { 
+  if(!p.quest || p.quest.progress >= p.quest.goal) return; 
+  if(p.quest.req === reqType || (p.quest.req === 'kill' && reqType === 'boss')) { 
+    p.quest.progress++; 
+    if(p.quest.progress >= p.quest.goal) { 
+      playSound('level'); 
+      log(`Questziel erreicht: ${p.quest.title}!`, "good"); 
+    } 
+    updateHUD(); 
+  } 
+}
+function claimQuest() {
+  if(!p.quest || p.quest.progress < p.quest.goal) return; 
+  playSound('coin'); 
+  p.gold += p.quest.rewardGold; 
+  p.xp += p.quest.rewardXP; 
+  let logText = `Pakt erfüllt! +${p.quest.rewardGold}G, +${p.quest.rewardXP}XP`;
+  if(p.quest.extra) {
+      if(p.quest.extra.type === 'hp') p.inv.potions.hp += p.quest.extra.val;
+      else if(p.quest.extra.type === 'mp') p.inv.potions.mp += p.quest.extra.val;
+      else if(p.quest.extra.type === 'shards') p.inv.shards += p.quest.extra.val;
+      else if(p.quest.extra.type === 'chest_wooden') p.inv.chests.wooden += p.quest.extra.val;
+      else if(p.quest.extra.type === 'chest_iron') p.inv.chests.iron += p.quest.extra.val;
+      else if(p.quest.extra.type === 'chest_mystic') p.inv.chests.mystic += p.quest.extra.val;
+      logText += `, +${p.quest.extra.text}`;
+  }
+  log(logText, "good"); 
+  const idx = state.availQuests.findIndex(q => q.id === p.quest.id);
+  if(idx !== -1) {
+      state.availQuests[idx] = getRandomQuest();
+  } else {
+      state.availQuests.push(getRandomQuest());
+      if (state.availQuests.length > 3) state.availQuests.shift();
+  }
+  p.quest = null;
+  if(p.xp >= p.maxXp) { 
+    playSound('level'); p.xp -= p.maxXp; p.lvl++; p.maxXp = Math.floor(p.maxXp * 1.5); p.maxHp += 15; p.hp = p.maxHp; p.sp += 1; 
+    log(`LEVEL UP! Stufe ${p.lvl}.`, "warn"); 
+  }
+  updateHUD();
+}
+function saveHighscore() {
+  try {
+    let hs = JSON.parse(localStorage.getItem('webDungeonsHighscores') || "[]");
+    let score = (p.lvl * 1000) + p.gold + (p.runStats.kills * 150) + ((state.dungeon.floor - 1) * 2000);
+    hs.push({ name: p.name, cls: p.cls, lvl: p.lvl, floor: state.dungeon.floor, score: score }); hs.sort((a,b) => b.score - a.score); hs = hs.slice(0, 10); 
+    localStorage.setItem('webDungeonsHighscores', JSON.stringify(hs)); return score;
+  } catch(e) { return (p.lvl * 1000) + p.gold + (p.runStats.kills * 150); }
+}
+function showHighscores() {
+  try {
+    let hs = JSON.parse(localStorage.getItem('webDungeonsHighscores') || "[]"); clearLog(); log("--- HALLE DER GEFALLENEN (TOP 10) ---", "warn");
+    if(hs.length === 0) log("Es gibt noch keine Helden in den Archiven.", "muted"); else hs.forEach((entry, i) => { log(`${i+1}. ${entry.name} (${entry.cls} Lvl ${entry.lvl}) - Score: ${entry.score}`, i === 0 ? "magic" : "info"); });
+  } catch(e) { log("Speicherfehler in diesem Browser/Widget.", "bad"); }
+}
+function saveGame() {
+  if(!p) return; let slot = prompt(`Spielstand sichern.\nWähle Slot (1-${SAVE_SLOTS}):`, "1"); if(!slot || isNaN(slot) || slot < 1 || slot > SAVE_SLOTS) return;
+  try {
+    let saves = JSON.parse(localStorage.getItem('webDungeonsSaves') || "{}"); saves[`slot_${slot}`] = { p, state, timestamp: new Date().toLocaleString() }; localStorage.setItem('webDungeonsSaves', JSON.stringify(saves)); playSound('magic'); log(`Spielstand auf Slot ${slot} gesichert.`, "good");
+  } catch(e) { log("Speicherfehler!", "bad"); }
+}
+function loadGame() {
+  try {
+    let saves = JSON.parse(localStorage.getItem('webDungeonsSaves') || "{}"); let info = "Spielstand laden. Wähle Slot:\n\n"; for(let i=1; i<=SAVE_SLOTS; i++) { let s = saves[`slot_${i}`]; info += `Slot ${i}: ${s ? s.p.name + ' (' + s.p.cls + ' Lvl ' + s.p.lvl + ') - ' + s.timestamp : 'Leer'}\n`; }
+    let slot = prompt(info, "1"); if(!slot || !saves[`slot_${slot}`]) { log("Kein gültiger Spielstand.", "bad"); return; }
+    const data = saves[`slot_${slot}`]; p = data.p; state = data.state;
+    
+    if (p.eq.weapon) {
+      let invWep = p.inv.weapons.find(i => i.id === p.eq.weapon.id);
+      if (invWep) {
+        if (p.eq.weapon.val > invWep.val) {
+          invWep.val = p.eq.weapon.val;
+          invWep.name = p.eq.weapon.name;
+          invWep.sell = p.eq.weapon.sell;
+        }
+        p.eq.weapon = invWep; 
+      }
+    }
+    
+    if (p.eq.armor) {
+      let invArm = p.inv.armors.find(i => i.id === p.eq.armor.id);
+      if (invArm) {
+        if (p.eq.armor.val > invArm.val) {
+          invArm.val = p.eq.armor.val;
+          invArm.name = p.eq.armor.name;
+          invArm.sell = p.eq.armor.sell;
+        }
+        p.eq.armor = invArm;
+      }
+    }
+    
+    if (p.eq.trinket) p.eq.trinket = p.inv.trinkets.find(i => i.id === p.eq.trinket.id) || p.eq.trinket;
+
+    if (!state.dungeon) state.dungeon = { active: false, type:'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }; if (!state.discovery) state.discovery = { weapons: [], armors: [] }; if (!state.availQuests) generateQuestBoard();
+    if (p.inv.shards === undefined) p.inv.shards = 0;
+    if (p.baseDodge === undefined) p.baseDodge = 0; 
+    if (p.baseLuck === undefined) p.baseLuck = 0;
+    
+    if (!p.prestige) p.prestige = { level: 0, dust: 0, buffs: { xp: 0, gold: 0, stats: 0 } };
+       
+    $('wd-overlay').style.display = 'none'; log(`Spielstand von Slot ${slot} geladen.`, "magic"); updateHUD(); playSound('magic');
+    if(state.enemy) { showCombatStage(true); renderCombatActions(); } else if(state.dungeon.active) { showCombatStage(false); showDungeonMenu(); } else if(state.area) { showCombatStage(false); enterRoom(); } else { goToTown(); }
+  } catch(e) { log("Ladefehler!", "bad"); }
+}
+initGame();
+</script>
