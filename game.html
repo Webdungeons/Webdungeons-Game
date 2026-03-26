@@ -38,7 +38,6 @@
   
   #wd-main-stage { flex: 1; display: flex; flex-direction: column; position: relative; }
   
-  /* --- VISUAL UPGRADE: KAMPFARENA HINTERGRÜNDE --- */
   #wd-visual-arena { flex: 0.5; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; border-bottom: 4px ridge var(--border); box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8); transition: background 1s ease; background: radial-gradient(circle at 50% 70%, rgba(200, 100, 30, 0.15) 0%, rgba(0,0,0,0.95) 70%); }
   @keyframes wdBossPulseArena { 0% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(153, 27, 27, 0.2); } 100% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8), inset 0 0 80px rgba(239, 68, 68, 0.4); } }
   .wd-arena-boss { animation: wdBossPulseArena 2s infinite alternate !important; }
@@ -48,11 +47,9 @@
   .wd-combatant { text-align: center; position: relative; }
   .wd-combatant-sprite { font-size: 5.5rem; filter: drop-shadow(0 15px 10px rgba(0,0,0,0.8)); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s, opacity 0.5s; position: relative; }
   
-  /* --- VISUAL UPGRADE: TODESANIMATION --- */
   @keyframes wdEnemyDeath { 0% { transform: translateY(0) scale(1); opacity: 1; filter: grayscale(0); } 100% { transform: translateY(50px) scale(0.8); opacity: 0; filter: grayscale(1); } }
   .wd-enemy-dead { animation: wdEnemyDeath 0.6s forwards !important; }
   
-  /* --- VISUAL UPGRADE: DUNGEON INTRO --- */
   @keyframes wdFloorIntro { 0% { opacity: 0; transform: translate(-50%, -40%) scale(0.8); letter-spacing: 5px; } 20% { opacity: 1; transform: translate(-50%, -50%) scale(1); letter-spacing: 15px; } 80% { opacity: 1; transform: translate(-50%, -50%) scale(1); letter-spacing: 15px; } 100% { opacity: 0; transform: translate(-50%, -60%) scale(1.1); letter-spacing: 20px; filter: blur(5px); } }
   .wd-floor-intro-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Cinzel', serif; font-size: 4rem; color: var(--accent); font-weight: bold; text-shadow: 0 0 30px rgba(212,175,55,0.6), 0 5px 10px #000; z-index: 20; pointer-events: none; opacity: 0; animation: wdFloorIntro 3.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; white-space: nowrap; }
 
@@ -218,17 +215,21 @@
   @keyframes wdBossPhase2 { 0% { transform: scale(1); filter: drop-shadow(0 15px 10px rgba(0,0,0,0.8)); } 50% { transform: scale(1.3) translateY(-10px); filter: drop-shadow(0 0 30px red) brightness(1.5); } 100% { transform: scale(1.1); filter: drop-shadow(0 0 25px darkred); } }
   .wd-boss-phase-2 { animation: wdBossPhase2 1s ease-out forwards; }
   
-  /* --- MUTE BUTTON --- */
-  #wd-mute-btn { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; padding: 5px 8px; border-radius: 4px; font-size: 1rem; z-index: 50; transition: all 0.2s; }
-  #wd-mute-btn:hover { border-color: var(--accent); color: var(--accent); }
+  /* V1.0: BACK BUTTON STYLING */
+  .back-btn { background: linear-gradient(180deg, #2c1616 0%, #160b0b 100%) !important; border-color: #7f1d1d !important; }
+  .back-btn:hover:not(:disabled) { background: linear-gradient(180deg, #3d1f1f 0%, #200f0f 100%) !important; border-color: var(--hp-glow) !important; box-shadow: 0 8px 15px rgba(0,0,0,0.8), 0 0 15px rgba(239, 68, 68, 0.3) !important; color: #fff !important; }
+
+  /* V1.0: MUTE BUTTON REPOSITIONED TO SIDEBAR */
+  #wd-mute-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; padding: 5px 8px; border-radius: 4px; font-size: 1rem; z-index: 50; transition: all 0.2s; }
+  #wd-mute-btn:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px rgba(212,175,55,0.2); }
 
 </style>
 </head>
 <body>
 <div id="wd-wrapper">
-  <button id="wd-mute-btn" onclick="toggleMute()">🔊</button>
   <div id="wd-app">
     <aside id="wd-sidebar-left">
+      <button id="wd-mute-btn" onclick="toggleMute()">🔊</button>
       <div class="wd-hero-header">
         <div class="wd-hero-avatar" id="wd-ui-avatar">🧙</div>
         <div class="wd-hero-info">
@@ -272,19 +273,22 @@
         <button class="wd-tab-btn" onclick="switchTab('wd-tab-quests', this)">Pakte</button>
         <button class="wd-tab-btn" onclick="switchTab('wd-tab-index', this)">Archiv</button>
       </div>
-      <div id="wd-tab-gear" class="wd-tab-content active">
+      <div id="wd-tab-gear" class="wd-tab-content active" style="overflow-y:auto; max-height:100%;">
         <h3>Aktiv ausgerüstet</h3>
         <div class="wd-eq-slot" id="wd-eq-weapon"><div class="wd-eq-icon">🗡️</div><div class="wd-eq-details"><h4>Waffe</h4><p>Nichts</p></div></div>
         <div class="wd-eq-slot" id="wd-eq-armor"><div class="wd-eq-icon">🛡️</div><div class="wd-eq-details"><h4>Rüstung</h4><p>Nichts</p></div></div>
+        <div class="wd-eq-slot" id="wd-eq-helm"><div class="wd-eq-icon">🪖</div><div class="wd-eq-details"><h4>Helm</h4><p>Nichts</p></div></div>
+        <div class="wd-eq-slot" id="wd-eq-accessory"><div class="wd-eq-icon">📿</div><div class="wd-eq-details"><h4>Accessoire</h4><p>Nichts</p></div></div>
         <div class="wd-eq-slot" id="wd-eq-trinket"><div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="r-artefact">Artefakt</h4><p>Leerer Sockel</p></div></div>
       </div>
       <div id="wd-tab-inv" class="wd-tab-content">
         <div style="display:flex;justify-content:space-between;margin-bottom:15px;padding:8px 12px;background:rgba(0,0,0,0.5);border:1px ridge var(--border);border-radius:4px">
           <span style="color:var(--text-muted);font-size:0.85rem;text-transform:uppercase;letter-spacing:1px">Arkane Splitter</span><strong id="wd-ui-shards" style="color:#d8b4e2;font-size:1.1rem;text-shadow:0 0 8px rgba(192, 132, 252, 0.4)">0</strong>
         </div>
-        <div style="display:flex;gap:6px;margin-bottom:18px">
-           <button class="wd-mini-btn" style="flex:1" onclick="renderInventoryList('weapons')">Waffen</button><button class="wd-mini-btn" style="flex:1" onclick="renderInventoryList('armors')">Rüstung</button>
-           <button class="wd-mini-btn" style="flex:1" onclick="renderInventoryList('trinkets')">Artefakt</button><button class="wd-mini-btn" style="flex:1" onclick="renderInventoryList('consumables')">Beute</button>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:18px">
+           <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('weapons')">Waffen</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('armors')">Rüstung</button>
+           <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('helms')">Helm</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('accessories')">Accs</button>
+           <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('trinkets')">Artefakt</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('consumables')">Beute</button>
         </div>
         <div id="wd-inv-list"></div>
       </div>
@@ -310,7 +314,7 @@
 </div>
 <script>
 /**
- * WEB DUNGEONS: ECLIPSE - v0.8: LORE, ARENA-STYLES, BOSS-PHASEN & SOUND-UPDATE
+ * WEB DUNGEONS: ECLIPSE - v1.0: SCHMELZTIEGEL, HELP-CENTER & BACK-BTN UI
  */
 let isMuted = false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -356,7 +360,6 @@ const SKILL_TREE = [ { id: "t_hp1", icon: "❤️", name: "Zähigkeit I", desc: 
 const SKILL_TIERS = [ ["t_hp1", "t_atk1"], ["t_def1", "t_mp1"], ["t_dodge1", "t_luck1"], ["t_hp2", "t_atk2"], ["t_dodge2", "t_luck2"] ];
 const TRINKETS = [ { id: 't_vamp', name: "Blutkristall", desc: "Heilt 20% des Schadens.", effect: "lifesteal", rarity: "r-artefact" }, { id: 't_focus', name: "Auge des Adlers", desc: "+20% Kritische Treffer.", effect: "crit", rarity: "r-artefact" }, { id: 't_stone', name: "Herz des Golems", desc: "+25% Gesamte Rüstung.", effect: "armor", rarity: "r-artefact" }, { id: 't_mana', name: "Aether-Phiole", desc: "Regeneriert 10% MP/Runde.", effect: "manareg", rarity: "r-artefact" } ];
 
-// --- V0.8: ORTSBESCHREIBUNGEN & ARENA STYLES ---
 const AREAS = {
   Forest: { name: "Düsterwald", bg: "radial-gradient(circle at 50% 70%, rgba(30, 60, 30, 0.2) 0%, rgba(0,0,0,0.95) 70%)", intro: "Das dichte Blätterdach verschluckt fast alles Sonnenlicht. Die Luft riecht nach Moder und Gefahr.", roomTexts: ["Du trittst auf einen morschen Ast, der laut knackt.", "Ein raschelnder Schatten lässt dich hochschrecken.", "Alte Grabsteine säumen den schlammigen Pfad."], diff: 1, enemies: [{n:"Wolf",h:50,a:8,s:"🐺",xp:15},{n:"Schleim",h:45,a:10,s:"🟢",xp:15},{n:"Wegelagerer",h:65,a:12,s:"🗡️",xp:20}] },
   Ruins: { name: "Sonnenruinen", bg: "radial-gradient(circle at 50% 70%, rgba(150, 130, 80, 0.15) 0%, rgba(0,0,0,0.95) 70%)", intro: "Die Überreste einer längst vergessenen Zivilisation. Sand rinnt durch die Spalten geborstener Säulen.", roomTexts: ["Ein alter Tempel wacht stumm über den Sand.", "Der Wüstenwind heult durch die Risse im Gestein.", "Skarabäen flüchten eilig unter bröckelnde Statuen."], diff: 1.6, enemies: [{n:"Steinwächter",h:120,a:22,s:"🗿",xp:40},{n:"Sandgeist",h:90,a:28,s:"🌪️",xp:35},{n:"Skarabäus",h:140,a:18,s:"🪲",xp:45}] },
@@ -373,28 +376,29 @@ const ENEMY_ABILITIES = { howl: { name: "Geheul", type: "buff", cd: 3, desc: "Sa
 const AREA_ABILITIES = { Forest: ['howl', 'poison'], Ruins: ['heavy', 'stun'], Volcano: ['heavy', 'heal'], Dungeon: ['howl', 'heavy', 'poison', 'stun', 'heal'] };
 const MUTATORS = [ { id: 'vampiric', name: "Vampirisch", desc: "Gegner heilt 20% seines Schadens." }, { id: 'thorns', name: "Dornen", desc: "Reflektiert 10% deines Schadens." }, { id: 'brute', name: "Titanisch", desc: "+50% HP für den Gegner." }, { id: 'frenzy', name: "Raserei", desc: "+30% Angriff für den Gegner." } ];
 const DUNGEON_ENEMIES = [ {n:"Skelett",h:80,a:15,s:"💀",xp:20},{n:"Nekromant",h:70,a:25,s:"🧟",xp:25},{n:"Gargoyle",h:130,a:18,s:"🪨",xp:30} ];
-const CHEST_DEFS = { wooden: { label: "Holzkiste", icon: "🪵", rewardMult: 0.8, weights: {weapon:32, armor:33, gold:20, potions:15} }, iron: { label: "Eisenkiste", icon: "🧰", rewardMult: 1.2, weights: {weapon:35, armor:35, gold:20, potions:10} }, mystic: { label: "Arkankiste", icon: "✨", rewardMult: 1.8, weights: {weapon:45, armor:45, gold:10, potions:0} } };
+
+const CHEST_DEFS = { 
+  wooden: { label: "Holzkiste", icon: "🪵", rewardMult: 0.8, weights: {weapon:25, armor:25, helm:15, accessory:15, gold:10, potions:10} }, 
+  iron: { label: "Eisenkiste", icon: "🧰", rewardMult: 1.2, weights: {weapon:25, armor:25, helm:20, accessory:20, gold:5, potions:5} }, 
+  mystic: { label: "Arkankiste", icon: "✨", rewardMult: 1.8, weights: {weapon:30, armor:30, helm:15, accessory:15, trinket:5, gold:5} } 
+};
+
 const WEAPON_POOLS = { Ritter: { common: ["Schildspitze", "Rostiges Schwert", "Eisenflegel"], rare: ["Bastionsäbel", "Silberwacht", "Stahlschwert"], epic: ["Sonnenzorn", "Eidbrecher", "Titanspalter"], legendary: ["Löwenschwur", "Himmelsbrecher", "Aegis-Klinge"] }, Magier: { common: ["Runenfokus", "Aschenstab", "Kupferstab"], rare: ["Frostsigel", "Aetherstab", "Glutstab"], epic: ["Arkanherz", "Flammenkrone", "Sturmrufer"], legendary: ["Weltfunke", "Erzkomet", "Stab der Ewigkeit"] }, Schurke: { common: ["Krähenzahn", "Nachtstahl", "Eisendolch"], rare: ["Nebelklinge", "Schwarzfeder", "Giftdolch"], epic: ["Leerenkralle", "Blutmond", "Nachtschatten"], legendary: ["Nachtfürst", "Rabenurteil", "Seelenfresser"] }, Paladin: { common: ["Weihschwert", "Segenshammer", "Knappenhammer"], rare: ["Sonnenklinge", "Glaubenswacht", "Lichtbringer"], epic: ["Aurora", "Heiligzorn", "Himmelswacht"], legendary: ["Dawnbreaker", "Ewiger Eid", "Gnade der Engel"] }, Waldläufer: { common: ["Jagdspieß", "Waldbogen", "Kupferpfeile"], rare: ["Habichtzahn", "Eibenbogen", "Falkenauge"], epic: ["Sturmfeder", "Wolfsfang", "Donnerspeer"], legendary: ["Alderheart", "Königsjagd", "Sonnenfinsternis"] } };
 const ARMOR_POOLS = { Ritter: { common: ["Eisenpanzer", "Kettenhemd", "Milizbrustpanzer"], rare: ["Schildmantel", "Plattenrock", "Stahlwams"], epic: ["Königswache", "Drachenschuppe", "Mithrilhemd"], legendary: ["Titanwall", "Aegis", "Drachenherz-Rüstung"] }, Magier: { common: ["Leinenrobe", "Schülergewand", "Flickengewand"], rare: ["Kristallrobe", "Zaubertunika", "Elementarmantel"], epic: ["Leerenrobe", "Erzmagierrobe", "Schattenzwirnrobe"], legendary: ["Kosmosgewand", "Zeitweberrobe", "Dimensionsgewand"] }, Schurke: { common: ["Lederwams", "Straßenkleidung", "Schmugglergewand"], rare: ["Schwarzleder", "Schleicheranzug", "Nebelmantel"], epic: ["Phantomhaut", "Blutgewand", "Nachtschattengewand"], legendary: ["Rabenhaut", "Meuchelmörderkutte", "Umhang des Phantoms"] }, Paladin: { common: ["Pilgerpanzer", "Klerikerwams", "Eisenwams"], rare: ["Heiligplatte", "Tempelritterrüstung", "Kreuzfahrerpanzer"], epic: ["Seraphhaut", "Sonnenwall", "Inquisitorenrüstung"], legendary: ["Ewiglicht", "Himmelsfestung", "Rüstung der Erlösung"] }, Waldläufer: { common: ["Pfadmantel", "Fellrüstung", "Raues Leder"], rare: ["Eichenhaut", "Wildnisleder", "Späherpanzer"], epic: ["Nebelfell", "Sturmmantel", "Windläuferpanzer"], legendary: ["Herbststurm", "Waldläuferkönig-Panzer", "Umhang der Bestie"] } };
+const HELM_POOLS = { Ritter: { common: ["Eisenhelm", "Lederkappe"], rare: ["Ritterhelm", "Stahlvisier"], epic: ["Königshelm", "Drachenkrone"], legendary: ["Titanhelm", "Aegis-Krone"] }, Magier: { common: ["Stoffkapuze", "Leinenhut"], rare: ["Zauberhut", "Seidenkapuze"], epic: ["Erzmagier-Hut", "Schattenkrone"], legendary: ["Kosmoskrone", "Zeitweber-Kapuze"] }, Schurke: { common: ["Lederkappe", "Stirnband"], rare: ["Schattenmaske", "Diebeshaube"], epic: ["Phantomkapuze", "Vipernmaske"], legendary: ["Rabenmaske", "Antlitz der Leere"] }, Paladin: { common: ["Eisenkappe", "Pilgerhut"], rare: ["Heiligvisier", "Kreuzritterhelm"], epic: ["Sonnenhelm", "Inquisitoren-Krone"], legendary: ["Himmelskrone", "Halo des Lichts"] }, Waldläufer: { common: ["Jägerkapuze", "Fellmütze"], rare: ["Späherhut", "Wildniskapuze"], epic: ["Drachenschuppen-Kapuze", "Sturmfänger"], legendary: ["Herbststurm-Kapuze", "Auge des Adlers"] } };
+const ACC_POOLS = { common: ["Kupferring", "Knochenamulett", "Lederband"], rare: ["Silberring", "Wolfszahn-Amulett", "Schattenring"], epic: ["Goldamulett", "Rubinring", "Drachenauge"], legendary: ["Königsring", "Sternen-Amulett", "Ring der Ewigkeit"] };
+
 const SHOP_WEAPONS = { Ritter: [{name:"Breitschwert",dmg:13,cost:150}, {name:"Bastion-Axt",dmg:22,cost:360}, {name:"Ritter-Großschwert",dmg:35,cost:650}], Magier: [{name:"Runenstab",dmg:13,cost:150}, {name:"Fokuszepter",dmg:22,cost:360}, {name:"Meisterstab",dmg:35,cost:650}], Schurke: [{name:"Eisendolch",dmg:13,cost:150}, {name:"Nachtklinge",dmg:22,cost:360}, {name:"Korsarendolch",dmg:35,cost:650}], Paladin: [{name:"Glaubensklinge",dmg:12,cost:150}, {name:"Lichtstreitkolben",dmg:22,cost:360}, {name:"Richtschwert",dmg:34,cost:650}], Waldläufer: [{name:"Jagdbogen",dmg:12,cost:150}, {name:"Stachelset",dmg:22,cost:360}, {name:"Meisterbogen",dmg:34,cost:650}] };
 const SHOP_ARMORS = { Ritter: [{name:"Turmschild-Panzer",def:5,cost:140}, {name:"Ordensharnisch",def:8,cost:330}, {name:"Plattenrüstung",def:15,cost:600}], Magier: [{name:"Runenrobe",def:3,cost:140}, {name:"Astralmantel",def:5,cost:330}, {name:"Seidenrobe",def:10,cost:600}], Schurke: [{name:"Jägerleder",def:4,cost:140}, {name:"Schattenweste",def:6,cost:330}, {name:"Meisterleder",def:12,cost:600}], Paladin: [{name:"Kapellenpanzer",def:4,cost:140}, {name:"Sonnensegel",def:7,cost:330}, {name:"Inquisitorenrüstung",def:14,cost:600}], Waldläufer: [{name:"Pfadleder",def:4,cost:140}, {name:"Jägerhaut",def:6,cost:330}, {name:"Drachenleder",def:12,cost:600}] };
 
 let p = null; 
-let state = { mode: 'menu', area: null, enemy: null, combatStats: { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 }, room: 0, dungeon: { active: false, type: 'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }, lock: false, tab: 'weapons', discovery: { weapons: [], armors: [] }, lore: [], availQuests: [], selectedSkill: null, firstCombatHintShown: false };
+let state = { mode: 'menu', area: null, enemy: null, combatStats: { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 }, room: 0, dungeon: { active: false, type: 'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }, lock: false, tab: 'weapons', discovery: { weapons: [], armors: [], helms: [], accessories: [] }, lore: [], availQuests: [], selectedSkill: null, firstCombatHintShown: false };
 let isSkippingChest = false;
 let _lockTimeout = null;
 
 function applyLockRecovery(stateObj) {
     let _currentLock = stateObj.lock || false;
-    Object.defineProperty(stateObj, 'lock', {
-        get: function() { return _currentLock; },
-        set: function(val) {
-            _currentLock = val;
-            if (_lockTimeout) clearTimeout(_lockTimeout);
-            if (val) { _lockTimeout = setTimeout(() => { if (_currentLock) { _currentLock = false; console.warn("Global Recovery: state.lock wurde entsperrt."); } }, 3000); }
-        },
-        configurable: true
-    });
+    Object.defineProperty(stateObj, 'lock', { get: function() { return _currentLock; }, set: function(val) { _currentLock = val; if (_lockTimeout) clearTimeout(_lockTimeout); if (val) { _lockTimeout = setTimeout(() => { if (_currentLock) { _currentLock = false; console.warn("Global Recovery: state.lock wurde entsperrt."); } }, 3000); } }, configurable: true });
 }
 applyLockRecovery(state);
 
@@ -412,19 +416,60 @@ function discover(type, name) { if(!state.discovery[type].includes(name)) state.
 function switchTab(tabId, element) { document.querySelectorAll('.wd-tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.wd-tab-content').forEach(c => c.classList.remove('active')); if(element) element.classList.add('active'); $(tabId).classList.add('active'); if(tabId === 'wd-tab-inv') renderInventoryList(state.tab); if(tabId === 'wd-tab-skills') renderSkills(); if(tabId === 'wd-tab-quests') renderQuests(); if(tabId === 'wd-tab-index') renderIndexList('weapons'); }
 function showToast(msg) { const t = document.createElement('div'); t.textContent = msg; t.style.cssText = "position:absolute; top: 120px; left: 50%; transform: translateX(-50%); background: rgba(30,58,138,0.95); border: 2px solid var(--mp-glow); color: #fff; padding: 12px 25px; border-radius: 6px; z-index: 1000; font-family: 'Cinzel', serif; font-size: 1rem; animation: wdFadeIn 0.3s ease-out; box-shadow: 0 10px 25px rgba(0,0,0,0.9); pointer-events: none; text-shadow: 1px 1px 2px #000;"; $('wd-wrapper').appendChild(t); setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.6s'; setTimeout(() => t.remove(), 600); }, 4500); }
 
+const AFFIX_TYPES = ['atk', 'def', 'crit', 'dodge', 'luck'];
+function generateAffix(rarity) {
+   if (Math.random() > 0.3) return null; 
+   let type = AFFIX_TYPES[rand(0, AFFIX_TYPES.length-1)];
+   let mult = rarity === 'r-legendary' ? 3 : (rarity === 'r-epic' ? 2 : 1);
+   let val, label;
+   if (type === 'atk') { val = rand(1,3)*mult; label = `+${val} ATK`; }
+   if (type === 'def') { val = rand(1,2)*mult; label = `+${val} RÜS`; }
+   if (type === 'crit') { val = rand(2,5)*mult; label = `+${val}% Krit`; }
+   if (type === 'dodge') { val = rand(2,4)*mult; label = `+${val}% Ausw.`; }
+   if (type === 'luck') { val = rand(1,2)*mult; label = `+${val} Glück`; }
+   return { type, val, label };
+}
+
 function updateHUD() {
   if (!p) return;
+  
+  let totalAtk = p.baseAtk + (p.eq.weapon ? p.eq.weapon.val : 0);
+  let totalDef = p.baseDef + (p.eq.armor ? p.eq.armor.val : 0) + (p.eq.helm ? p.eq.helm.val : 0);
+  let totalLuck = p.baseLuck + (p.eq.accessory ? p.eq.accessory.val : 0);
+  let bCrit = 0, bDodge = 0;
+
+  ['weapon', 'armor', 'helm', 'accessory'].forEach(s => {
+      if(p.eq[s] && p.eq[s].affix) {
+          let af = p.eq[s].affix;
+          if(af.type === 'atk') totalAtk += af.val;
+          if(af.type === 'def') totalDef += af.val;
+          if(af.type === 'luck') totalLuck += af.val;
+          if(af.type === 'crit') bCrit += af.val;
+          if(af.type === 'dodge') bDodge += af.val;
+      }
+  });
+
+  p.bonusStats = { crit: bCrit/100, dodge: bDodge, atk: totalAtk - p.baseAtk - (p.eq.weapon ? p.eq.weapon.val : 0), def: totalDef - p.baseDef - (p.eq.armor ? p.eq.armor.val : 0) - (p.eq.helm ? p.eq.helm.val : 0), luck: totalLuck - p.baseLuck - (p.eq.accessory ? p.eq.accessory.val : 0) };
+
   $('wd-ui-name').textContent = p.name; $('wd-ui-class-level').textContent = `${p.cls} · Level ${p.lvl}`; $('wd-ui-avatar').textContent = CLASSES[p.cls].avatar;
   $('wd-ui-hp-text').textContent = `${Math.max(0, p.hp)} / ${p.maxHp}`; $('wd-ui-hp-bar').style.width = `${Math.max(0, (p.hp/p.maxHp)*100)}%`;
   $('wd-ui-mp-text').textContent = `${p.mp} / ${p.maxMp}`; $('wd-ui-mp-bar').style.width = `${(p.mp/p.maxMp)*100}%`;
   $('wd-ui-xp-text').textContent = `${p.xp} / ${p.maxXp}`; $('wd-ui-xp-bar').style.width = `${(p.xp/p.maxXp)*100}%`;
-  $('wd-ui-atk').textContent = p.baseAtk + (p.eq.weapon ? p.eq.weapon.val : 0); let totalDef = p.baseDef + (p.eq.armor ? p.eq.armor.val : 0); if (p.eq.trinket && p.eq.trinket.effect === 'armor') totalDef = Math.floor(totalDef * 1.25); let defPct = Math.floor(Math.min(0.85, totalDef / (totalDef + 40)) * 100);
-  $('wd-ui-def').textContent = `${totalDef} (${defPct}%)`; $('wd-ui-gold').textContent = p.gold; $('wd-ui-shards').textContent = p.inv.shards; $('wd-ui-dodge').textContent = `${p.baseDodge}%`; $('wd-ui-luck').textContent = p.baseLuck;
+  
+  $('wd-ui-atk').textContent = totalAtk; 
+  if (p.eq.trinket && p.eq.trinket.effect === 'armor') totalDef = Math.floor(totalDef * 1.25); 
+  let defPct = Math.floor(Math.min(0.85, totalDef / (totalDef + 40)) * 100);
+  $('wd-ui-def').textContent = `${totalDef} (${defPct}%)`; 
+  $('wd-ui-gold').textContent = p.gold; $('wd-ui-shards').textContent = p.inv.shards; 
+  $('wd-ui-dodge').textContent = `${p.baseDodge + bDodge}%`; $('wd-ui-luck').textContent = totalLuck;
   $('wd-ui-location').textContent = state.dungeon.active ? `${DUNGEONS[state.dungeon.type].name} E${state.dungeon.floor}` : (state.area ? AREAS[state.area].name : "Dorf");
   $('wd-ui-sp').textContent = p.sp;
-  $('wd-eq-weapon').innerHTML = p.eq.weapon ? `<div class="wd-eq-icon">${getWepEmoji(p.eq.weapon.name)}</div><div class="wd-eq-details"><h4 class="${p.eq.weapon.rarity}">${p.eq.weapon.name}</h4><p>+${p.eq.weapon.val} ATK</p></div>` : `<div class="wd-eq-icon">🗡️</div><div class="wd-eq-details"><h4>Waffe</h4><p>Nichts</p></div>`;
-  $('wd-eq-armor').innerHTML = p.eq.armor ? `<div class="wd-eq-icon">${getArmEmoji(p.eq.armor.name)}</div><div class="wd-eq-details"><h4 class="${p.eq.armor.rarity}">${p.eq.armor.name}</h4><p>+${p.eq.armor.val} RÜS</p></div>` : `<div class="wd-eq-icon">🛡️</div><div class="wd-eq-details"><h4>Rüstung</h4><p>Nichts</p></div>`;
-  $('wd-eq-trinket').innerHTML = p.eq.trinket ? `<div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="${p.eq.trinket.rarity}">${p.eq.trinket.name}</h4><p>${p.eq.trinket.desc}</p></div><button class="wd-mini-btn" style="margin-left:auto" onclick="unequipTrinket()">Ablegen</button>` : `<div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="r-artefact">Artefakt</h4><p>Leerer Sockel</p></div>`;
+  
+  $('wd-eq-weapon').innerHTML = p.eq.weapon ? `<div class="wd-eq-icon">${getWepEmoji(p.eq.weapon.name)}</div><div class="wd-eq-details"><h4 class="${p.eq.weapon.rarity}">${p.eq.weapon.name}</h4><p>+${p.eq.weapon.val} ATK ${p.eq.weapon.affix ? `<span style="color:var(--epic)">✧</span>` : ''}</p></div>` : `<div class="wd-eq-icon">🗡️</div><div class="wd-eq-details"><h4>Waffe</h4><p>Nichts</p></div>`;
+  $('wd-eq-armor').innerHTML = p.eq.armor ? `<div class="wd-eq-icon">${getArmEmoji(p.eq.armor.name)}</div><div class="wd-eq-details"><h4 class="${p.eq.armor.rarity}">${p.eq.armor.name}</h4><p>+${p.eq.armor.val} RÜS ${p.eq.armor.affix ? `<span style="color:var(--epic)">✧</span>` : ''}</p></div>` : `<div class="wd-eq-icon">🛡️</div><div class="wd-eq-details"><h4>Rüstung</h4><p>Nichts</p></div>`;
+  $('wd-eq-helm').innerHTML = p.eq.helm ? `<div class="wd-eq-icon">🪖</div><div class="wd-eq-details"><h4 class="${p.eq.helm.rarity}">${p.eq.helm.name}</h4><p>+${p.eq.helm.val} RÜS ${p.eq.helm.affix ? `<span style="color:var(--epic)">✧</span>` : ''}</p></div><button class="wd-mini-btn" style="margin-left:auto" onclick="unequipItem('helm')">Ablegen</button>` : `<div class="wd-eq-icon">🪖</div><div class="wd-eq-details"><h4>Helm</h4><p>Nichts</p></div>`;
+  $('wd-eq-accessory').innerHTML = p.eq.accessory ? `<div class="wd-eq-icon">📿</div><div class="wd-eq-details"><h4 class="${p.eq.accessory.rarity}">${p.eq.accessory.name}</h4><p>+${p.eq.accessory.val} LUCK ${p.eq.accessory.affix ? `<span style="color:var(--epic)">✧</span>` : ''}</p></div><button class="wd-mini-btn" style="margin-left:auto" onclick="unequipItem('accessory')">Ablegen</button>` : `<div class="wd-eq-icon">📿</div><div class="wd-eq-details"><h4>Accessoire</h4><p>Nichts</p></div>`;
+  $('wd-eq-trinket').innerHTML = p.eq.trinket ? `<div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="${p.eq.trinket.rarity}">${p.eq.trinket.name}</h4><p>${p.eq.trinket.desc}</p></div><button class="wd-mini-btn" style="margin-left:auto" onclick="unequipItem('trinket')">Ablegen</button>` : `<div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="r-artefact">Artefakt</h4><p>Leerer Sockel</p></div>`;
   
   let fxHtml = '';
   if(p.fx.shield > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--rare)">Schild (${p.fx.shield})</span>`; if(p.fx.dodge > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--xp-glow)">Waldläufer-Ausw. (${p.fx.dodge})</span>`; if(p.fx.combo > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--hp-glow)">Combo (${p.fx.combo})</span>`; if(p.fx.bossBuff) fxHtml += `<span class="wd-effect-chip" style="color:var(--gold)">Boss-Segen</span>`;
@@ -470,26 +515,15 @@ function showCombatStage(show) {
   $('wd-combat-stage').style.display = show ? 'flex' : 'none';
   const titleEl = $('wd-arena-title'); const arena = $('wd-visual-arena');
   titleEl.textContent = state.enemy ? state.enemy.n : (state.area ? (state.area==='Dungeon'?DUNGEONS[state.dungeon.type].name:AREAS[state.area].name) : "Dorfplatz");
-  
-  if (state.enemy && (state.enemy.elite || state.enemy.boss)) { titleEl.style.color = "var(--epic)"; titleEl.style.textShadow = "0 2px 15px rgba(192, 132, 252, 0.6)"; } 
-  else { titleEl.style.color = "rgba(255,255,255,0.2)"; titleEl.style.textShadow = "0 2px 10px rgba(0,0,0,1)"; }
-
-  // V0.8: Arena Hintergründe dynamisch anpassen
-  if (state.dungeon && state.dungeon.active) { arena.style.background = DUNGEONS[state.dungeon.type].bg; }
-  else if (state.area) { arena.style.background = AREAS[state.area].bg; }
-  else { arena.style.background = "radial-gradient(circle at 50% 70%, rgba(20, 20, 25, 0.2) 0%, rgba(0,0,0,0.95) 70%)"; } // Dorf-Bg
+  if (state.enemy && (state.enemy.elite || state.enemy.boss)) { titleEl.style.color = "var(--epic)"; titleEl.style.textShadow = "0 2px 15px rgba(192, 132, 252, 0.6)"; } else { titleEl.style.color = "rgba(255,255,255,0.2)"; titleEl.style.textShadow = "0 2px 10px rgba(0,0,0,1)"; }
+  if (state.dungeon && state.dungeon.active) { arena.style.background = DUNGEONS[state.dungeon.type].bg; } else if (state.area) { arena.style.background = AREAS[state.area].bg; } else { arena.style.background = "radial-gradient(circle at 50% 70%, rgba(20, 20, 25, 0.2) 0%, rgba(0,0,0,0.95) 70%)"; }
 
   if(show && state.enemy) {
     $('wd-ui-enemy-hp').textContent = `HP: ${Math.max(0, state.enemy.h)}/${state.enemy.maxH}`;
-    let el = $('wd-sprite-enemy');
-    el.textContent = state.enemy.s;
-    el.classList.remove('wd-enemy-dead'); // Tote-Gegner-Klasse entfernen
-    if(state.enemy.boss && state.enemy.phase === 2) { el.classList.add('wd-boss-phase-2'); arena.classList.add('wd-arena-boss'); }
-    else { el.classList.remove('wd-boss-phase-2'); arena.classList.remove('wd-arena-boss'); }
+    let el = $('wd-sprite-enemy'); el.textContent = state.enemy.s; el.classList.remove('wd-enemy-dead'); 
+    if(state.enemy.boss && state.enemy.phase === 2) { el.classList.add('wd-boss-phase-2'); arena.classList.add('wd-arena-boss'); } else { el.classList.remove('wd-boss-phase-2'); arena.classList.remove('wd-arena-boss'); }
     $('wd-sprite-hero').textContent = CLASSES[p.cls].avatar;
-  } else {
-    arena.classList.remove('wd-arena-boss');
-  }
+  } else { arena.classList.remove('wd-arena-boss'); }
 }
 
 function showMainMenu() {
@@ -503,7 +537,7 @@ function showMainMenu() {
           <button class="wd-menu-btn" onclick="loadGame()"><span class="wd-icon">📂</span><span class="wd-menu-btn-text">Spiel laden</span></button>
         </div>
       </div>
-      <div class="wd-menu-footer"><p>Web Dungeons v0.8 | Eclipse v1.4 | © 2024 CodetNiemalsHigh</p></div>
+      <div class="wd-menu-footer"><p>Web Dungeons v1.0 | Eclipse v2.1 | © 2024 CodetNiemalsHigh</p></div>
     </div>
   `;
 }
@@ -520,62 +554,133 @@ function createPlayer(cls, existingPrestige = null, preserveName = null) {
   const name = preserveName || (prompt("Wie lautet dein Name?") || "Namenloser"); const c = CLASSES[cls]; const prestige = existingPrestige || { level: 0, dust: 0, buffs: { xp: 0, gold: 0, stats: 0 } };
   p = {
     name, cls, lvl: 1, xp: 0, maxXp: 100, sp: 0, gold: 90, hp: c.maxHp + (prestige.buffs.stats * 15), maxHp: c.maxHp + (prestige.buffs.stats * 15), mp: c.maxMp, maxMp: c.maxMp, 
-    baseAtk: c.baseAtk + (prestige.buffs.stats * 2), baseDef: 0, baseDodge: 0, baseLuck: 0,
-    eq: { weapon: { id: makeId('w'), type: 'weapon', name: c.defW, val: c.defDmg, rarity: 'r-common', sell: calculateSellValue(c.defDmg, 'r-common', 'weapon') }, armor: { id: makeId('a'), type: 'armor', name: c.defA, val: c.defDef, rarity: 'r-common', sell: calculateSellValue(c.defDef, 'r-common', 'armor') }, trinket: null },
-    inv: { weapons: [], armors: [], trinkets: [], potions: { hp: 2, mp: 1 }, chests: { wooden: 1, iron: 0, mystic: 0 }, shards: 0 },
+    baseAtk: c.baseAtk + (prestige.buffs.stats * 2), baseDef: 0, baseDodge: 0, baseLuck: 0, bonusStats: { crit: 0, dodge: 0, atk: 0, def: 0, luck: 0 },
+    eq: { weapon: { id: makeId('w'), type: 'weapon', name: c.defW, val: c.defDmg, rarity: 'r-common', sell: calculateSellValue(c.defDmg, 'r-common', 'weapon') }, armor: { id: makeId('a'), type: 'armor', name: c.defA, val: c.defDef, rarity: 'r-common', sell: calculateSellValue(c.defDef, 'r-common', 'armor') }, helm: null, accessory: null, trinket: null },
+    inv: { weapons: [], armors: [], helms: [], accessories: [], trinkets: [], potions: { hp: 2, mp: 1 }, chests: { wooden: 1, iron: 0, mystic: 0 }, shards: 0 },
     fx: { shield: 0, dodge: 0, combo: 0, bossBuff: false, poison: 0, poisonDmg: 0, stun: 0, weak: 0, regen: 0, regenHeal: 0 }, talents: {}, quest: null, runStats: { kills: 0 }, prestige: prestige
   };
   if (name === "CodetNiemalsHigh") { p.gold = 99999999; p.inv.chests = { wooden: 50, iron: 50, mystic: 50 }; }
-  p.inv.weapons.push(p.eq.weapon); p.inv.armors.push(p.eq.armor); state.discovery = { weapons: [p.eq.weapon.name], armors: [p.eq.armor.name] }; state.lore = []; state.selectedSkill = "t_hp1"; 
+  p.inv.weapons.push(p.eq.weapon); p.inv.armors.push(p.eq.armor); state.discovery = { weapons: [p.eq.weapon.name], armors: [p.eq.armor.name], helms: [], accessories: [] }; state.lore = []; state.selectedSkill = "t_hp1"; 
   generateQuestBoard(); playSound('magic'); log(`Die Reise beginnt, ${name} der ${cls}.`, "good"); goToTown();
 }
+
+function showHelpCenter() {
+    clearLog();
+    log("--- 📖 KOMPENDIUM DER FINSTERNIS ---", "warn");
+    log("<b>Arkane Splitter:</b> Erhältst du durch das Zerlegen (Dismantle) von Ausrüstung im Inventar.", "info");
+    log("<b>Helme & Accessoires:</b> Finde sie in epischen und arkanen Kisten oder crafte sie im Schmelztiegel.", "info");
+    log("<b>Schmelztiegel:</b> Tausche 3 Items der gleichen Seltenheit gegen 1 zufälliges, besseres Item (Händlerviertel).", "info");
+    log("<b>Magische Affixe:</b> Items aus Kisten oder dem Schmelztiegel können seltene (✧) Boni erhalten.", "info");
+    log("<b>Lore & Geschichte:</b> Besiege Bosse, um mehr über die Welt zu erfahren (Archiv-Tab).", "info");
+    setActions([{ label: "Zurück", sub: "Zum Dorfplatz", cssClass: "back-btn", onclick: goToTown }]);
+}
+
 function goToTown() {
   state.area = null; state.enemy = null; state.room = 0; state.dungeon.active = false; updateHUD(); showCombatStage(false); clearLog(); log("Du befindest dich im Dorf. Bereite dich gut vor.", "info");
-  const actions = [ { label: "🗺️ Expedition", sub: "Ressourcen farmen", onclick: showExpeditionSelection }, { label: "🏰 Dungeons", sub: "Endloser Boss-Modus", onclick: showDungeonSelection }, { label: "⚖️ Händlerviertel", sub: "Schmied & Alchemist", onclick: openShopMenu }, { label: "📜 Questbrett", sub: "Aufträge annehmen", onclick: () => switchTab('wd-tab-quests', document.querySelectorAll('.wd-tab-btn')[3]) } ];
+  const actions = [ 
+      { label: "🗺️ Expedition", sub: "Ressourcen farmen", onclick: showExpeditionSelection }, 
+      { label: "🏰 Dungeons", sub: "Endloser Boss-Modus", onclick: showDungeonSelection }, 
+      { label: "⚖️ Händlerviertel", sub: "Schmied & Alchemist", onclick: openShopMenu }, 
+      { label: "📜 Questbrett", sub: "Aufträge annehmen", onclick: () => switchTab('wd-tab-quests', document.querySelectorAll('.wd-tab-btn')[3]) },
+      { label: "📖 Kompendium", sub: "Hilfe & Wissen", onclick: showHelpCenter }
+  ];
   if (p.lvl >= 25 || (p.prestige && p.prestige.level > 0)) { actions.push({ label: "🌌 Astral-Altar", sub: "Wiedergeburt", onclick: showPrestigeMenu }); }
   setActions(actions);
 }
 
-function showPrestigeMenu() { clearLog(); log("Der Astral-Altar summt vor kosmischer Energie. Hier kannst du deine weltliche Macht für permanenten Astralstaub opfern.", "magic"); const canPrestige = p.lvl >= 25; const dustReward = 5; setActions([ { label: "Wiedergeburt", sub: canPrestige ? `+${dustReward} Astralstaub` : "Ab Lvl 25", disabled: !canPrestige, onclick: () => doPrestige(dustReward) }, { label: "Erfahrungs-Echo", sub: `1 Staub (+10% XP) [Lvl ${p.prestige.buffs.xp}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('xp') }, { label: "Goldsog", sub: `1 Staub (+10% Gold) [Lvl ${p.prestige.buffs.gold}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('gold') }, { label: "Macht des Kosmos", sub: `1 Staub (+15 HP, +2 ATK) [Lvl ${p.prestige.buffs.stats}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('stats') }, { label: "Zurück", sub: "Zum Dorfplatz", onclick: goToTown } ]); }
+function showPrestigeMenu() { clearLog(); log("Der Astral-Altar summt vor kosmischer Energie. Hier kannst du deine weltliche Macht für permanenten Astralstaub opfern.", "magic"); const canPrestige = p.lvl >= 25; const dustReward = 5; setActions([ { label: "Wiedergeburt", sub: canPrestige ? `+${dustReward} Astralstaub` : "Ab Lvl 25", disabled: !canPrestige, onclick: () => doPrestige(dustReward) }, { label: "Erfahrungs-Echo", sub: `1 Staub (+10% XP) [Lvl ${p.prestige.buffs.xp}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('xp') }, { label: "Goldsog", sub: `1 Staub (+10% Gold) [Lvl ${p.prestige.buffs.gold}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('gold') }, { label: "Macht des Kosmos", sub: `1 Staub (+15 HP, +2 ATK) [Lvl ${p.prestige.buffs.stats}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('stats') }, { label: "Zurück", sub: "Zum Dorfplatz", cssClass: "back-btn", onclick: goToTown } ]); }
 function buyPrestigeBuff(type) { p.prestige.dust -= 1; p.prestige.buffs[type] += 1; if (type === 'stats') { p.maxHp += 15; p.hp += 15; p.baseAtk += 2; } playSound('level'); updateHUD(); log(`Permanenter Buff verstärkt! Deine Macht überdauert den Tod.`, "magic"); showPrestigeMenu(); }
 function doPrestige(dustReward) { if(!confirm("WARNUNG: Du verlierst dein aktuelles Level, Gold, Inventar und Ausrüstung! Deine permanenten Buffs und dein Astralstaub bleiben erhalten. Fortfahren?")) return; playSound('magic'); const savedPrestige = JSON.parse(JSON.stringify(p.prestige)); savedPrestige.dust += dustReward; savedPrestige.level += 1; createPlayer(p.cls, savedPrestige, p.name); log(`WIEDERGEBURT ERFOLGREICH! Du startest neu, aber mächtiger als zuvor. (+${dustReward} Astralstaub)`, "warn"); }
 
-function showExpeditionSelection() { clearLog(); log("Die Tore stehen offen. Wohin führt dein Weg?", "info"); setActions([ { label: "🌲 "+AREAS.Forest.name, sub: "Geringe Gefahr", onclick: () => startExploration('Forest') }, { label: "🏛️ "+AREAS.Ruins.name, sub: "Mittlere Gefahr", onclick: () => startExploration('Ruins') }, { label: "🌋 "+AREAS.Volcano.name, sub: "Hohe Gefahr", onclick: () => startExploration('Volcano') }, { label: "Zurück", sub: "Zum Dorfplatz", onclick: goToTown } ]); }
-function showDungeonSelection() { clearLog(); log("Wähle einen Dungeon. Jeder Raum bedeutet Kampf, jede Etage einen Boss.", "warn"); setActions([ { label: "Katakomben (Leicht)", sub: "Basis-Loot", onclick: () => startDungeonRun('D1') }, { label: "Schattenfestung (Mittel)", sub: "1.5x Loot Chance", onclick: () => startDungeonRun('D2') }, { label: "Abgrund (Schwer)", sub: "2.2x Loot Chance", onclick: () => startDungeonRun('D3') }, { label: "Mahlstrom (Endlos)", sub: "Mutatoren ab Lvl 20", disabled: (p.lvl < 20 && (!p.prestige || p.prestige.level === 0)), onclick: () => startDungeonRun('D4') }, { label: "Zurück", sub: "Zum Dorfplatz", onclick: goToTown } ]); }
-function openShopMenu() { clearLog(); log("Der Schmied hämmert, die Arkanschmiede knistert.", "info"); setActions([ { label: "Waffenschmied", sub: "Ausrüstung kaufen", onclick: visitBlacksmith }, { label: "Rüstungsschmied", sub: "Schutz verbessern", onclick: visitArmorer }, { label: "Arkanschmiede", sub: "Ausrüstung aufwerten", onclick: visitForge }, { label: "Alchemist", sub: "Tränke & Kisten", onclick: visitAlchemist }, { label: "Taverne", sub: "Heilung & Buffs", onclick: visitTavern }, { label: "Zurück", sub: "Zum Dorfplatz", onclick: goToTown } ]); }
-function visitBlacksmith() { const acts = SHOP_WEAPONS[p.cls].map(o => ({ label: `${o.name} (+${o.dmg})`, sub: `${o.cost} G`, current: p.gold, cost: o.cost, onclick: () => buyGear(o, 'weapon') })); acts.push({ label: "Zurück", sub: "Zum Marktplatz", onclick: openShopMenu }); setActions(acts); }
-function visitArmorer() { const acts = SHOP_ARMORS[p.cls].map(o => ({ label: `${o.name} (+${o.def})`, sub: `${o.cost} G`, current: p.gold, cost: o.cost, onclick: () => buyGear(o, 'armor') })); acts.push({ label: "Zurück", sub: "Zum Marktplatz", onclick: openShopMenu }); setActions(acts); }
-function visitForge() { clearLog(); log(`Die magischen Flammen der Arkanschmiede benötigen Splitter. Du besitzt ${p.inv.shards}.`, "magic"); const wCost = Math.floor(p.eq.weapon.val * 1.5) + 5; const aCost = Math.floor(p.eq.armor.val * 1.5) + 5; const wBonus = Math.max(2, Math.floor(p.eq.weapon.val * 0.15)); const aBonus = Math.max(1, Math.floor(p.eq.armor.val * 0.15)); setActions([ { label: "Waffe aufwerten", sub: `${wCost} Splitter (+${wBonus} ATK)`, current: p.inv.shards, cost: wCost, onclick: () => upgradeGear('weapon', wCost, wBonus) }, { label: "Rüstung aufwerten", sub: `${aCost} Splitter (+${aBonus} RÜS)`, current: p.inv.shards, cost: aCost, onclick: () => upgradeGear('armor', aCost, aBonus) }, { label: "Zurück", sub: "Zum Marktplatz", onclick: openShopMenu } ]); }
+function showExpeditionSelection() { clearLog(); log("Die Tore stehen offen. Wohin führt dein Weg?", "info"); setActions([ { label: "🌲 "+AREAS.Forest.name, sub: "Geringe Gefahr", onclick: () => startExploration('Forest') }, { label: "🏛️ "+AREAS.Ruins.name, sub: "Mittlere Gefahr", onclick: () => startExploration('Ruins') }, { label: "🌋 "+AREAS.Volcano.name, sub: "Hohe Gefahr", onclick: () => startExploration('Volcano') }, { label: "Zurück", sub: "Zum Dorfplatz", cssClass: "back-btn", onclick: goToTown } ]); }
+function showDungeonSelection() { clearLog(); log("Wähle einen Dungeon. Jeder Raum bedeutet Kampf, jede Etage einen Boss.", "warn"); setActions([ { label: "Katakomben (Leicht)", sub: "Basis-Loot", onclick: () => startDungeonRun('D1') }, { label: "Schattenfestung (Mittel)", sub: "1.5x Loot Chance", onclick: () => startDungeonRun('D2') }, { label: "Abgrund (Schwer)", sub: "2.2x Loot Chance", onclick: () => startDungeonRun('D3') }, { label: "Mahlstrom (Endlos)", sub: "Mutatoren ab Lvl 20", disabled: (p.lvl < 20 && (!p.prestige || p.prestige.level === 0)), onclick: () => startDungeonRun('D4') }, { label: "Zurück", sub: "Zum Dorfplatz", cssClass: "back-btn", onclick: goToTown } ]); }
+
+function openShopMenu() { 
+    clearLog(); log("Der Schmied hämmert, die Arkanschmiede knistert.", "info"); 
+    setActions([ 
+        { label: "Waffenschmied", sub: "Ausrüstung kaufen", onclick: visitBlacksmith }, 
+        { label: "Rüstungsschmied", sub: "Schutz verbessern", onclick: visitArmorer }, 
+        { label: "Arkanschmiede", sub: "Ausrüstung aufwerten", onclick: visitForge }, 
+        { label: "Schmelztiegel", sub: "Items kombinieren", onclick: visitCrucible }, 
+        { label: "Alchemist", sub: "Tränke & Kisten", onclick: visitAlchemist }, 
+        { label: "Taverne", sub: "Heilung & Buffs", onclick: visitTavern }, 
+        { label: "Zurück", sub: "Zum Dorfplatz", cssClass: "back-btn", onclick: goToTown } 
+    ]); 
+}
+
+function visitBlacksmith() { const acts = SHOP_WEAPONS[p.cls].map(o => ({ label: `${o.name} (+${o.dmg})`, sub: `${o.cost} G`, current: p.gold, cost: o.cost, onclick: () => buyGear(o, 'weapon') })); acts.push({ label: "Zurück", sub: "Zum Marktplatz", cssClass: "back-btn", onclick: openShopMenu }); setActions(acts); }
+function visitArmorer() { const acts = SHOP_ARMORS[p.cls].map(o => ({ label: `${o.name} (+${o.def})`, sub: `${o.cost} G`, current: p.gold, cost: o.cost, onclick: () => buyGear(o, 'armor') })); acts.push({ label: "Zurück", sub: "Zum Marktplatz", cssClass: "back-btn", onclick: openShopMenu }); setActions(acts); }
+function visitForge() { clearLog(); log(`Die magischen Flammen der Arkanschmiede benötigen Splitter. Du besitzt ${p.inv.shards}.`, "magic"); const wCost = Math.floor(p.eq.weapon.val * 1.5) + 5; const aCost = Math.floor(p.eq.armor.val * 1.5) + 5; const wBonus = Math.max(2, Math.floor(p.eq.weapon.val * 0.15)); const aBonus = Math.max(1, Math.floor(p.eq.armor.val * 0.15)); setActions([ { label: "Waffe aufwerten", sub: `${wCost} Splitter (+${wBonus} ATK)`, current: p.inv.shards, cost: wCost, onclick: () => upgradeGear('weapon', wCost, wBonus) }, { label: "Rüstung aufwerten", sub: `${aCost} Splitter (+${aBonus} RÜS)`, current: p.inv.shards, cost: aCost, onclick: () => upgradeGear('armor', aCost, aBonus) }, { label: "Zurück", sub: "Zum Marktplatz", cssClass: "back-btn", onclick: openShopMenu } ]); }
 function upgradeGear(type, cost, bonus) { if(p.inv.shards < cost) return; p.inv.shards -= cost; playSound('level'); if(type === 'weapon') { p.eq.weapon.val += bonus; p.eq.weapon.name = p.eq.weapon.name.includes('+') ? p.eq.weapon.name.replace(/\+\d+/, `+${parseInt(p.eq.weapon.name.match(/\+(\d+)/)[1]) + 1}`) : p.eq.weapon.name + ' +1'; p.eq.weapon.sell = calculateSellValue(p.eq.weapon.val, p.eq.weapon.rarity, 'weapon'); let invItem = p.inv.weapons.find(i => i.id === p.eq.weapon.id); if (invItem && invItem !== p.eq.weapon) { invItem.val = p.eq.weapon.val; invItem.name = p.eq.weapon.name; invItem.sell = p.eq.weapon.sell; } log(`${p.eq.weapon.name} glüht vor Energie!`, "good"); } else { p.eq.armor.val += bonus; p.eq.armor.name = p.eq.armor.name.includes('+') ? p.eq.armor.name.replace(/\+\d+/, `+${parseInt(p.eq.armor.name.match(/\+(\d+)/)[1]) + 1}`) : p.eq.armor.name + ' +1'; p.eq.armor.sell = calculateSellValue(p.eq.armor.val, p.eq.armor.rarity, 'armor'); let invItem = p.inv.armors.find(i => i.id === p.eq.armor.id); if (invItem && invItem !== p.eq.armor) { invItem.val = p.eq.armor.val; invItem.name = p.eq.armor.name; invItem.sell = p.eq.armor.sell; } log(`${p.eq.armor.name} glüht vor Energie!`, "good"); } updateHUD(); visitForge(); }
 function buyGear(item, type) { if (p.gold < item.cost) return; playSound('coin'); p.gold -= item.cost; if(type === 'weapon') { const w = { id: makeId('w'), type: 'weapon', name: item.name, val: item.dmg, rarity: 'r-shop', sell: calculateSellValue(item.dmg, 'r-shop', 'weapon') }; p.inv.weapons.unshift(w); p.eq.weapon = JSON.parse(JSON.stringify(w)); discover('weapons', w.name); } else { const a = { id: makeId('a'), type: 'armor', name: item.name, val: item.def, rarity: 'r-shop', sell: calculateSellValue(item.def, 'r-shop', 'armor') }; p.inv.armors.unshift(a); p.eq.armor = JSON.parse(JSON.stringify(a)); discover('armors', a.name); } log(`${item.name} gekauft und ausgerüstet.`, "good"); updateHUD(); type === 'weapon' ? visitBlacksmith() : visitArmorer(); }
-function visitAlchemist() { setActions([ { label: "Heiltrank", sub: "25 G (+50 HP)", current: p.gold, cost: 25, onclick: () => buyItem('hp', 25) }, { label: "Manatrank", sub: "20 G (+40 MP)", current: p.gold, cost: 20, onclick: () => buyItem('mp', 20) }, { label: "Holzkiste", sub: "150 G (Basics)", current: p.gold, cost: 150, onclick: () => buyItem('wooden', 150) }, { label: "Eisenkiste", sub: "300 G (Mehr Epics)", current: p.gold, cost: 300, onclick: () => buyItem('iron', 300) }, { label: "Arkankiste", sub: "600 G (Leg-Chance)", current: p.gold, cost: 600, onclick: () => buyItem('mystic', 600) }, { label: "Zurück", sub: "Zum Marktplatz", onclick: openShopMenu } ]); }
+
+// V1.0: SCHMELZTIEGEL LOGIK
+function getUnequippedItemsByRarity(rarity) {
+    let list = [];
+    ['weapons', 'armors', 'helms', 'accessories', 'trinkets'].forEach(type => {
+        p.inv[type].forEach(i => {
+            let isEq = false;
+            ['weapon', 'armor', 'helm', 'accessory', 'trinket'].forEach(slot => { if (p.eq[slot] && p.eq[slot].id === i.id) isEq = true; });
+            if (!isEq && i.rarity === rarity) list.push({type: type, id: i.id});
+        });
+    });
+    return list;
+}
+
+function visitCrucible() {
+    clearLog();
+    log(`Der Schmelztiegel brodelt. Wirf 3 nicht ausgerüstete Items gleicher Seltenheit hinein, um etwas Besseres zu formen! (Aktuelle Splitter: ${p.inv.shards})`, "magic");
+    let cCount = getUnequippedItemsByRarity('r-common').length;
+    let rCount = getUnequippedItemsByRarity('r-rare').length;
+    let eCount = getUnequippedItemsByRarity('r-epic').length;
+    setActions([
+        { label: "Selten craften", sub: `3x Gew. + 5 Splitter (${cCount}/3)`, current: p.inv.shards, cost: 5, disabled: cCount < 3, onclick: () => craftItem('r-common', 'rare', 5) },
+        { label: "Episch craften", sub: `3x Selten + 15 Splitter (${rCount}/3)`, current: p.inv.shards, cost: 15, disabled: rCount < 3, onclick: () => craftItem('r-rare', 'epic', 15) },
+        { label: "Legendär craften", sub: `3x Episch + 40 Splitter (${eCount}/3)`, current: p.inv.shards, cost: 40, disabled: eCount < 3, onclick: () => craftItem('r-epic', 'legendary', 40) },
+        { label: "Zurück", sub: "Zum Marktplatz", cssClass: "back-btn", onclick: openShopMenu }
+    ]);
+}
+
+function craftItem(inRarity, outRarityEnum, shardCost) {
+    let items = getUnequippedItemsByRarity(inRarity);
+    if (items.length < 3 || p.inv.shards < shardCost) return;
+    for (let k = 0; k < 3; k++) {
+        let toRemove = items[k]; let idx = p.inv[toRemove.type].findIndex(i => i.id === toRemove.id);
+        if(idx > -1) p.inv[toRemove.type].splice(idx, 1);
+    }
+    p.inv.shards -= shardCost;
+    
+    let categories = ['weapon', 'armor', 'helm', 'accessory', 'trinket'];
+    let chosenCat = categories[rand(0, categories.length-1)];
+    let rewardText, rewardClass;
+    
+    if (chosenCat === 'trinket') {
+        const t = Object.assign({}, TRINKETS[rand(0, TRINKETS.length-1)]); t.id = makeId('t'); t.type = 'trinket'; t.sell = 100; p.inv.trinkets.push(t); rewardText = t.name; rewardClass = "r-artefact";
+    } else {
+        let pool, name, val, itemObj; let rarity = outRarityEnum; let rKey = 'r-' + rarity;
+        const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
+        if (chosenCat === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * 1.2 * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); }
+        else if (chosenCat === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * 1.2 * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); }
+        else if (chosenCat === 'helm') { pool = HELM_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(1, 4) + p.lvl * 0.5) * 1.2 * rarityMult); itemObj = { id: makeId('h'), type:'helm', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.helms.push(itemObj); discover('helms', name); }
+        else if (chosenCat === 'accessory') { pool = ACC_POOLS[rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor(rand(1, 3) * rarityMult); itemObj = { id: makeId('acc'), type:'accessory', name, val, rarity: rKey, sell: calculateSellValue(val*2, rKey, 'weapon') }; p.inv.accessories.push(itemObj); discover('accessories', name); }
+        let affix = generateAffix(rKey); if (affix) itemObj.affix = affix;
+        let statSuf = (chosenCat === 'accessory') ? 'LUCK' : (chosenCat === 'weapon' ? 'ATK' : 'RÜS');
+        rewardText = itemObj.name + ` (+${val} ${statSuf})` + (affix ? ' ✧' : ''); rewardClass = rKey;
+    }
+    playSound('magic'); log(`Der Schmelztiegel formt etwas Neues: ${rewardText}!`, "good");
+    updateHUD(); visitCrucible();
+}
+
+function visitAlchemist() { setActions([ { label: "Heiltrank", sub: "25 G (+50 HP)", current: p.gold, cost: 25, onclick: () => buyItem('hp', 25) }, { label: "Manatrank", sub: "20 G (+40 MP)", current: p.gold, cost: 20, onclick: () => buyItem('mp', 20) }, { label: "Holzkiste", sub: "150 G (Basics)", current: p.gold, cost: 150, onclick: () => buyItem('wooden', 150) }, { label: "Eisenkiste", sub: "300 G (Mehr Epics)", current: p.gold, cost: 300, onclick: () => buyItem('iron', 300) }, { label: "Arkankiste", sub: "600 G (Leg-Chance)", current: p.gold, cost: 600, onclick: () => buyItem('mystic', 600) }, { label: "Zurück", sub: "Zum Marktplatz", cssClass: "back-btn", onclick: openShopMenu } ]); }
 function buyItem(type, cost) { if (p.gold < cost) return; playSound('coin'); p.gold -= cost; if(type === 'hp') { p.inv.potions.hp++; log("Heiltrank gekauft.", "good"); } else if(type === 'mp') { p.inv.potions.mp++; log("Manatrank gekauft.", "good"); } else { p.inv.chests[type]++; log(`${CHEST_DEFS[type].label} gekauft.`, "magic"); playSound('magic'); } updateHUD(); visitAlchemist(); }
-function visitTavern() { setActions([ { label: "Kleine Rast", sub: "18 G (Heilt 35%)", current: p.gold, cost: 18, onclick: () => tavernRest(18, 0.35) }, { label: "Große Rast", sub: `${48+p.lvl*8} G (Heilt 100%)`, current: p.gold, cost: 48+p.lvl*8, onclick: () => tavernRest(48+p.lvl*8, 1.0) }, { label: "Abendsegen", sub: "65 G (Boss-Ulti Buff)", current: p.gold, cost: 65, onclick: () => { if(p.gold>=65){ playSound('magic'); p.gold-=65; p.fx.bossBuff=true; log("Segen empfangen!", "magic"); updateHUD(); visitTavern(); }}}, { label: "Zurück", sub: "Zum Marktplatz", onclick: openShopMenu } ]); }
+function visitTavern() { setActions([ { label: "Kleine Rast", sub: "18 G (Heilt 35%)", current: p.gold, cost: 18, onclick: () => tavernRest(18, 0.35) }, { label: "Große Rast", sub: `${48+p.lvl*8} G (Heilt 100%)`, current: p.gold, cost: 48+p.lvl*8, onclick: () => tavernRest(48+p.lvl*8, 1.0) }, { label: "Abendsegen", sub: "65 G (Boss-Ulti Buff)", current: p.gold, cost: 65, onclick: () => { if(p.gold>=65){ playSound('magic'); p.gold-=65; p.fx.bossBuff=true; log("Segen empfangen!", "magic"); updateHUD(); visitTavern(); }}}, { label: "Zurück", sub: "Zum Marktplatz", cssClass: "back-btn", onclick: openShopMenu } ]); }
 function tavernRest(cost, pct) { if (p.gold < cost) return; playSound('heal'); p.gold -= cost; p.hp = Math.min(p.maxHp, p.hp + Math.floor(p.maxHp*pct)); p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp*pct)); log("Wunden geheilt.", "good"); updateHUD(); visitTavern(); }
 
-function startExploration(area) {
-  state.area = area; state.room = 0; clearLog(); 
-  log(`--- ${AREAS[area].name} ---`, "warn");
-  log(AREAS[area].intro, "magic"); // V0.8: Atmosphäre-Text
-  enterRoom();
-}
-function enterRoom() {
-  state.room++; updateHUD(); showCombatStage(false);
-  setActions([
-    { label: "Linker Pfad", sub: "Gefahr & Beute", onclick: () => resolveRoom(1.2) },
-    { label: "Geradeaus", sub: "Ausgewogen", onclick: () => resolveRoom(1.0) },
-    { label: "Rechter Pfad", sub: "Sicherer", onclick: () => resolveRoom(0.8) },
-    { label: "Stadt (Rückzug)", sub: "Beute sichern", onclick: goToTown }
-  ]);
-}
+function startExploration(area) { state.area = area; state.room = 0; clearLog(); log(`--- ${AREAS[area].name} ---`, "warn"); log(AREAS[area].intro, "magic"); enterRoom(); }
+function enterRoom() { state.room++; updateHUD(); showCombatStage(false); setActions([ { label: "Linker Pfad", sub: "Gefahr & Beute", onclick: () => resolveRoom(1.2) }, { label: "Geradeaus", sub: "Ausgewogen", onclick: () => resolveRoom(1.0) }, { label: "Rechter Pfad", sub: "Sicherer", onclick: () => resolveRoom(0.8) }, { label: "Stadt (Rückzug)", sub: "Beute sichern", cssClass: "back-btn", onclick: goToTown } ]); }
 async function resolveRoom(dangerMult) {
   if(state.lock) return; state.lock = true; setActions([]); 
-  
-  // V0.8: Zufälliger Raumtext
-  let texts = state.area ? AREAS[state.area].roomTexts : DUNGEONS[state.dungeon.type].roomTexts;
-  log(texts[rand(0, texts.length-1)], "muted"); 
-  await sleep(400);
-
+  let texts = state.area ? AREAS[state.area].roomTexts : DUNGEONS[state.dungeon.type].roomTexts; log(texts[rand(0, texts.length-1)], "muted"); await sleep(400);
   const roll = Math.random(); const combatChance = 0.5 * dangerMult;
   if (roll < combatChance) { spawnEnemy(dangerMult); }
   else if (roll < combatChance + 0.05) { playSound('magic'); p.inv.chests[Math.random()<0.1?'mystic':(Math.random()<0.4?'iron':'wooden')]++; log("Truhe gefunden!", "magic"); await sleep(800); state.lock = false; enterRoom(); }
@@ -583,58 +688,28 @@ async function resolveRoom(dangerMult) {
   else { playSound('heal'); const heal=Math.floor(p.maxHp*0.2); p.hp=Math.min(p.maxHp,p.hp+heal); p.mp=Math.min(p.maxMp,p.mp+Math.floor(p.maxMp*0.2)); log(`Rast: +${heal} HP/MP.`, "good"); await sleep(800); state.lock=false; enterRoom(); }
 }
 
-function showFloorIntro(text) {
-    const fct = document.createElement('div');
-    fct.className = 'wd-floor-intro-text';
-    fct.textContent = text;
-    $('wd-visual-arena').appendChild(fct);
-    setTimeout(() => fct.remove(), 3600);
-}
+function showFloorIntro(text) { const fct = document.createElement('div'); fct.className = 'wd-floor-intro-text'; fct.textContent = text; $('wd-visual-arena').appendChild(fct); setTimeout(() => fct.remove(), 3600); }
 
-function startDungeonRun(type) {
-  state.area = 'Dungeon'; 
-  state.dungeon = { active: true, type: type, floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false };
-  clearLog(); 
-  log(`--- ${DUNGEONS[type].name} ---`, "warn");
-  log(DUNGEONS[type].intro, "magic"); // V0.8: Intro Text
-  showFloorIntro(`EBENE 1`); // V0.8: Floor Intro Animation
-  showDungeonMenu();
-}
-function showDungeonMenu() {
-  updateHUD(); showCombatStage(false); const d = state.dungeon; const acts = [];
-  if (d.bossPending) { log(`Das Tor zum Boss liegt vor dir.`, "bad"); acts.push({ label: "Boss-Tor öffnen", sub: "Bereite dich vor", onclick: () => spawnEnemy(1.2, true) }); } 
-  else { log(`Ebene ${d.floor} · Räume geklärt: ${d.roomsCleared} / ${d.roomsPerFloor}`, "info"); acts.push({ label: "Nächster Raum (Kampf)", sub: "Gegner besiegen, um voranzukommen", onclick: triggerDungeonRoom }); }
-  const canRest = d.rests > 0 && d.firstEnemyDefeated;
-  acts.push({ label: "Am Feuer rasten", sub: d.firstEnemyDefeated ? `+20% HP/MP (${d.rests} übrig)` : "Erst Gegner besiegen!", disabled: !canRest, onclick: dungeonRest });
-  acts.push({ label: "Dungeon verlassen", sub: "Zurück ins Dorf", onclick: goToTown }); setActions(acts);
-}
+function startDungeonRun(type) { state.area = 'Dungeon'; state.dungeon = { active: true, type: type, floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }; clearLog(); log(`--- ${DUNGEONS[type].name} ---`, "warn"); log(DUNGEONS[type].intro, "magic"); showFloorIntro(`EBENE 1`); showDungeonMenu(); }
+function showDungeonMenu() { updateHUD(); showCombatStage(false); const d = state.dungeon; const acts = []; if (d.bossPending) { log(`Das Tor zum Boss liegt vor dir.`, "bad"); acts.push({ label: "Boss-Tor öffnen", sub: "Bereite dich vor", onclick: () => spawnEnemy(1.2, true) }); } else { log(`Ebene ${d.floor} · Räume geklärt: ${d.roomsCleared} / ${d.roomsPerFloor}`, "info"); acts.push({ label: "Nächster Raum (Kampf)", sub: "Gegner besiegen, um voranzukommen", onclick: triggerDungeonRoom }); } const canRest = d.rests > 0 && d.firstEnemyDefeated; acts.push({ label: "Am Feuer rasten", sub: d.firstEnemyDefeated ? `+20% HP/MP (${d.rests} übrig)` : "Erst Gegner besiegen!", disabled: !canRest, onclick: dungeonRest }); acts.push({ label: "Dungeon verlassen", sub: "Zurück ins Dorf", cssClass: "back-btn", onclick: goToTown }); setActions(acts); }
 async function triggerDungeonRoom() { if(state.lock) return; state.lock = true; setActions([]); log("Eine schwere Eisentür öffnet sich...", "muted"); await sleep(400); spawnEnemy(1 + state.dungeon.floor * 0.1); }
 function dungeonRest() { if(!state.dungeon.firstEnemyDefeated || state.dungeon.rests <= 0) return; state.dungeon.rests--; playSound('heal'); p.hp = Math.min(p.maxHp, p.hp + Math.floor(p.maxHp * 0.2)); p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp * 0.2)); log("Du rastest kurz am Feuer.", "good"); updateHUD(); showDungeonMenu(); }
 
 function spawnEnemy(mult, forceBoss=false) {
-  let isBoss = forceBoss; let t; let diff = 1; let lootMult = 1; const levelScale = 1 + (p.lvl * 0.05);
-  let isElite = false; let isMedium = false;
+  let isBoss = forceBoss; let t; let diff = 1; let lootMult = 1; const levelScale = 1 + (p.lvl * 0.05); let isElite = false; let isMedium = false;
   if (!isBoss) { let r = Math.random(); if (r < 0.10) isElite = true; else if (r < 0.40) isMedium = true; }
-
-  if(isBoss && state.area === 'Dungeon') { t = Object.assign({}, DUNGEONS[state.dungeon.type].boss); diff = DUNGEONS[state.dungeon.type].diff + (state.dungeon.floor * 0.2); lootMult = DUNGEONS[state.dungeon.type].loot; } 
-  else { diff = state.area === 'Dungeon' ? DUNGEONS[state.dungeon.type].diff + (state.dungeon.floor*0.1) : AREAS[state.area].diff; lootMult = state.area === 'Dungeon' ? DUNGEONS[state.dungeon.type].loot : 1; const pool = state.area === 'Dungeon' ? DUNGEON_ENEMIES : AREAS[state.area].enemies; t = Object.assign({}, pool[rand(0, pool.length-1)]); }
+  if(isBoss && state.area === 'Dungeon') { t = Object.assign({}, DUNGEONS[state.dungeon.type].boss); diff = DUNGEONS[state.dungeon.type].diff + (state.dungeon.floor * 0.2); lootMult = DUNGEONS[state.dungeon.type].loot; } else { diff = state.area === 'Dungeon' ? DUNGEONS[state.dungeon.type].diff + (state.dungeon.floor*0.1) : AREAS[state.area].diff; lootMult = state.area === 'Dungeon' ? DUNGEONS[state.dungeon.type].loot : 1; const pool = state.area === 'Dungeon' ? DUNGEON_ENEMIES : AREAS[state.area].enemies; t = Object.assign({}, pool[rand(0, pool.length-1)]); }
   if (isElite) { t.n = "Elite-" + t.n; mult *= 1.4; lootMult *= 2.0; } else if (isMedium) { mult *= 1.1; lootMult *= 1.2; }
-  const h = Math.floor(t.h * diff * mult * levelScale); const a = Math.floor(t.a * diff * mult * levelScale);
-  let xp = Math.floor((t.xp || 20) * Math.pow(diff, 1.3) * mult * (isBoss ? 5 : (isElite ? 2.5 : 1)) * (1 + (p.lvl * 0.15)));
+  const h = Math.floor(t.h * diff * mult * levelScale); const a = Math.floor(t.a * diff * mult * levelScale); let xp = Math.floor((t.xp || 20) * Math.pow(diff, 1.3) * mult * (isBoss ? 5 : (isElite ? 2.5 : 1)) * (1 + (p.lvl * 0.15)));
   
   state.combatStats = { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 };
   state.enemy = { n: (isBoss?"BOSS: ":"")+t.n, s: t.s, h, maxH: h, a, xp, boss: isBoss, elite: isElite, phase: 1, lootMult, fx: { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }, cooldowns: {}, abilities: [] };
   if(t.lore) state.enemy.lore = t.lore;
 
   let areaKey = state.area || 'Dungeon'; let abilityPool = AREA_ABILITIES[areaKey] || AREA_ABILITIES['Dungeon'];
-  if (isBoss || isElite) { let a1 = abilityPool[rand(0, abilityPool.length-1)]; let a2 = abilityPool[rand(0, abilityPool.length-1)]; while(a1 === a2 && abilityPool.length > 1) a2 = abilityPool[rand(0, abilityPool.length-1)]; state.enemy.abilities = [a1, a2]; } 
-  else if (isMedium) { state.enemy.abilities = [abilityPool[rand(0, abilityPool.length-1)]]; }
+  if (isBoss || isElite) { let a1 = abilityPool[rand(0, abilityPool.length-1)]; let a2 = abilityPool[rand(0, abilityPool.length-1)]; while(a1 === a2 && abilityPool.length > 1) a2 = abilityPool[rand(0, abilityPool.length-1)]; state.enemy.abilities = [a1, a2]; } else if (isMedium) { state.enemy.abilities = [abilityPool[rand(0, abilityPool.length-1)]]; }
 
-  if (state.area === 'Dungeon' && state.dungeon.type === 'D4') {
-    const mutator = MUTATORS[rand(0, MUTATORS.length - 1)]; state.enemy.mutator = mutator; state.enemy.n = `[${mutator.name}] ${state.enemy.n}`;
-    if (mutator.id === 'brute') { state.enemy.maxH = Math.floor(state.enemy.maxH * 1.5); state.enemy.h = state.enemy.maxH; }
-    if (mutator.id === 'frenzy') { state.enemy.a = Math.floor(state.enemy.a * 1.3); } log(`Mahlstrom-Effekt aktiv: ${mutator.desc}`, "magic");
-  }
+  if (state.area === 'Dungeon' && state.dungeon.type === 'D4') { const mutator = MUTATORS[rand(0, MUTATORS.length - 1)]; state.enemy.mutator = mutator; state.enemy.n = `[${mutator.name}] ${state.enemy.n}`; if (mutator.id === 'brute') { state.enemy.maxH = Math.floor(state.enemy.maxH * 1.5); state.enemy.h = state.enemy.maxH; } if (mutator.id === 'frenzy') { state.enemy.a = Math.floor(state.enemy.a * 1.3); } log(`Mahlstrom-Effekt aktiv: ${mutator.desc}`, "magic"); }
   log(`${state.enemy.n} greift an! ${isElite ? '(Gefährlich)' : ''}`, "bad"); showCombatStage(true); state.lock = false; renderCombatActions();
 }
 
@@ -650,18 +725,12 @@ function renderCombatActions() {
   updateHUD(); if (!state.firstCombatHintShown) { state.firstCombatHintShown = true; showToast("Tipp: Nutze deine Klassenfähigkeit, sobald du genug Mana hast!"); }
 }
 
-async function tryFlee() {
-  if(state.lock) return; state.lock = true; log("Fluchtversuch...", "info"); await sleep(400);
-  if(Math.random() < 0.5) { log("Erfolgreich entkommen!", "good"); state.enemy = null; state.lock = false; updateHUD(); if(state.dungeon.active) showDungeonMenu(); else enterRoom(); } 
-  else { log("Flucht fehlgeschlagen! Der Gegner schlägt zu.", "bad"); await sleep(400); enemyTurn(); }
-}
+async function tryFlee() { if(state.lock) return; state.lock = true; log("Fluchtversuch...", "info"); await sleep(400); if(Math.random() < 0.5) { log("Erfolgreich entkommen!", "good"); state.enemy = null; state.lock = false; updateHUD(); if(state.dungeon.active) showDungeonMenu(); else enterRoom(); } else { log("Flucht fehlgeschlagen! Der Gegner schlägt zu.", "bad"); await sleep(400); enemyTurn(); } }
 
 async function checkBossPhase() {
     if (state.enemy && state.enemy.boss && state.enemy.phase === 1 && state.enemy.h > 0 && state.enemy.h <= state.enemy.maxH * 0.5) {
-        state.enemy.phase = 2; state.enemy.a = Math.floor(state.enemy.a * 1.5);
-        state.enemy.fx.poison = 0; state.enemy.fx.weak = 0; state.enemy.fx.stun = 0;
-        playSound('phase'); // V0.8: Eigener Phase Sound
-        let arena = $('wd-visual-arena'); if (arena) { arena.classList.remove('wd-error-shake'); void arena.offsetWidth; arena.classList.add('wd-error-shake'); arena.classList.add('wd-arena-boss'); }
+        state.enemy.phase = 2; state.enemy.a = Math.floor(state.enemy.a * 1.5); state.enemy.fx.poison = 0; state.enemy.fx.weak = 0; state.enemy.fx.stun = 0;
+        playSound('phase'); let arena = $('wd-visual-arena'); if (arena) { arena.classList.remove('wd-error-shake'); void arena.offsetWidth; arena.classList.add('wd-error-shake'); arena.classList.add('wd-arena-boss'); }
         let el = $('wd-sprite-enemy'); if (el) { el.classList.remove('wd-anim-hurt'); void el.offsetWidth; el.classList.add('wd-boss-phase-2'); }
         log(`Der Boss brüllt wütend! Seine Macht wächst!`, "bad"); updateHUD(); await sleep(1000);
     }
@@ -670,16 +739,13 @@ async function checkBossPhase() {
 async function tickEffects(entity, isPlayer) {
   if (!entity) return false; let died = false;
   if (entity.fx.poison > 0) {
-    let dmg = entity.fx.poisonDmg || 5;
-    if(isPlayer) { p.hp -= dmg; state.combatStats.dmgTaken += dmg; } else { state.enemy.h -= dmg; state.combatStats.dmgDealt += dmg; }
-    visualDamage(isPlayer ? 'hero' : 'enemy', dmg, false);
-    log(`${isPlayer ? 'Du erleidest' : state.enemy.n + ' erleidet'} ${dmg} Giftschaden.`, "bad"); playSound('error'); // Tick Sound
+    let dmg = entity.fx.poisonDmg || 5; if(isPlayer) { p.hp -= dmg; state.combatStats.dmgTaken += dmg; } else { state.enemy.h -= dmg; state.combatStats.dmgDealt += dmg; }
+    visualDamage(isPlayer ? 'hero' : 'enemy', dmg, false); log(`${isPlayer ? 'Du erleidest' : state.enemy.n + ' erleidet'} ${dmg} Giftschaden.`, "bad"); playSound('error'); 
     entity.fx.poison--; if (!isPlayer) await checkBossPhase();
     if ((isPlayer && p.hp <= 0) || (!isPlayer && state.enemy.h <= 0)) died = true; await sleep(400);
   }
   if (entity.fx.regen > 0 && !died) {
-    let heal = entity.fx.regenHeal || 5;
-    if(isPlayer) p.hp = Math.min(p.maxHp, p.hp + heal); else state.enemy.h = Math.min(state.enemy.maxH, state.enemy.h + heal);
+    let heal = entity.fx.regenHeal || 5; if(isPlayer) p.hp = Math.min(p.maxHp, p.hp + heal); else state.enemy.h = Math.min(state.enemy.maxH, state.enemy.h + heal);
     log(`${isPlayer ? 'Du heilst' : state.enemy.n + ' heilt'} ${heal} HP durch Regeneration.`, "good"); playSound('heal'); visualDamage(isPlayer ? 'hero' : 'enemy', -heal, false);
     entity.fx.regen--; await sleep(400);
   }
@@ -691,9 +757,9 @@ async function doAttack(type) {
   if (await tickEffects(p, true)) { checkDeath(); return; }
   if (p.fx.stun > 0) { p.fx.stun--; log("Du bist betäubt und setzt aus!", "bad"); updateHUD(); await sleep(800); await enemyTurn(); return; }
 
-  let dmg = p.baseAtk + (p.eq.weapon ? p.eq.weapon.val : 0);
+  let dmg = p.baseAtk + (p.eq.weapon ? p.eq.weapon.val : 0) + (p.bonusStats ? p.bonusStats.atk : 0);
   if (p.fx.weak > 0) { dmg = Math.floor(dmg * 0.7); p.fx.weak--; }
-  let luckCritBonus = p.baseLuck * 0.005; let critChance = c.crit + (p.eq.trinket && p.eq.trinket.effect==='crit' ? 0.2 : 0) + (p.fx.combo*0.05) + luckCritBonus; let isCrit = Math.random() < critChance;
+  let luckCritBonus = p.baseLuck * 0.005; let critChance = c.crit + (p.eq.trinket && p.eq.trinket.effect==='crit' ? 0.2 : 0) + (p.fx.combo*0.05) + luckCritBonus + (p.bonusStats ? p.bonusStats.crit : 0); let isCrit = Math.random() < critChance;
   
   if(type === 'skill') { p.mp -= c.cost; dmg = Math.floor(dmg * 1.5); }
   if(type === 'ult') { p.mp -= c.uCost; dmg = Math.floor(dmg * 2.8); if(p.fx.bossBuff && state.enemy.boss) { dmg=Math.floor(dmg*1.3); p.fx.bossBuff=false; log("Boss-Segen!","magic"); playSound('magic'); } progressQuest('ult'); }
@@ -718,7 +784,7 @@ async function doAttack(type) {
 async function enemyTurn() {
   if (await tickEffects(state.enemy, false)) { await winCombat(); return; }
   if (state.enemy.fx.stun > 0) { state.enemy.fx.stun--; log(`${state.enemy.n} ist betäubt und setzt aus!`, "good"); updateHUD(); state.lock = false; renderCombatActions(); return; }
-  const dodgeChance = (p.baseDodge * 0.01) + (p.fx.dodge > 0 ? 0.4 : 0);
+  const dodgeChance = (p.baseDodge * 0.01) + (p.fx.dodge > 0 ? 0.4 : 0) + ((p.bonusStats ? p.bonusStats.dodge : 0) * 0.01);
   if(Math.random() < dodgeChance) { if(p.fx.dodge > 0) p.fx.dodge--; log("Du weichst geschickt aus!", "good"); playSound('hover'); state.combatStats.dodges++; state.lock = false; renderCombatActions(); return; } 
 
   let chosenAbility = null;
@@ -738,7 +804,7 @@ async function enemyTurn() {
   if (!skipAttack) {
       visualHit('enemy', 'left'); await sleep(200); let eDmg = Math.floor(state.enemy.a * atkMultiplier);
       if (state.enemy.fx.weak > 0) { eDmg = Math.floor(eDmg * 0.7); state.enemy.fx.weak--; }
-      let def = p.baseDef + (p.eq.armor ? p.eq.armor.val : 0); if(p.eq.trinket && p.eq.trinket.effect==='armor') def = Math.floor(def * 1.25);
+      let def = p.baseDef + (p.eq.armor ? p.eq.armor.val : 0) + (p.eq.helm ? p.eq.helm.val : 0) + (p.bonusStats ? p.bonusStats.def : 0); if(p.eq.trinket && p.eq.trinket.effect==='armor') def = Math.floor(def * 1.25);
       let mitigation = Math.min(0.85, def / (def + 40)); eDmg = Math.max(1, Math.floor(eDmg * (1 - mitigation)));
       if(p.fx.shield > 0) { eDmg = Math.floor(eDmg * 0.5); p.fx.shield--; }
       playSound('hurt'); p.hp -= eDmg; visualDamage('hero', eDmg, false); state.combatStats.dmgTaken += eDmg;
@@ -756,40 +822,27 @@ async function enemyTurn() {
 }
 
 async function winCombat() {
-  const isBoss = state.enemy.boss; // Wichtig für Lore
-  const eName = state.enemy.n;
-  const loreText = state.enemy.lore;
-
-  let el = $('wd-sprite-enemy');
-  el.classList.add('wd-enemy-dead'); // V0.8: Death Animation
-  await sleep(600); // Warten bis Animation fertig
+  const isBoss = state.enemy.boss; const eName = state.enemy.n; const loreText = state.enemy.lore;
+  let el = $('wd-sprite-enemy'); el.classList.add('wd-enemy-dead'); await sleep(600);
   
-  const luckGoldMult = 1 + (p.baseLuck * 0.03); const prestigeGoldBuff = 1 + ((p.prestige?.buffs?.gold || 0) * 0.1); const prestigeXpBuff = 1 + ((p.prestige?.buffs?.xp || 0) * 0.1);
+  const luckGoldMult = 1 + ((p.baseLuck + (p.bonusStats ? p.bonusStats.luck : 0)) * 0.03); const prestigeGoldBuff = 1 + ((p.prestige?.buffs?.gold || 0) * 0.1); const prestigeXpBuff = 1 + ((p.prestige?.buffs?.xp || 0) * 0.1);
   const gold = Math.floor(rand(10, 30) * state.enemy.lootMult * (isBoss?5:1) * luckGoldMult * prestigeGoldBuff); const gainedXp = Math.floor(state.enemy.xp * prestigeXpBuff);
   p.gold += gold; p.xp += gainedXp; p.runStats.kills++;
   playSound('coin'); log(`Sieg! +${gold} Gold, +${gainedXp} XP.`, "good");
   
-  log(`--- Kampf-Zusammenfassung ---`, "magic");
-  log(`Schaden ausgeteilt: ${state.combatStats.dmgDealt} (${state.combatStats.crits}x Krit)`, "info");
-  log(`Schaden erlitten: ${state.combatStats.dmgTaken} (${state.combatStats.dodges}x Ausgewichen)`, "info");
+  log(`--- Kampf-Zusammenfassung ---`, "magic"); log(`Schaden ausgeteilt: ${state.combatStats.dmgDealt} (${state.combatStats.crits}x Krit)`, "info"); log(`Schaden erlitten: ${state.combatStats.dmgTaken} (${state.combatStats.dodges}x Ausgewichen)`, "info");
   
   progressQuest(isBoss ? 'boss' : 'kill');
 
-  // V0.8 Lore Freischaltung
-  if (isBoss && loreText) {
-      if(!state.lore.some(l => l.name === eName)) {
-          state.lore.push({ name: eName, text: loreText });
-          log(`📖 Lore-Eintrag freigeschaltet: ${eName}!`, "magic");
-      }
-  }
+  if (isBoss && loreText) { if(!state.lore.some(l => l.name === eName)) { state.lore.push({ name: eName, text: loreText }); log(`📖 Lore-Eintrag freigeschaltet: ${eName}!`, "magic"); } }
   
-  const luckChestChance = p.baseLuck * 0.01;
+  const luckChestChance = (p.baseLuck + (p.bonusStats ? p.bonusStats.luck : 0)) * 0.01;
   if (state.dungeon.active) {
     state.dungeon.firstEnemyDefeated = true;
     if (isBoss) { 
       p.inv.chests['mystic']++; log("Boss-Drop: Arkankiste!", "magic"); 
       let artChance = state.dungeon.type === 'D4' ? 0.02 : (state.dungeon.type === 'D3' ? 0.0133 : (state.dungeon.type === 'D2' ? 0.0115 : 0.01));
-      if (Math.random() < artChance + (p.baseLuck * 0.0005)) { const tBase = TRINKETS[rand(0, TRINKETS.length-1)]; const t = Object.assign({}, tBase); t.id = makeId('t'); t.type = 'trinket'; t.sell = 1500; p.inv.trinkets.push(t); playSound('level'); log(`MÄCHTIGE BEUTE: Artefakt '${t.name}' gefunden!`, "magic"); }
+      if (Math.random() < artChance + ((p.baseLuck + (p.bonusStats ? p.bonusStats.luck : 0)) * 0.0005)) { const tBase = TRINKETS[rand(0, TRINKETS.length-1)]; const t = Object.assign({}, tBase); t.id = makeId('t'); t.type = 'trinket'; t.sell = 1500; p.inv.trinkets.push(t); playSound('level'); log(`MÄCHTIGE BEUTE: Artefakt '${t.name}' gefunden!`, "magic"); }
     } 
     else { state.dungeon.roomsCleared++; if (state.dungeon.roomsCleared >= state.dungeon.roomsPerFloor) state.dungeon.bossPending = true; if (Math.random() < (0.15 * state.enemy.lootMult) + luckChestChance) { p.inv.chests[Math.random()<0.3?'iron':'wooden']++; log("Gegner ließ eine Kiste fallen!", "magic"); } }
   } else { if (Math.random() < 0.08 + luckChestChance) { p.inv.chests.wooden++; log("Holzkiste gefunden!", "magic"); } }
@@ -797,9 +850,7 @@ async function winCombat() {
   if(p.xp >= p.maxXp) { playSound('level'); p.xp -= p.maxXp; p.lvl++; p.maxXp = Math.floor(p.maxXp * 1.5); p.maxHp += 15; p.hp = p.maxHp; p.sp += 1; log(`LEVEL UP! Stufe ${p.lvl}. (+1 Talent)`, "warn"); }
   if(isBoss && state.dungeon.active) {
     state.dungeon.floor++; state.dungeon.roomsCleared = 0; state.dungeon.roomsPerFloor = Math.min(8, 3 + Math.floor(state.dungeon.floor / 2)); state.dungeon.bossPending = false; state.dungeon.rests = 1;
-    log(`Dungeon Ebene ${state.dungeon.floor} betreten!`, "magic"); 
-    showFloorIntro(`EBENE ${state.dungeon.floor}`); // V0.8 Intro
-    state.enemy = null; state.lock = false; updateHUD(); showDungeonMenu(); return;
+    log(`Dungeon Ebene ${state.dungeon.floor} betreten!`, "magic"); showFloorIntro(`EBENE ${state.dungeon.floor}`); state.enemy = null; state.lock = false; updateHUD(); showDungeonMenu(); return;
   }
   state.enemy = null; state.lock = false; updateHUD();
   if(state.dungeon.active) showDungeonMenu(); else enterRoom();
@@ -809,7 +860,6 @@ function checkDeath() {
   if(p.hp <= 0) {
     playSound('death'); state.lock = true; let score = saveHighscore();
     $('wd-overlay').style.display = 'flex';
-    // V0.8: showMainMenu() anstatt initGame() beim Tod
     $('wd-overlay-content').innerHTML = `<h2>Gefallen</h2><p>Die Dunkelheit verschlingt dich.</p><p style="color:var(--gold); font-size:1.2rem; margin-bottom: 20px; font-weight:bold; font-family:'Cinzel', serif;">Dein Vermächtnis: ${score}</p><button class="wd-btn" style="width: 100%;" onclick="showMainMenu()">Zurück zum Menü</button>`;
   }
 }
@@ -836,22 +886,36 @@ function visualDamage(target, amt, crit) {
     const rect = el.getBoundingClientRect(); const fct = document.createElement('div'); fct.className = 'wd-fct'; fct.textContent = displayAmt; fct.style.color = color; fct.style.left = `${rect.left + rect.width/2}px`; fct.style.top = `${rect.top}px`; $('wd-wrapper').appendChild(fct); setTimeout(() => fct.remove(), 1200);
   }
 }
+
 function renderInventoryList(type) {
   state.tab = type; const c = $('wd-inv-list'); c.innerHTML = '';
-  const filterBtns = document.querySelectorAll('#wd-tab-inv > div:nth-child(2) .wd-mini-btn'); filterBtns.forEach(b => b.classList.remove('wd-active-filter')); const typeMap = { 'weapons': 0, 'armors': 1, 'trinkets': 2, 'consumables': 3 }; if(filterBtns[typeMap[type]]) filterBtns[typeMap[type]].classList.add('wd-active-filter');
+  const filterBtns = document.querySelectorAll('#wd-tab-inv > div:nth-child(2) .wd-mini-btn'); filterBtns.forEach(b => b.classList.remove('wd-active-filter')); const typeMap = { 'weapons': 0, 'armors': 1, 'helms': 2, 'accessories': 3, 'trinkets': 4, 'consumables': 5 }; if(filterBtns[typeMap[type]]) filterBtns[typeMap[type]].classList.add('wd-active-filter');
   if(type === 'consumables') {
     c.innerHTML = `<div class="wd-list-item"><div class="wd-list-info"><h4>Heiltränke</h4><p>Stellt 50 HP her</p></div><div class="wd-list-actions"><span style="font-weight:bold">${p.inv.potions.hp}x</span><button class="wd-mini-btn" onclick="usePotion('hp')">Nutzen</button></div></div><div class="wd-list-item"><div class="wd-list-info"><h4>Manatränke</h4><p>Stellt 40 MP her</p></div><div class="wd-list-actions"><span style="font-weight:bold">${p.inv.potions.mp}x</span><button class="wd-mini-btn" onclick="usePotion('mp')">Nutzen</button></div></div>`;
     Object.keys(CHEST_DEFS).forEach(k => { const amt = p.inv.chests[k]; c.innerHTML += `<div class="wd-list-item"><div class="wd-list-info"><h4>${CHEST_DEFS[k].icon} ${CHEST_DEFS[k].label}</h4></div><div class="wd-list-actions"><span style="font-weight:bold; color:var(--gold)">${amt}x</span><div style="display:flex; gap:4px;"><button class="wd-mini-btn" ${amt<=0 || state.enemy || state.lock ? 'disabled':''} onclick="openChest('${k}', 1)">1x</button><button class="wd-mini-btn" ${amt<3 || state.enemy || state.lock ? 'disabled':''} onclick="openChest('${k}', 3)">3x</button></div></div></div>`; }); return;
   }
   const items = p.inv[type]; if(items.length === 0) { c.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding: 20px; font-style:italic;">Leer.</p>'; return; }
+  
+  let eqItem = p.eq[type === 'weapons' ? 'weapon' : (type === 'armors' ? 'armor' : (type === 'helms' ? 'helm' : (type === 'accessories' ? 'accessory' : (type === 'trinkets' ? 'trinket' : null))))];
+
   items.forEach(i => {
-    const isEq = (p.eq.weapon?.id === i.id) || (p.eq.armor?.id === i.id) || (p.eq.trinket?.id === i.id); const div = document.createElement('div'); div.className = 'wd-list-item'; if(isEq) { div.style.borderColor = 'var(--gold)'; div.style.boxShadow = 'inset 0 0 15px rgba(212, 175, 55, 0.2)'; }
-    let statText = i.type==='weapon' ? `+${i.val} ATK` : i.type==='armor' ? `+${i.val} RÜS` : i.desc;
-    div.innerHTML = `<div class="wd-list-info"><h4 class="${i.rarity}">${i.name}</h4><p>${statText} | Wert: ${i.sell}G</p></div><div class="wd-list-actions">${!isEq ? `<button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="equipItem('${type}', '${i.id}')">Ausrüsten</button><button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="sellItem('${type}', '${i.id}')">Verkaufen</button><button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="dismantleItem('${type}', '${i.id}')">Zerlegen</button>` : `<span style="font-size:0.75rem; color:var(--gold); font-family:'Cinzel', serif; font-weight:bold;">Aktiv</span>`}</div>`; c.appendChild(div);
+    const isEq = eqItem && eqItem.id === i.id; const div = document.createElement('div'); div.className = 'wd-list-item'; if(isEq) { div.style.borderColor = 'var(--gold)'; div.style.boxShadow = 'inset 0 0 15px rgba(212, 175, 55, 0.2)'; }
+    
+    let diffText = "";
+    if (!isEq && type !== 'trinkets') {
+        let currentVal = eqItem ? eqItem.val : 0; let diff = i.val - currentVal;
+        let color = diff > 0 ? 'var(--xp-glow)' : (diff < 0 ? 'var(--hp-glow)' : 'var(--text-muted)');
+        let sign = diff > 0 ? '+' : ''; diffText = `<span style="color:${color}; font-size:0.75rem; margin-left:8px;">[Vergleich: ${sign}${diff} Grundwert]</span>`;
+    }
+
+    let affixText = i.affix ? `<br><span style="color:var(--epic); font-weight:bold; font-size:0.75rem; text-shadow:0 0 5px rgba(192,132,252,0.4)">✧ ${i.affix.label}</span>` : '';
+    let statText = (i.type==='weapon' ? `+${i.val} ATK` : (i.type==='armor' || i.type==='helm' ? `+${i.val} RÜS` : (i.type==='accessory' ? `+${i.val} LUCK` : i.desc)));
+    
+    div.innerHTML = `<div class="wd-list-info"><h4 class="${i.rarity}">${i.name}</h4><p>${statText}${diffText} | Wert: ${i.sell}G ${affixText}</p></div><div class="wd-list-actions">${!isEq ? `<button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="equipItem('${type}', '${i.id}')">Ausrüsten</button><button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="sellItem('${type}', '${i.id}')">Verkaufen</button><button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="dismantleItem('${type}', '${i.id}')">Zerlegen</button>` : `<span style="font-size:0.75rem; color:var(--gold); font-family:'Cinzel', serif; font-weight:bold;">Aktiv</span>`}</div>`; c.appendChild(div);
   });
 }
-function equipItem(type, id) { const item = p.inv[type].find(i => i.id === id); if(type === 'weapons') p.eq.weapon = JSON.parse(JSON.stringify(item)); else if(type === 'armors') p.eq.armor = JSON.parse(JSON.stringify(item)); else if(type === 'trinkets') p.eq.trinket = JSON.parse(JSON.stringify(item)); updateHUD(); renderInventoryList(type); }
-function unequipTrinket() { p.eq.trinket = null; updateHUD(); renderInventoryList('trinkets'); }
+function equipItem(type, id) { const item = p.inv[type].find(i => i.id === id); if(type === 'weapons') p.eq.weapon = JSON.parse(JSON.stringify(item)); else if(type === 'armors') p.eq.armor = JSON.parse(JSON.stringify(item)); else if(type === 'helms') p.eq.helm = JSON.parse(JSON.stringify(item)); else if(type === 'accessories') p.eq.accessory = JSON.parse(JSON.stringify(item)); else if(type === 'trinkets') p.eq.trinket = JSON.parse(JSON.stringify(item)); updateHUD(); renderInventoryList(type); }
+function unequipItem(slot) { p.eq[slot] = null; updateHUD(); if(slot==='trinket') renderInventoryList('trinkets'); if(slot==='helm') renderInventoryList('helms'); if(slot==='accessory') renderInventoryList('accessories'); }
 function sellItem(type, id) { const idx = p.inv[type].findIndex(i => i.id === id); p.gold += p.inv[type][idx].sell; p.inv[type].splice(idx, 1); playSound('coin'); updateHUD(); renderInventoryList(type); }
 function dismantleItem(type, id) { const idx = p.inv[type].findIndex(i => i.id === id); const item = p.inv[type][idx]; const shards = calculateShardValue(item.rarity); if(p.inv.shards === undefined) p.inv.shards = 0; p.inv.shards += shards; progressQuest('dismantle'); p.inv[type].splice(idx, 1); playSound('magic'); log(`${item.name} zerschlagen! +${shards} Arkane Splitter.`, "magic"); updateHUD(); renderInventoryList(type); }
 function chestRewardVisualClass(rewardText, rewardClass='') { const text = (rewardText||'').toLowerCase(); if (text.includes('mana')) return 'reward-mana'; if (text.includes('trank')) return 'reward-potion'; if (text.includes('gold')) return 'reward-gold'; return rewardClass || 'r-common'; }
@@ -875,65 +939,43 @@ async function playChestOpeningAnimation(type, results) {
 }
 function generateChestReward(type) {
   const def = CHEST_DEFS[type]; let rewardText = "", rewardClass = ""; const category = pickByWeights(def.weights);
-  if(category === 'trinket') { const t = Object.assign({}, TRINKETS[rand(0, TRINKETS.length-1)]); t.id = makeId('t'); t.type = 'trinket'; t.sell = 100; p.inv.trinkets.push(t); rewardText = t.name; rewardClass = "r-artefact"; } 
-  else if (category === 'weapon') { const rarity = rollRarity(type); const pool = WEAPON_POOLS[p.cls][rarity]; const name = pool[rand(0, pool.length-1)]; const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1; const val = Math.floor((rand(4, 10) + p.lvl * 1.5) * def.rewardMult * rarityMult); const w = { id: makeId('w'), type:'weapon', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'weapon') }; p.inv.weapons.push(w); discover('weapons', w.name); rewardText = w.name + ` (+${val})`; rewardClass = 'r-'+rarity; } 
-  else if (category === 'armor') { const rarity = rollRarity(type); const pool = ARMOR_POOLS[p.cls][rarity]; const name = pool[rand(0, pool.length-1)]; const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1; const val = Math.floor((rand(2, 6) + p.lvl) * def.rewardMult * rarityMult); const a = { id: makeId('a'), type:'armor', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.armors.push(a); discover('armors', a.name); rewardText = a.name + ` (+${val})`; rewardClass = 'r-'+rarity; } 
+  if(category === 'trinket') { 
+      const t = Object.assign({}, TRINKETS[rand(0, TRINKETS.length-1)]); t.id = makeId('t'); t.type = 'trinket'; t.sell = 100; p.inv.trinkets.push(t); rewardText = t.name; rewardClass = "r-artefact"; 
+  } else if (['weapon', 'armor', 'helm', 'accessory'].includes(category)) { 
+      const rarity = rollRarity(type); let pool, name, val, itemObj;
+      const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
+      
+      if (category === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * def.rewardMult * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); }
+      else if (category === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * def.rewardMult * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); }
+      else if (category === 'helm') { pool = HELM_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(1, 4) + p.lvl * 0.5) * def.rewardMult * rarityMult); itemObj = { id: makeId('h'), type:'helm', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.helms.push(itemObj); discover('helms', name); }
+      else if (category === 'accessory') { pool = ACC_POOLS[rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor(rand(1, 3) * rarityMult); itemObj = { id: makeId('acc'), type:'accessory', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val*2, 'r-'+rarity, 'weapon') }; p.inv.accessories.push(itemObj); discover('accessories', name); }
+      
+      let affix = generateAffix('r-'+rarity); if (affix) itemObj.affix = affix;
+      let statSuf = (category === 'accessory') ? 'LUCK' : (category === 'weapon' ? 'ATK' : 'RÜS');
+      rewardText = itemObj.name + ` (+${val} ${statSuf})` + (affix ? ' ✧' : ''); rewardClass = 'r-'+rarity; 
+  } 
   else if (category === 'potions') { p.inv.potions.hp += 2; p.inv.potions.mp += 1; rewardText = `Tränke (HP/MP)`; rewardClass = 'reward-potion'; } 
   else { const g = Math.floor(rand(50, 150) * def.rewardMult); p.gold += g; rewardText = `${g} Gold`; rewardClass = 'reward-gold'; } return { rewardText, rewardClass };
 }
 async function openChest(type, count = 1) { if(p.inv.chests[type] < count || state.lock || state.enemy) return; state.lock = true; p.inv.chests[type] -= count; let results = []; for(let i=0; i<count; i++) { progressQuest('chest'); results.push(generateChestReward(type)); } updateHUD(); renderInventoryList('consumables'); await playChestOpeningAnimation(type, results); if (count === 1) { log(`Kiste geöffnet: ${results[0].rewardText}`, "good"); } else { log(`${count} Kisten geöffnet!`, "good"); } state.lock = false; renderInventoryList('consumables'); }
 function rarityLabel(r) { const labels = { common: 'Gewöhnlich', rare: 'Selten', epic: 'Episch', legendary: 'Legendär' }; return labels[r] || r; }
 
-// V0.8 Lore in Index Liste rendern
 function renderIndexList(type) {
-  const c = $('wd-index-list'); c.innerHTML = ''; 
-  const btns = document.querySelectorAll('#wd-tab-index .wd-mini-btn'); btns.forEach(b => b.classList.remove('wd-active-filter'));
-  if (type === 'weapons') btns[0].classList.add('wd-active-filter');
-  else if (type === 'armors') btns[1].classList.add('wd-active-filter');
-  else if (type === 'lore') btns[2].classList.add('wd-active-filter');
-
-  if (type === 'lore') {
-      c.style.gridTemplateColumns = "1fr";
-      if (!state.lore || state.lore.length === 0) {
-          c.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding: 20px; font-style:italic;">Die Seiten dieses Folianten sind leer. Besiege Bosse, um ihr Wissen zu stehlen.</p>'; return;
-      }
-      state.lore.forEach(l => {
-          c.innerHTML += `<div class="wd-quest-card" style="cursor:default; margin-bottom:8px;"><div class="wd-quest-title" style="color:var(--epic)">${l.name}</div><div class="wd-quest-desc" style="color:var(--text-main); font-family:'Lora', serif;">${l.text}</div></div>`;
-      });
-      c.style.gridTemplateColumns = "repeat(2, 1fr)";
-      return;
-  }
-
-  const items = type === 'weapons' ? WEAPON_POOLS[p.cls] : ARMOR_POOLS[p.cls]; const discovered = state.discovery[type] || [];
-  for(let rarity in items) { items[rarity].forEach(name => { const isKnown = discovered.includes(name); c.innerHTML += `<div class="wd-index-item ${isKnown ? '' : 'undiscovered'}" style="border-color: ${isKnown ? `var(--${rarity})` : 'var(--border)'}"><h4 style="color: ${isKnown ? `var(--${rarity})` : 'var(--text-muted)'}">${isKnown ? name : '???'}</h4><span style="color:var(--text-muted)">${rarityLabel(rarity)}</span></div>`; }); }
+  const c = $('wd-index-list'); c.innerHTML = ''; const btns = document.querySelectorAll('#wd-tab-index .wd-mini-btn'); btns.forEach(b => b.classList.remove('wd-active-filter')); if (type === 'weapons') btns[0].classList.add('wd-active-filter'); else if (type === 'armors') btns[1].classList.add('wd-active-filter'); else if (type === 'lore') btns[2].classList.add('wd-active-filter');
+  if (type === 'lore') { c.style.gridTemplateColumns = "1fr"; if (!state.lore || state.lore.length === 0) { c.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding: 20px; font-style:italic;">Die Seiten dieses Folianten sind leer. Besiege Bosse, um ihr Wissen zu stehlen.</p>'; return; } state.lore.forEach(l => { c.innerHTML += `<div class="wd-quest-card" style="cursor:default; margin-bottom:8px;"><div class="wd-quest-title" style="color:var(--epic)">${l.name}</div><div class="wd-quest-desc" style="color:var(--text-main); font-family:'Lora', serif;">${l.text}</div></div>`; }); c.style.gridTemplateColumns = "repeat(2, 1fr)"; return; }
+  const items = type === 'weapons' ? WEAPON_POOLS[p.cls] : ARMOR_POOLS[p.cls]; const discovered = state.discovery[type] || []; for(let rarity in items) { items[rarity].forEach(name => { const isKnown = discovered.includes(name); c.innerHTML += `<div class="wd-index-item ${isKnown ? '' : 'undiscovered'}" style="border-color: ${isKnown ? `var(--${rarity})` : 'var(--border)'}"><h4 style="color: ${isKnown ? `var(--${rarity})` : 'var(--text-muted)'}">${isKnown ? name : '???'}</h4><span style="color:var(--text-muted)">${rarityLabel(rarity)}</span></div>`; }); }
 }
 function selectSkill(id) { state.selectedSkill = id; playSound('click'); renderSkills(); }
 function renderSkills() {
   const c = $('wd-skill-list'); c.innerHTML = ``; let treeHtml = `<div class="wd-skill-tree-container"><div class="wd-skill-path" style="left:30%; top:50px; bottom:50px;"></div><div class="wd-skill-path" style="left:70%; top:50px; bottom:50px;"></div><div class="wd-skill-path" style="left:50%; top:50px; bottom:50px; width:1px; background: rgba(255,255,255,0.05); box-shadow:none; border-left: 1px dashed rgba(255,255,255,0.1);"></div>`;
-  SKILL_TIERS.forEach(tier => {
-    treeHtml += `<div style="display:flex; justify-content:space-around; width:100%; position:relative; z-index:2;">`;
-    tier.forEach(skillId => { const t = SKILL_TREE.find(s => s.id === skillId); const rank = p.talents[skillId] || 0; let locked = false; for (let reqId in t.req) { if ((p.talents[reqId] || 0) < t.req[reqId]) locked = true; } let nodeClass = "wd-skill-node"; if (locked) nodeClass += " locked"; else if (rank >= t.max) nodeClass += " maxed"; else if (rank > 0) nodeClass += " active"; else nodeClass += " unlocked"; if (state.selectedSkill === skillId) nodeClass += " selected"; treeHtml += `<div class="${nodeClass}" onclick="selectSkill('${skillId}')" title="${t.name}"><div class="wd-skill-icon">${t.icon}</div><div class="wd-skill-rank">${rank}/${t.max}</div></div>`; });
-    treeHtml += `</div>`;
-  }); treeHtml += `</div>`; c.innerHTML += treeHtml;
-  if (state.selectedSkill) {
-     const t = SKILL_TREE.find(s => s.id === state.selectedSkill); const rank = p.talents[state.selectedSkill] || 0; const pct = (rank / t.max) * 100; let locked = false; let reqText = []; for (let reqId in t.req) { const reqRank = p.talents[reqId] || 0; if (reqRank < t.req[reqId]) { locked = true; const reqNode = SKILL_TREE.find(n => n.id === reqId); reqText.push(`${reqNode.name} (Lvl ${t.req[reqId]})`); } }
-     let detailsHtml = `<div class="wd-skill-detail-card" style="border-left-color: ${locked ? 'var(--hp-glow)' : (rank >= t.max ? 'var(--gold)' : 'var(--rare)')};"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;"><div><h4 style="color:var(--text-main); font-size:1.3rem; margin:0; font-family:'Cinzel', serif; text-shadow: 0 2px 4px #000;">${t.icon} ${t.name}</h4><span style="color:var(--accent); font-size:0.8rem; letter-spacing: 1px; text-transform:uppercase;">Rang ${rank} von ${t.max}</span></div></div><div class="wd-bar-bg" style="height:4px; margin-bottom:15px; border-color:var(--border);"><div class="wd-bar-fill" style="width:${pct}%; background: ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'}; box-shadow: 0 0 8px ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'};"></div></div><p style="color:var(--text-muted); font-size:0.95rem; line-height:1.5; margin-bottom:15px; font-style:italic;">"${t.desc}"</p>`;
-     if (locked) { detailsHtml += `<p style="background: rgba(153, 27, 27, 0.2); padding: 8px; border-left: 2px solid var(--hp-glow); color:var(--hp-glow); font-size:0.8rem; margin-bottom:15px; font-weight:bold;">❌ Erfordert: ${reqText.join(', ')}</p>`; } else if (rank >= t.max) { detailsHtml += `<p style="color:var(--gold); font-size:0.8rem; margin-bottom:15px; font-weight:bold; text-shadow: 0 0 5px rgba(212,175,55,0.4);">✔️ Ultimative Meisterschaft erreicht</p>`; }
-     detailsHtml += `<button class="wd-btn" style="width:100%; padding:12px; font-size: 1rem;" ${p.sp <= 0 || rank >= t.max || locked ? 'disabled' : ''} onclick="buyTalent('${t.id}')">${locked ? 'Wissen versiegelt' : (rank >= t.max ? 'Maximiert' : 'Talent studieren (1 SP)')}</button></div>`; c.innerHTML += detailsHtml;
-  }
+  SKILL_TIERS.forEach(tier => { treeHtml += `<div style="display:flex; justify-content:space-around; width:100%; position:relative; z-index:2;">`; tier.forEach(skillId => { const t = SKILL_TREE.find(s => s.id === skillId); const rank = p.talents[skillId] || 0; let locked = false; for (let reqId in t.req) { if ((p.talents[reqId] || 0) < t.req[reqId]) locked = true; } let nodeClass = "wd-skill-node"; if (locked) nodeClass += " locked"; else if (rank >= t.max) nodeClass += " maxed"; else if (rank > 0) nodeClass += " active"; else nodeClass += " unlocked"; if (state.selectedSkill === skillId) nodeClass += " selected"; treeHtml += `<div class="${nodeClass}" onclick="selectSkill('${skillId}')" title="${t.name}"><div class="wd-skill-icon">${t.icon}</div><div class="wd-skill-rank">${rank}/${t.max}</div></div>`; }); treeHtml += `</div>`; }); treeHtml += `</div>`; c.innerHTML += treeHtml;
+  if (state.selectedSkill) { const t = SKILL_TREE.find(s => s.id === state.selectedSkill); const rank = p.talents[state.selectedSkill] || 0; const pct = (rank / t.max) * 100; let locked = false; let reqText = []; for (let reqId in t.req) { const reqRank = p.talents[reqId] || 0; if (reqRank < t.req[reqId]) { locked = true; const reqNode = SKILL_TREE.find(n => n.id === reqId); reqText.push(`${reqNode.name} (Lvl ${t.req[reqId]})`); } } let detailsHtml = `<div class="wd-skill-detail-card" style="border-left-color: ${locked ? 'var(--hp-glow)' : (rank >= t.max ? 'var(--gold)' : 'var(--rare)')};"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;"><div><h4 style="color:var(--text-main); font-size:1.3rem; margin:0; font-family:'Cinzel', serif; text-shadow: 0 2px 4px #000;">${t.icon} ${t.name}</h4><span style="color:var(--accent); font-size:0.8rem; letter-spacing: 1px; text-transform:uppercase;">Rang ${rank} von ${t.max}</span></div></div><div class="wd-bar-bg" style="height:4px; margin-bottom:15px; border-color:var(--border);"><div class="wd-bar-fill" style="width:${pct}%; background: ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'}; box-shadow: 0 0 8px ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'};"></div></div><p style="color:var(--text-muted); font-size:0.95rem; line-height:1.5; margin-bottom:15px; font-style:italic;">"${t.desc}"</p>`; if (locked) { detailsHtml += `<p style="background: rgba(153, 27, 27, 0.2); padding: 8px; border-left: 2px solid var(--hp-glow); color:var(--hp-glow); font-size:0.8rem; margin-bottom:15px; font-weight:bold;">❌ Erfordert: ${reqText.join(', ')}</p>`; } else if (rank >= t.max) { detailsHtml += `<p style="color:var(--gold); font-size:0.8rem; margin-bottom:15px; font-weight:bold; text-shadow: 0 0 5px rgba(212,175,55,0.4);">✔️ Ultimative Meisterschaft erreicht</p>`; } detailsHtml += `<button class="wd-btn" style="width:100%; padding:12px; font-size: 1rem;" ${p.sp <= 0 || rank >= t.max || locked ? 'disabled' : ''} onclick="buyTalent('${t.id}')">${locked ? 'Wissen versiegelt' : (rank >= t.max ? 'Maximiert' : 'Talent studieren (1 SP)')}</button></div>`; c.innerHTML += detailsHtml; }
 }
 function buyTalent(id) { const t = SKILL_TREE.find(x => x.id === id); const rank = p.talents[id] || 0; if(p.sp <= 0 || rank >= t.max) return; for (let reqId in t.req) if ((p.talents[reqId] || 0) < t.req[reqId]) return; playSound('magic'); p.sp--; p.talents[id] = rank + 1; if(t.type === 'hp') { p.maxHp += t.val; p.hp += t.val; } if(t.type === 'mp') { p.maxMp += t.val; p.mp += t.val; } if(t.type === 'atk') { p.baseAtk += t.val; } if(t.type === 'def') { p.baseDef += t.val; } if(t.type === 'dodge') { p.baseDodge += t.val; } if(t.type === 'luck') { p.baseLuck += t.val; } updateHUD(); renderSkills(); }
 
-function getRandomQuest() {
-  const lvl = p ? p.lvl : 1; const maxXp = p ? p.maxXp : 100; const xpEasy = Math.floor(maxXp * 0.15); const xpMed = Math.floor(maxXp * 0.25); const xpHard = Math.floor(maxXp * 0.40); 
-  const questPool = [ { id: "q1_"+makeId(), title: "Säuberung", desc: `Besiege ${4 + lvl} Gegner im Kampf.`, goal: 4 + lvl, req: "kill", rewardGold: 50 + lvl * 15, rewardXP: xpEasy, extra: null }, { id: "q2_"+makeId(), title: "Gieriger Blick", desc: `Öffne ${2 + Math.floor(lvl/4)} Truhen.`, goal: 2 + Math.floor(lvl/4), req: "chest", rewardGold: 80 + lvl * 20, rewardXP: xpMed, extra: {type: 'hp', text: '1x Heiltrank', val: 1} }, { id: "q3_"+makeId(), title: "Kopfgeld", desc: `Besiege 1 Boss-Monster.`, goal: 1, req: "boss", rewardGold: 150 + lvl * 40, rewardXP: xpHard, extra: {type: 'shards', text: `${5 + lvl*2} Arkane Splitter`, val: 5 + lvl*2} }, { id: "q4_"+makeId(), title: "Machtdemonstration", desc: `Nutze deine ultimative Fähigkeit ${3 + Math.floor(lvl/2)} mal.`, goal: 3 + Math.floor(lvl/2), req: "ult", rewardGold: 60 + lvl * 15, rewardXP: xpEasy, extra: {type: 'mp', text: '1x Manatrank', val: 1} }, { id: "q5_"+makeId(), title: "Schmiedekunst", desc: `Zerschlage ${2 + Math.floor(lvl/3)} Items für Splitter.`, goal: 2 + Math.floor(lvl/3), req: "dismantle", rewardGold: 70 + lvl * 20, rewardXP: xpMed, extra: {type: 'chest_wooden', text: '1x Holzkiste', val: 1} }, { id: "q6_"+makeId(), title: "Der unerbittliche Jäger", desc: `Besiege ${8 + lvl*2} Gegner.`, goal: 8 + lvl*2, req: "kill", rewardGold: 180 + lvl * 40, rewardXP: xpHard, extra: {type: 'chest_iron', text: '1x Eisenkiste', val: 1} } ]; return questPool[Math.floor(Math.random() * questPool.length)];
-}
+function getRandomQuest() { const lvl = p ? p.lvl : 1; const maxXp = p ? p.maxXp : 100; const xpEasy = Math.floor(maxXp * 0.15); const xpMed = Math.floor(maxXp * 0.25); const xpHard = Math.floor(maxXp * 0.40); const questPool = [ { id: "q1_"+makeId(), title: "Säuberung", desc: `Besiege ${4 + lvl} Gegner im Kampf.`, goal: 4 + lvl, req: "kill", rewardGold: 50 + lvl * 15, rewardXP: xpEasy, extra: null }, { id: "q2_"+makeId(), title: "Gieriger Blick", desc: `Öffne ${2 + Math.floor(lvl/4)} Truhen.`, goal: 2 + Math.floor(lvl/4), req: "chest", rewardGold: 80 + lvl * 20, rewardXP: xpMed, extra: {type: 'hp', text: '1x Heiltrank', val: 1} }, { id: "q3_"+makeId(), title: "Kopfgeld", desc: `Besiege 1 Boss-Monster.`, goal: 1, req: "boss", rewardGold: 150 + lvl * 40, rewardXP: xpHard, extra: {type: 'shards', text: `${5 + lvl*2} Arkane Splitter`, val: 5 + lvl*2} }, { id: "q4_"+makeId(), title: "Machtdemonstration", desc: `Nutze deine ultimative Fähigkeit ${3 + Math.floor(lvl/2)} mal.`, goal: 3 + Math.floor(lvl/2), req: "ult", rewardGold: 60 + lvl * 15, rewardXP: xpEasy, extra: {type: 'mp', text: '1x Manatrank', val: 1} }, { id: "q5_"+makeId(), title: "Schmiedekunst", desc: `Zerschlage ${2 + Math.floor(lvl/3)} Items für Splitter.`, goal: 2 + Math.floor(lvl/3), req: "dismantle", rewardGold: 70 + lvl * 20, rewardXP: xpMed, extra: {type: 'chest_wooden', text: '1x Holzkiste', val: 1} }, { id: "q6_"+makeId(), title: "Der unerbittliche Jäger", desc: `Besiege ${8 + lvl*2} Gegner.`, goal: 8 + lvl*2, req: "kill", rewardGold: 180 + lvl * 40, rewardXP: xpHard, extra: {type: 'chest_iron', text: '1x Eisenkiste', val: 1} } ]; return questPool[Math.floor(Math.random() * questPool.length)]; }
 function generateQuestBoard() { state.availQuests = [getRandomQuest(), getRandomQuest(), getRandomQuest()]; }
-function renderQuests() {
-  const board = $('wd-quest-board'); const active = $('wd-quest-active'); if(!board) return;
-  if(p.quest) { const ready = p.quest.progress >= p.quest.goal; const pct = Math.min(100, (p.quest.progress / p.quest.goal) * 100); let extraHTML = p.quest.extra ? `<div class="wd-reward-badge" style="color:#d8b4e2; border-color:rgba(192,132,252,0.3)">🎁 ${p.quest.extra.text}</div>` : ''; active.innerHTML = `<div class="wd-active-quest-box ${ready ? 'ready' : ''}"><div class="wd-aq-header">${ready ? 'Pakt Erfüllt!' : 'Aktiver Pakt'}</div><h4 style="color:var(--text-main); font-size:1.1rem; margin-bottom:5px;">${p.quest.title}</h4><p style="font-size:0.85rem; color:var(--text-muted); font-style:italic; margin-bottom:12px;">${p.quest.desc}</p><div class="wd-quest-rewards" style="justify-content:center; margin-bottom:12px;"><div class="wd-reward-badge" style="color:var(--gold)">🪙 ${p.quest.rewardGold} G</div><div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${p.quest.rewardXP} XP</div>${extraHTML}</div><div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); font-weight:bold; margin-bottom:6px; font-family:'Cinzel', serif;"><span>Fortschritt</span><span style="color:${ready ? 'var(--xp-glow)' : 'var(--accent)'}">${p.quest.progress} / ${p.quest.goal}</span></div><div class="wd-bar-bg" style="height:8px; margin-bottom:15px; border-color:var(--border-light)"><div class="wd-bar-fill" style="width:${pct}%; background:${ready ? 'linear-gradient(90deg, #065f46, var(--xp-glow))' : 'linear-gradient(90deg, #78350f, var(--accent))'}; box-shadow: 0 0 10px ${ready ? 'var(--xp-glow)' : 'var(--accent)'};"></div></div>${ready ? `<button class="wd-btn" style="width:100%; padding:10px; border-color:var(--xp-glow); color:var(--xp-glow); text-shadow: 0 0 5px rgba(16,185,129,0.5);" onclick="claimQuest()">Belohnung einfordern</button>` : `<button class="wd-mini-btn" style="width:100%; border-style:dashed; opacity:0.7;" onclick="p.quest=null; updateHUD();">Pakt abbrechen</button>`}</div>`; } else { active.innerHTML = `<div style="text-align:center; padding:25px 20px; border:1px dashed var(--border); border-radius:4px; color:var(--text-muted); font-style:italic; background:rgba(0,0,0,0.3)">Kein aktiver Pakt. Wähle unten einen Auftrag vom Brett.</div>`; }
-  board.innerHTML = ''; state.availQuests.forEach(q => { let extraHTML = q.extra ? `<div class="wd-reward-badge" style="color:#d8b4e2">🎁 ${q.extra.text}</div>` : ''; board.innerHTML += `<div class="wd-quest-card"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="flex:1; padding-right:15px;"><div class="wd-quest-title">${q.title}</div><div class="wd-quest-desc">${q.desc}</div><div class="wd-quest-rewards"><div class="wd-reward-badge" style="color:var(--gold)">🪙 ${q.rewardGold}</div><div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${q.rewardXP}</div>${extraHTML}</div></div><button class="wd-mini-btn" style="padding:10px 15px; height:fit-content;" ${p.quest?'disabled':''} onclick="acceptQuest('${q.id}')">Pakt<br>besiegeln</button></div></div>`; });
-}
+function renderQuests() { const board = $('wd-quest-board'); const active = $('wd-quest-active'); if(!board) return; if(p.quest) { const ready = p.quest.progress >= p.quest.goal; const pct = Math.min(100, (p.quest.progress / p.quest.goal) * 100); let extraHTML = p.quest.extra ? `<div class="wd-reward-badge" style="color:#d8b4e2; border-color:rgba(192,132,252,0.3)">🎁 ${p.quest.extra.text}</div>` : ''; active.innerHTML = `<div class="wd-active-quest-box ${ready ? 'ready' : ''}"><div class="wd-aq-header">${ready ? 'Pakt Erfüllt!' : 'Aktiver Pakt'}</div><h4 style="color:var(--text-main); font-size:1.1rem; margin-bottom:5px;">${p.quest.title}</h4><p style="font-size:0.85rem; color:var(--text-muted); font-style:italic; margin-bottom:12px;">${p.quest.desc}</p><div class="wd-quest-rewards" style="justify-content:center; margin-bottom:12px;"><div class="wd-reward-badge" style="color:var(--gold)">🪙 ${p.quest.rewardGold} G</div><div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${p.quest.rewardXP} XP</div>${extraHTML}</div><div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); font-weight:bold; margin-bottom:6px; font-family:'Cinzel', serif;"><span>Fortschritt</span><span style="color:${ready ? 'var(--xp-glow)' : 'var(--accent)'}">${p.quest.progress} / ${p.quest.goal}</span></div><div class="wd-bar-bg" style="height:8px; margin-bottom:15px; border-color:var(--border-light)"><div class="wd-bar-fill" style="width:${pct}%; background:${ready ? 'linear-gradient(90deg, #065f46, var(--xp-glow))' : 'linear-gradient(90deg, #78350f, var(--accent))'}; box-shadow: 0 0 10px ${ready ? 'var(--xp-glow)' : 'var(--accent)'};"></div></div>${ready ? `<button class="wd-btn" style="width:100%; padding:10px; border-color:var(--xp-glow); color:var(--xp-glow); text-shadow: 0 0 5px rgba(16,185,129,0.5);" onclick="claimQuest()">Belohnung einfordern</button>` : `<button class="wd-mini-btn" style="width:100%; border-style:dashed; opacity:0.7;" onclick="p.quest=null; updateHUD();">Pakt abbrechen</button>`}</div>`; } else { active.innerHTML = `<div style="text-align:center; padding:25px 20px; border:1px dashed var(--border); border-radius:4px; color:var(--text-muted); font-style:italic; background:rgba(0,0,0,0.3)">Kein aktiver Pakt. Wähle unten einen Auftrag vom Brett.</div>`; } board.innerHTML = ''; state.availQuests.forEach(q => { let extraHTML = q.extra ? `<div class="wd-reward-badge" style="color:#d8b4e2">🎁 ${q.extra.text}</div>` : ''; board.innerHTML += `<div class="wd-quest-card"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="flex:1; padding-right:15px;"><div class="wd-quest-title">${q.title}</div><div class="wd-quest-desc">${q.desc}</div><div class="wd-quest-rewards"><div class="wd-reward-badge" style="color:var(--gold)">🪙 ${q.rewardGold}</div><div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${q.rewardXP}</div>${extraHTML}</div></div><button class="wd-mini-btn" style="padding:10px 15px; height:fit-content;" ${p.quest?'disabled':''} onclick="acceptQuest('${q.id}')">Pakt<br>besiegeln</button></div></div>`; }); }
 function acceptQuest(id) { const q = state.availQuests.find(x => x.id === id); p.quest = JSON.parse(JSON.stringify(q)); p.quest.progress = 0; playSound('magic'); log(`Pakt geschlossen: ${q.title}`, "warn"); updateHUD(); }
 function progressQuest(reqType) { if(!p.quest || p.quest.progress >= p.quest.goal) return; if(p.quest.req === reqType || (p.quest.req === 'kill' && reqType === 'boss')) { p.quest.progress++; if(p.quest.progress >= p.quest.goal) { playSound('level'); log(`Questziel erreicht: ${p.quest.title}!`, "good"); } updateHUD(); } }
 function claimQuest() { if(!p.quest || p.quest.progress < p.quest.goal) return; playSound('quest'); p.gold += p.quest.rewardGold; p.xp += p.quest.rewardXP; let logText = `Pakt erfüllt! +${p.quest.rewardGold}G, +${p.quest.rewardXP}XP`; if(p.quest.extra) { if(p.quest.extra.type === 'hp') p.inv.potions.hp += p.quest.extra.val; else if(p.quest.extra.type === 'mp') p.inv.potions.mp += p.quest.extra.val; else if(p.quest.extra.type === 'shards') p.inv.shards += p.quest.extra.val; else if(p.quest.extra.type === 'chest_wooden') p.inv.chests.wooden += p.quest.extra.val; else if(p.quest.extra.type === 'chest_iron') p.inv.chests.iron += p.quest.extra.val; else if(p.quest.extra.type === 'chest_mystic') p.inv.chests.mystic += p.quest.extra.val; logText += `, +${p.quest.extra.text}`; } log(logText, "good"); const idx = state.availQuests.findIndex(q => q.id === p.quest.id); if(idx !== -1) { state.availQuests[idx] = getRandomQuest(); } else { state.availQuests.push(getRandomQuest()); if (state.availQuests.length > 3) state.availQuests.shift(); } p.quest = null; if(p.xp >= p.maxXp) { playSound('level'); p.xp -= p.maxXp; p.lvl++; p.maxXp = Math.floor(p.maxXp * 1.5); p.maxHp += 15; p.hp = p.maxHp; p.sp += 1; log(`LEVEL UP! Stufe ${p.lvl}.`, "warn"); } updateHUD(); }
@@ -946,14 +988,23 @@ function loadGame() {
     let slot = prompt(info, "1"); if(!slot || !saves[`slot_${slot}`]) { log("Kein gültiger Spielstand.", "bad"); return; }
     const data = saves[`slot_${slot}`]; p = data.p; state = data.state;
     applyLockRecovery(state);
+    
+    if (!p.eq.helm) p.eq.helm = null; if (!p.eq.accessory) p.eq.accessory = null;
+    if (!p.inv.helms) p.inv.helms = []; if (!p.inv.accessories) p.inv.accessories = [];
+    if (!state.discovery.helms) state.discovery.helms = []; if (!state.discovery.accessories) state.discovery.accessories = [];
+
     if (p.eq.weapon) { let invWep = p.inv.weapons.find(i => i.id === p.eq.weapon.id); if (invWep) { if (p.eq.weapon.val > invWep.val) { invWep.val = p.eq.weapon.val; invWep.name = p.eq.weapon.name; invWep.sell = p.eq.weapon.sell; } p.eq.weapon = invWep; } }
     if (p.eq.armor) { let invArm = p.inv.armors.find(i => i.id === p.eq.armor.id); if (invArm) { if (p.eq.armor.val > invArm.val) { invArm.val = p.eq.armor.val; invArm.name = p.eq.armor.name; invArm.sell = p.eq.armor.sell; } p.eq.armor = invArm; } }
+    if (p.eq.helm) p.eq.helm = p.inv.helms.find(i => i.id === p.eq.helm.id) || p.eq.helm;
+    if (p.eq.accessory) p.eq.accessory = p.inv.accessories.find(i => i.id === p.eq.accessory.id) || p.eq.accessory;
     if (p.eq.trinket) p.eq.trinket = p.inv.trinkets.find(i => i.id === p.eq.trinket.id) || p.eq.trinket;
+
     if (!state.dungeon) state.dungeon = { active: false, type:'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }; if (!state.discovery) state.discovery = { weapons: [], armors: [] }; if (!state.availQuests) generateQuestBoard(); if (state.firstCombatHintShown === undefined) state.firstCombatHintShown = true; if (p.inv.shards === undefined) p.inv.shards = 0; if (p.baseDodge === undefined) p.baseDodge = 0; if (p.baseLuck === undefined) p.baseLuck = 0; if (!p.prestige) p.prestige = { level: 0, dust: 0, buffs: { xp: 0, gold: 0, stats: 0 } };
     if (p.fx.poison === undefined) { p.fx.poison = 0; p.fx.poisonDmg = 0; p.fx.stun = 0; p.fx.weak = 0; p.fx.regen = 0; p.fx.regenHeal = 0; }
     if (state.enemy) { if(state.enemy.fx === undefined) state.enemy.fx = { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }; if(state.enemy.cooldowns === undefined) state.enemy.cooldowns = {}; if(state.enemy.abilities === undefined) state.enemy.abilities = []; }
     if (!state.combatStats) state.combatStats = { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 };
     if (!state.lore) state.lore = [];
+    
     $('wd-overlay').style.display = 'none'; log(`Spielstand von Slot ${slot} geladen.`, "magic"); updateHUD(); playSound('magic');
     if(state.enemy) { showCombatStage(true); renderCombatActions(); } else if(state.dungeon.active) { showCombatStage(false); showDungeonMenu(); } else if(state.area) { showCombatStage(false); enterRoom(); } else { goToTown(); }
   } catch(e) { log("Ladefehler!", "bad"); }
