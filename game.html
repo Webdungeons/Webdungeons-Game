@@ -90,7 +90,7 @@
     box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8);
     transition: all 0.3s ease;
   }
-  #wd-arena-title { position: absolute; top: 30px; font-family: 'Cinzel', serif; font-size: 1.5rem; color: rgba(255,255,255,0.2); letter-spacing: 8px; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,1); text-align: center; width: 100%;}
+  #wd-arena-title { position: absolute; top: 30px; font-family: 'Cinzel', serif; font-size: 1.5rem; color: rgba(255,255,255,0.2); letter-spacing: 8px; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,1); text-align: center; width: 100%; transition: color 0.3s;}
   #wd-combat-stage { display: none; width: 100%; max-width: 600px; justify-content: space-between; align-items: flex-end; padding: 0 40px; margin-bottom: 20px;}
   .wd-combatant { text-align: center; position: relative; }
   .wd-combatant-sprite { 
@@ -179,38 +179,20 @@
     0% { box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.3); }
     100% { box-shadow: inset 0 0 70px rgba(239, 68, 68, 0.7), 0 0 20px rgba(239, 68, 68, 0.4); border-color: rgba(239, 68, 68, 0.9); }
   }
-  .wd-danger-pulse {
-    animation: wdDangerPulse 0.8s infinite alternate !important;
-  }
+  .wd-danger-pulse { animation: wdDangerPulse 0.8s infinite alternate !important; }
 
   /* --- TRANK ANIMATIONEN --- */
-  @keyframes wdPotionHpArena {
-    0% { box-shadow: inset 0 0 150px rgba(239, 68, 68, 0.8), inset 0 0 50px rgba(239, 68, 68, 0.5); }
-    100% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8); }
-  }
-  @keyframes wdPotionMpArena {
-    0% { box-shadow: inset 0 0 150px rgba(59, 130, 246, 0.8), inset 0 0 50px rgba(59, 130, 246, 0.5); }
-    100% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8); }
-  }
-  @keyframes wdPotionHpSprite {
-    0% { filter: drop-shadow(0 0 40px rgba(239, 68, 68, 1)) brightness(1.5); transform: scale(1.3); }
-    100% { filter: drop-shadow(0 15px 10px rgba(0,0,0,0.8)) brightness(1); transform: scale(1); }
-  }
-  @keyframes wdPotionMpSprite {
-    0% { filter: drop-shadow(0 0 40px rgba(59, 130, 246, 1)) brightness(1.5); transform: scale(1.3); }
-    100% { filter: drop-shadow(0 15px 10px rgba(0,0,0,0.8)) brightness(1); transform: scale(1); }
-  }
+  @keyframes wdPotionHpArena { 0% { box-shadow: inset 0 0 150px rgba(239, 68, 68, 0.8), inset 0 0 50px rgba(239, 68, 68, 0.5); } 100% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8); } }
+  @keyframes wdPotionMpArena { 0% { box-shadow: inset 0 0 150px rgba(59, 130, 246, 0.8), inset 0 0 50px rgba(59, 130, 246, 0.5); } 100% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8); } }
+  @keyframes wdPotionHpSprite { 0% { filter: drop-shadow(0 0 40px rgba(239, 68, 68, 1)) brightness(1.5); transform: scale(1.3); } 100% { filter: drop-shadow(0 15px 10px rgba(0,0,0,0.8)) brightness(1); transform: scale(1); } }
+  @keyframes wdPotionMpSprite { 0% { filter: drop-shadow(0 0 40px rgba(59, 130, 246, 1)) brightness(1.5); transform: scale(1.3); } 100% { filter: drop-shadow(0 15px 10px rgba(0,0,0,0.8)) brightness(1); transform: scale(1); } }
   .wd-anim-potion-hp-arena { animation: wdPotionHpArena 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) !important; }
   .wd-anim-potion-mp-arena { animation: wdPotionMpArena 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) !important; }
   .wd-anim-potion-hp-sprite { animation: wdPotionHpSprite 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) !important; }
   .wd-anim-potion-mp-sprite { animation: wdPotionMpSprite 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) !important; }
 
   /* --- NEUE TALENT-TAB STYLES --- */
-  .wd-skill-tree-container {
-    position: relative; display: flex; flex-direction: column; gap: 35px; align-items: center;
-    background: radial-gradient(circle at center, rgba(30, 25, 45, 0.8) 0%, rgba(5, 5, 5, 0.95) 100%), repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 2px, transparent 2px, transparent 15px);
-    border: 2px solid var(--border-light); border-radius: 6px; padding: 35px 0; margin-bottom: 20px; box-shadow: inset 0 0 40px rgba(0,0,0,1), 0 5px 15px rgba(0,0,0,0.5); overflow: hidden;
-  }
+  .wd-skill-tree-container { position: relative; display: flex; flex-direction: column; gap: 35px; align-items: center; background: radial-gradient(circle at center, rgba(30, 25, 45, 0.8) 0%, rgba(5, 5, 5, 0.95) 100%), repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 2px, transparent 2px, transparent 15px); border: 2px solid var(--border-light); border-radius: 6px; padding: 35px 0; margin-bottom: 20px; box-shadow: inset 0 0 40px rgba(0,0,0,1), 0 5px 15px rgba(0,0,0,0.5); overflow: hidden; }
   .wd-skill-path { position: absolute; background: linear-gradient(to bottom, rgba(92, 78, 68, 0.3), rgba(212, 175, 55, 0.4), rgba(92, 78, 68, 0.3)); z-index: 1; width: 3px; border-radius: 2px; box-shadow: 0 0 10px rgba(212, 175, 55, 0.1); }
   @keyframes wdNodePulse { 0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.3), inset 0 0 10px rgba(0,0,0,0.8); border-color: var(--gold); } 100% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.7), inset 0 0 15px rgba(212, 175, 55, 0.2); border-color: #fff; } }
   .wd-skill-node { width: 62px; height: 62px; border-radius: 50%; background: linear-gradient(135deg, #1a1820 0%, #0a0a0c 100%); border: 2px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 5px 10px rgba(0,0,0,0.6); z-index: 2; }
@@ -284,7 +266,6 @@
     #wd-action-panel { grid-template-columns: repeat(2, 1fr); }
   }
 
-  /* --- UX FIXES v0.2 --- */
   @keyframes wdErrorShake {
     0%, 100% { transform: translateX(0); }
     20%, 60% { transform: translateX(-5px); border-color: var(--hp-glow); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); color: var(--hp-glow); }
@@ -293,169 +274,42 @@
   .wd-error-shake { animation: wdErrorShake 0.4s ease !important; }
   .wd-active-filter { color: var(--accent) !important; border-color: var(--accent) !important; background: rgba(212,175,55,0.1) !important; box-shadow: inset 0 0 8px rgba(212,175,55,0.2); }
 
-  /* --- VERBESSERTES HAUPTMENÜ UI --- */
-  #wd-menu-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    height: 100%;
-    padding: 50px 30px;
-    background: radial-gradient(circle at center, rgba(17,16,21,0.9) 0%, rgba(5,5,5,0.98) 100%);
-    border: 4px ridge var(--border);
-    border-radius: 6px;
-    box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
-  }
+  #wd-menu-screen { display: flex; flex-direction: column; align-items: center; justify-content: space-between; width: 100%; height: 100%; padding: 50px 30px; background: radial-gradient(circle at center, rgba(17,16,21,0.9) 0%, rgba(5,5,5,0.98) 100%); border: 4px ridge var(--border); border-radius: 6px; box-shadow: inset 0 0 30px rgba(0,0,0,0.9); }
+  .wd-menu-header { text-align: center; margin-bottom: 20px; }
+  .wd-menu-title { font-size: 4.8rem; color: var(--accent); text-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 5px 10px #000; margin-bottom: -15px; }
+  .wd-menu-subtitle { font-size: 1.8rem; color: var(--text-muted); letter-spacing: 15px; text-transform: uppercase; text-shadow: 0 2px 5px #000; margin-left: 15px; }
+  .wd-menu-divider { width: 150px; height: 3px; background: linear-gradient(90deg, transparent, var(--border-light), transparent); margin: 30px auto 10px; }
+  .wd-menu-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 60px; width: 100%; }
+  .wd-menu-quote { font-size: 1.45rem; color: var(--text-main); font-style: italic; text-align: center; max-width: 80%; margin: 0; text-shadow: 0 2px 4px #000; }
+  .wd-menu-actions { display: flex; flex-direction: column; gap: 20px; width: 60%; align-items: center; }
+  .wd-menu-btn { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; padding: 20px; background: linear-gradient(135deg, #1a181f 0%, #111015 100%); border: 3px ridge var(--accent); border-radius: 8px; cursor: pointer; overflow: hidden; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 8px 15px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.9); }
+  .wd-menu-btn::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%); opacity: 0; transition: opacity 0.3s; }
+  .wd-menu-btn::after { content: ""; position: absolute; width: 80px; height: 200%; background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.25), transparent); transform: rotate(45deg); left: -120px; top: -100px; transition: left 0.6s; }
+  .wd-menu-btn:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 18px 35px rgba(0,0,0,0.9), 0 0 25px rgba(212, 175, 55, 0.4), inset 0 0 25px rgba(0,0,0,0.7); border-color: #fff; }
+  .wd-menu-btn:hover::before { opacity: 1; } .wd-menu-btn:hover::after { left: 120%; }
+  .wd-menu-btn-text { font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-shadow: 0 2px 4px #000; transition: color 0.3s, text-shadow 0.3s; }
+  .wd-menu-btn:hover .wd-menu-btn-text { color: #fff; text-shadow: 0 2px 10px rgba(212, 175, 55, 0.8); }
+  .wd-menu-btn .wd-icon { font-size: 2rem; margin-right: 20px; transition: transform 0.3s; }
+  .wd-menu-btn:hover .wd-icon { transform: scale(1.1) rotate(-5deg); }
+  .wd-menu-btn:active { transform: translateY(2px); box-shadow: 0 5px 10px rgba(0,0,0,0.7), inset 0 0 15px rgba(0,0,0,0.8); }
+  .wd-menu-footer { width: 100%; text-align: center; padding-top: 15px; border-top: 1px dashed var(--border); font-size: 0.8rem; color: var(--text-muted); }
 
-  .wd-menu-header {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+  /* --- NEUE KAMPF-UI BUTTON STYLES --- */
+  .atk-btn { grid-column: span 2; background: linear-gradient(180deg, #3a1c1c 0%, #200a0a 100%) !important; border-color: var(--hp-glow) !important; font-size: 1.15rem; }
+  .atk-btn:hover:not(:disabled) { background: linear-gradient(180deg, #4a2222 0%, #301010 100%) !important; box-shadow: 0 8px 15px rgba(0,0,0,0.8), 0 0 15px rgba(239, 68, 68, 0.4), inset 0 1px 1px rgba(255,255,255,0.1) !important; }
+  .skill-btn { background: linear-gradient(180deg, #1c263a 0%, #0a1120 100%) !important; border-color: var(--mp-glow) !important; }
+  .skill-btn:hover:not(:disabled) { background: linear-gradient(180deg, #25334a 0%, #101a30 100%) !important; box-shadow: 0 8px 15px rgba(0,0,0,0.8), 0 0 15px rgba(59, 130, 246, 0.4), inset 0 1px 1px rgba(255,255,255,0.1) !important; border-color: #fff !important; }
+  .ult-btn { background: linear-gradient(180deg, #301a3a 0%, #1c0a20 100%) !important; border-color: var(--epic) !important; }
+  .ult-btn:hover:not(:disabled) { background: linear-gradient(180deg, #40224a 0%, #281030 100%) !important; box-shadow: 0 8px 15px rgba(0,0,0,0.8), 0 0 15px rgba(192, 132, 252, 0.4), inset 0 1px 1px rgba(255,255,255,0.1) !important; border-color: #fff !important; }
 
-  .wd-menu-title {
-    font-size: 4.8rem;
-    color: var(--accent);
-    text-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 5px 10px #000;
-    margin-bottom: -15px;
+  /* --- NEUE BOSS-PHASE ANIMATION --- */
+  @keyframes wdBossPhase2 {
+      0% { transform: scale(1); filter: drop-shadow(0 15px 10px rgba(0,0,0,0.8)); }
+      50% { transform: scale(1.3) translateY(-10px); filter: drop-shadow(0 0 30px red) brightness(1.5); }
+      100% { transform: scale(1.1); filter: drop-shadow(0 0 25px darkred); }
   }
+  .wd-boss-phase-2 { animation: wdBossPhase2 1s ease-out forwards; }
 
-  .wd-menu-subtitle {
-    font-size: 1.8rem;
-    color: var(--text-muted);
-    letter-spacing: 15px;
-    text-transform: uppercase;
-    text-shadow: 0 2px 5px #000;
-    margin-left: 15px; /* Korrektur für letter-spacing */
-  }
-
-  .wd-menu-divider {
-    width: 150px;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--border-light), transparent);
-    margin: 30px auto 10px;
-  }
-
-  .wd-menu-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 60px;
-    width: 100%;
-  }
-
-  .wd-menu-quote {
-    font-size: 1.45rem;
-    color: var(--text-main);
-    font-style: italic;
-    text-align: center;
-    max-width: 80%;
-    margin: 0;
-    text-shadow: 0 2px 4px #000;
-  }
-
-  .wd-menu-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 60%;
-    align-items: center;
-  }
-
-  /* Dekorative, fantasievolle Buttons */
-  .wd-menu-btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 20px;
-    background: linear-gradient(135deg, #1a181f 0%, #111015 100%);
-    border: 3px ridge var(--accent);
-    border-radius: 8px;
-    cursor: pointer;
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.9);
-  }
-
-  /* Metalleffekt-Überlagerung */
-  .wd-menu-btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  /* Goldener Schimmer-Effekt im Hover-Zustand */
-  .wd-menu-btn::after {
-    content: "";
-    position: absolute;
-    width: 80px;
-    height: 200%;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.25), transparent);
-    transform: rotate(45deg);
-    left: -120px;
-    top: -100px;
-    transition: left 0.6s;
-  }
-
-  .wd-menu-btn:hover {
-    transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 18px 35px rgba(0,0,0,0.9), 0 0 25px rgba(212, 175, 55, 0.4), inset 0 0 25px rgba(0,0,0,0.7);
-    border-color: #fff;
-  }
-
-  .wd-menu-btn:hover::before {
-    opacity: 1;
-  }
-
-  .wd-menu-btn:hover::after {
-    left: 120%;
-  }
-
-  .wd-menu-btn-text {
-    font-family: 'Cinzel', serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--accent);
-    text-shadow: 0 2px 4px #000;
-    transition: color 0.3s, text-shadow 0.3s;
-  }
-
-  .wd-menu-btn:hover .wd-menu-btn-text {
-    color: #fff;
-    text-shadow: 0 2px 10px rgba(212, 175, 55, 0.8);
-  }
-
-  .wd-menu-btn .wd-icon {
-    font-size: 2rem;
-    margin-right: 20px;
-    transition: transform 0.3s;
-  }
-
-  .wd-menu-btn:hover .wd-icon {
-    transform: scale(1.1) rotate(-5deg);
-  }
-
-  .wd-menu-btn:active {
-    transform: translateY(2px);
-    box-shadow: 0 5px 10px rgba(0,0,0,0.7), inset 0 0 15px rgba(0,0,0,0.8);
-  }
-
-  .wd-menu-footer {
-    width: 100%;
-    text-align: center;
-    padding-top: 15px;
-    border-top: 1px dashed var(--border);
-    font-size: 0.8rem;
-    color: var(--text-muted);
-  }
 </style>
 </head>
 <body>
@@ -505,6 +359,7 @@
           <div class="wd-combatant">
             <div class="wd-combatant-sprite" id="wd-sprite-enemy">👹</div>
             <div class="wd-combatant-hp" id="wd-ui-enemy-hp">HP: 100/100</div>
+            <div id="wd-enemy-effects" style="display:flex; justify-content:center; gap:4px; margin-top:5px; flex-wrap:wrap; min-height: 20px;"></div>
           </div>
         </div>
       </div>
@@ -569,7 +424,7 @@
 </div>
 <script>
 /**
- * WEB DUNGEONS: ECLIPSE - BALANCED ECONOMY & VISUAL CHEST EFFECTS & DYNAMIC QUESTS & MAHLSTROM
+ * WEB DUNGEONS: ECLIPSE - STATUSEFFEKTE, GEGNERFÄHIGKEITEN & BOSS PHASEN (v0.5 FINAL)
  */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 document.addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); }, { once: true });
@@ -601,13 +456,12 @@ document.addEventListener('mouseover', e => { if (e.target.closest('.wd-btn') ||
 document.addEventListener('mousedown', e => { let btn = e.target.closest('.wd-btn') || e.target.closest('.wd-mini-btn') || e.target.closest('.wd-tab-btn'); if (btn) { if(btn.disabled) playSound('error'); else playSound('click'); } });
 const SAVE_SLOTS = 3;
 
-// UX Fix: Onboarding - Klassenbeschreibungen hinzugefügt
 const CLASSES = {
-  Ritter: { avatar: "🛡️", desc: "Verteidiger: Baut Schilde auf.", maxHp: 150, maxMp: 40, baseAtk: 12, defW: "Trainingsschwert", defDmg: 4, defA: "Kettenwams", defDef: 3, skill: "Schildsturm", cost: 20, ult: "Heiliger Zorn", uCost: 45, crit: 0.1 },
-  Magier: { avatar: "🧙‍♂️", desc: "Zauberer: Enormer Flächenschaden.", maxHp: 90, maxMp: 140, baseAtk: 9, defW: "Arkanstab", defDmg: 5, defA: "Zauberrobe", defDef: 1, skill: "Flammenfokus", cost: 25, ult: "Meteorhagel", uCost: 55, crit: 0.15 },
-  Schurke: { avatar: "🥷", desc: "Attentäter: Baut Combos auf.", maxHp: 110, maxMp: 80, baseAtk: 14, defW: "Schattenklinge", defDmg: 4, defA: "Lederwams", defDef: 2, skill: "Hinterhalt", cost: 25, ult: "Schattentanz", uCost: 50, crit: 0.22 },
-  Paladin: { avatar: "⚜️", desc: "Kriegerpriester: Allrounder.", maxHp: 140, maxMp: 90, baseAtk: 11, defW: "Weihklinge", defDmg: 4, defA: "Lichtpanzer", defDef: 3, skill: "Lichtstoß", cost: 25, ult: "Urteil", uCost: 50, crit: 0.12 },
-  Waldläufer: { avatar: "🏹", desc: "Jäger: Erhöht das Ausweichen.", maxHp: 115, maxMp: 85, baseAtk: 13, defW: "Kurzbogen", defDmg: 4, defA: "Pfadweste", defDef: 2, skill: "Mehrfachschuss", cost: 22, ult: "Jägersturm", uCost: 48, crit: 0.18 }
+  Ritter: { avatar: "🛡️", desc: "Verteidiger: Baut Schilde auf. Skill schwächt Gegner.", maxHp: 150, maxMp: 40, baseAtk: 12, defW: "Trainingsschwert", defDmg: 4, defA: "Kettenwams", defDef: 3, skill: "Schildsturm", cost: 20, ult: "Heiliger Zorn", uCost: 45, crit: 0.1 },
+  Magier: { avatar: "🧙‍♂️", desc: "Zauberer: Enormer Schaden. Ulti betäubt Gegner.", maxHp: 90, maxMp: 140, baseAtk: 9, defW: "Arkanstab", defDmg: 5, defA: "Zauberrobe", defDef: 1, skill: "Flammenfokus", cost: 25, ult: "Meteorhagel", uCost: 55, crit: 0.15 },
+  Schurke: { avatar: "🥷", desc: "Attentäter: Baut Combos auf. Krits vergiften Gegner.", maxHp: 110, maxMp: 80, baseAtk: 14, defW: "Schattenklinge", defDmg: 4, defA: "Lederwams", defDef: 2, skill: "Hinterhalt", cost: 25, ult: "Schattentanz", uCost: 50, crit: 0.22 },
+  Paladin: { avatar: "⚜️", desc: "Kriegerpriester: Allrounder. Ulti regeneriert HP.", maxHp: 140, maxMp: 90, baseAtk: 11, defW: "Weihklinge", defDmg: 4, defA: "Lichtpanzer", defDef: 3, skill: "Lichtstoß", cost: 25, ult: "Urteil", uCost: 50, crit: 0.12 },
+  Waldläufer: { avatar: "🏹", desc: "Jäger: Erhöht Ausweichen. Skill vergiftet Gegner.", maxHp: 115, maxMp: 85, baseAtk: 13, defW: "Kurzbogen", defDmg: 4, defA: "Pfadweste", defDef: 2, skill: "Mehrfachschuss", cost: 22, ult: "Jägersturm", uCost: 48, crit: 0.18 }
 };
 
 const SKILL_TREE = [
@@ -622,13 +476,7 @@ const SKILL_TREE = [
   { id: "t_dodge2", icon: "👻", name: "Geistertanz", desc: "+4% Ausweichen", max: 3, req: { "t_dodge1": 5, "t_hp2": 2 }, type: "dodge", val: 4 },
   { id: "t_luck2", icon: "👑", name: "Midas Aura", desc: "+3 Glück", max: 3, req: { "t_luck1": 5, "t_atk2": 2 }, type: "luck", val: 3 }
 ];
-const SKILL_TIERS = [
-  ["t_hp1", "t_atk1"],
-  ["t_def1", "t_mp1"],
-  ["t_dodge1", "t_luck1"],
-  ["t_hp2", "t_atk2"],
-  ["t_dodge2", "t_luck2"]
-];
+const SKILL_TIERS = [ ["t_hp1", "t_atk1"], ["t_def1", "t_mp1"], ["t_dodge1", "t_luck1"], ["t_hp2", "t_atk2"], ["t_dodge2", "t_luck2"] ];
 const TRINKETS = [
   { id: 't_vamp', name: "Blutkristall", desc: "Heilt 20% des Schadens.", effect: "lifesteal", rarity: "r-artefact" },
   { id: 't_focus', name: "Auge des Adlers", desc: "+20% Kritische Treffer.", effect: "crit", rarity: "r-artefact" },
@@ -640,6 +488,16 @@ const AREAS = {
   Ruins: { name: "Sonnenruinen", diff: 1.6, enemies: [{n:"Steinwächter",h:120,a:22,s:"🗿",xp:40},{n:"Sandgeist",h:90,a:28,s:"🌪️",xp:35},{n:"Skarabäus",h:140,a:18,s:"🪲",xp:45}] },
   Volcano: { name: "Aschental", diff: 2.4, enemies: [{n:"Lavawicht",h:200,a:38,s:"🔥",xp:80},{n:"Feuergolem",h:280,a:32,s:"🧱",xp:100},{n:"Aschenwolf",h:180,a:45,s:"🐺",xp:90}] }
 };
+
+const ENEMY_ABILITIES = {
+    howl: { name: "Geheul", type: "buff", cd: 3, desc: "Sammelt Kraft für den nächsten Schlag." },
+    heavy: { name: "Wuchtschlag", type: "heavy", cd: 3, desc: "Ein extrem harter Angriff." },
+    poison: { name: "Giftsekret", type: "poison", cd: 4, desc: "Vergiftet das Ziel." },
+    stun: { name: "Erschütterung", type: "stun", cd: 5, desc: "Betäubt das Ziel." },
+    heal: { name: "Regeneration", type: "heal", cd: 5, desc: "Heilt einen großen Teil der Wunden." }
+};
+const AREA_ABILITIES = { Forest: ['howl', 'poison'], Ruins: ['heavy', 'stun'], Volcano: ['heavy', 'heal'], Dungeon: ['howl', 'heavy', 'poison', 'stun', 'heal'] };
+
 const DUNGEONS = {
   D1: { name: "Katakomben", diff: 1.2, loot: 1.0, boss: { n: "Torwächter Varg", s: "🛡️", h: 220, a: 20, chest: "iron", xp: 100 } },
   D2: { name: "Schattenfestung", diff: 1.8, loot: 1.5, boss: { n: "Knochentyrann", s: "☠️", h: 380, a: 35, chest: "mystic", xp: 200 } },
@@ -659,68 +517,18 @@ const CHEST_DEFS = {
   mystic: { label: "Arkankiste", icon: "✨", rewardMult: 1.8, weights: {weapon:45, armor:45, gold:10, potions:0} }
 };
 const WEAPON_POOLS = {
-  Ritter: { 
-    common: ["Schildspitze", "Ordensklinge", "Rostiges Schwert", "Knappenklinge", "Milizspeer", "Soldatenschwert", "Eisenflegel", "Stumpfe Axt"], 
-    rare: ["Bastionsäbel", "Silberwacht", "Stahlschwert", "Gardistenaxt", "Turnierlanze", "Schwerer Morgenstern", "Offiziersklinge"], 
-    epic: ["Sonnenzorn", "Eidbrecher", "Blutklinge", "Löwenpranke", "Kriegsherren-Axt", "Drachenzahn-Schwert", "Titanspalter"], 
-    legendary: ["Löwenschwur", "Himmelsbrecher", "Königsherz", "Drachentöter", "Weltenbrecher", "Klingensturm", "Leviathan-Axt", "Aegis-Klinge"] 
-  },
-  Magier: { 
-    common: ["Runenfokus", "Aschenstab", "Lehrlingsstab", "Kristallzweig", "Holzzepter", "Novizenfokus", "Kupferstab"], 
-    rare: ["Frostsigel", "Aetherstab", "Glutstab", "Schattenrute", "Silberzepter", "Stab des Adepten", "Illusionszweig"], 
-    epic: ["Arkanherz", "Flammenkrone", "Sturmrufer", "Leerenstab", "Eisiger Griff", "Donnerzepter", "Seelenfokus"], 
-    legendary: ["Weltfunke", "Erzkomet", "Sternenfall", "Chronosstab", "Auge des Kosmos", "Dimensionsspalter", "Stab der Ewigkeit"] 
-  },
-  Schurke: { 
-    common: ["Krähenzahn", "Nachtstahl", "Rostdolch", "Schlitzer", "Straßenmesser", "Knochenstecher", "Eisendolch"], 
-    rare: ["Nebelklinge", "Schwarzfeder", "Giftdolch", "Schattendorn", "Meuchelmesser", "Silberfang", "Diebesklinge"], 
-    epic: ["Leerenkralle", "Blutmond", "Seelenreißer", "Mörderklinge", "Phantomschnitt", "Vipernzahn", "Nachtschatten"], 
-    legendary: ["Nachtfürst", "Rabenurteil", "Witwenmacher", "Schattentod", "Flüstern der Leere", "Klinge des Assassinen", "Seelenfresser"] 
-  },
-  Paladin: { 
-    common: ["Weihschwert", "Segenshammer", "Pilgerstreitkolben", "Kirchenklinge", "Eisenmorgenstern", "Knappenhammer"], 
-    rare: ["Sonnenklinge", "Glaubenswacht", "Lichtbringer", "Inquisitorenhammer", "Silberner Streitkolben", "Gerechtigkeitsklinge"], 
-    epic: ["Aurora", "Heiligzorn", "Morgentau", "Seraphimklinge", "Hammer des Richters", "Sonnenfeuer-Streitkolben", "Himmelswacht"], 
-    legendary: ["Dawnbreaker", "Ewiger Eid", "Götterhammer", "Excalibur", "Urteil des Lichts", "Sternenschmiede", "Gnade der Engel"] 
-  },
-  Waldläufer: { 
-    common: ["Jagdspieß", "Waldbogen", "Kurzbogen", "Holzspeer", "Einfacher Bogen", "Wildnisspeer", "Kupferpfeile"], 
-    rare: ["Habichtzahn", "Eibenbogen", "Falkenauge", "Späherbogen", "Verstärkter Langbogen", "Pirscherspeer", "Windbogen"], 
-    epic: ["Sturmfeder", "Wolfsfang", "Windreiter", "Nachtjäger", "Bogen des Waldläufers", "Schattensehne", "Donnerspeer"], 
-    legendary: ["Alderheart", "Königsjagd", "Drachenbogen", "Flüsterwind", "Sturmrufer-Bogen", "Zorn der Natur", "Sonnenfinsternis"] 
-  }
+  Ritter: { common: ["Schildspitze", "Rostiges Schwert", "Eisenflegel"], rare: ["Bastionsäbel", "Silberwacht", "Stahlschwert"], epic: ["Sonnenzorn", "Eidbrecher", "Titanspalter"], legendary: ["Löwenschwur", "Himmelsbrecher", "Aegis-Klinge"] },
+  Magier: { common: ["Runenfokus", "Aschenstab", "Kupferstab"], rare: ["Frostsigel", "Aetherstab", "Glutstab"], epic: ["Arkanherz", "Flammenkrone", "Sturmrufer"], legendary: ["Weltfunke", "Erzkomet", "Stab der Ewigkeit"] },
+  Schurke: { common: ["Krähenzahn", "Nachtstahl", "Eisendolch"], rare: ["Nebelklinge", "Schwarzfeder", "Giftdolch"], epic: ["Leerenkralle", "Blutmond", "Nachtschatten"], legendary: ["Nachtfürst", "Rabenurteil", "Seelenfresser"] },
+  Paladin: { common: ["Weihschwert", "Segenshammer", "Knappenhammer"], rare: ["Sonnenklinge", "Glaubenswacht", "Lichtbringer"], epic: ["Aurora", "Heiligzorn", "Himmelswacht"], legendary: ["Dawnbreaker", "Ewiger Eid", "Gnade der Engel"] },
+  Waldläufer: { common: ["Jagdspieß", "Waldbogen", "Kupferpfeile"], rare: ["Habichtzahn", "Eibenbogen", "Falkenauge"], epic: ["Sturmfeder", "Wolfsfang", "Donnerspeer"], legendary: ["Alderheart", "Königsjagd", "Sonnenfinsternis"] }
 };
 const ARMOR_POOLS = {
-  Ritter: { 
-    common: ["Eisenpanzer", "Kettenhemd", "Knappenrüstung", "Rostige Platte", "Soldatenwams", "Milizbrustpanzer"], 
-    rare: ["Schildmantel", "Plattenrock", "Stahlwams", "Silberrüstung", "Gardistenpanzer", "Verstärktes Kettenhemd"], 
-    epic: ["Königswache", "Drachenschuppe", "Heldenpanzer", "Kriegsherrenrüstung", "Mithrilhemd", "Schwerer Titanpanzer"], 
-    legendary: ["Titanwall", "Aegis", "Götterwacht", "Rüstung des Champions", "Unbezwingbarer Panzer", "Drachenherz-Rüstung"] 
-  },
-  Magier: { 
-    common: ["Leinenrobe", "Schülergewand", "Novizenrobe", "Stofftunika", "Einfacher Umhang", "Flickengewand"], 
-    rare: ["Kristallrobe", "Zaubertunika", "Elementarmantel", "Seidenrobe", "Adeptengewand", "Silberfadenrobe"], 
-    epic: ["Leerenrobe", "Erzmagierrobe", "Astralgewand", "Runenverzierte Tunika", "Sturmmantel", "Schattenzwirnrobe"], 
-    legendary: ["Kosmosgewand", "Zeitweberrobe", "Aetherpanzer", "Robe der Ewigkeit", "Sternenstaubmantel", "Dimensionsgewand"] 
-  },
-  Schurke: { 
-    common: ["Lederwams", "Straßenkleidung", "Diebesweste", "Fellrüstung", "Leichte Tunika", "Schmugglergewand"], 
-    rare: ["Schwarzleder", "Schleicheranzug", "Nebelmantel", "Verstärktes Leder", "Schattenläuferweste", "Banditenrüstung"], 
-    epic: ["Phantomhaut", "Blutgewand", "Schattenpanzer", "Meisterdieb-Leder", "Vipernschuppe", "Nachtschattengewand"], 
-    legendary: ["Rabenhaut", "Meuchelmörderkutte", "Gewand der Leere", "Flüsterpanzer", "Drachenlederweste", "Umhang des Phantoms"] 
-  },
-  Paladin: { 
-    common: ["Pilgerpanzer", "Klerikerwams", "Ordensweste", "Kupferrüstung", "Einfacher Brustpanzer", "Eisenwams"], 
-    rare: ["Heiligplatte", "Tempelritterrüstung", "Kreuzfahrerpanzer", "Silberwacht-Rüstung", "Geweihter Panzer"], 
-    epic: ["Seraphhaut", "Sonnenwall", "Erzengelpanzer", "Rüstung des Richters", "Mithrilpanzer des Lichts", "Inquisitorenrüstung"], 
-    legendary: ["Ewiglicht", "Himmelsfestung", "Götterwacht", "Panzer der Dämmerung", "Heiliger Gralspanzer", "Rüstung der Erlösung"] 
-  },
-  Waldläufer: { 
-    common: ["Pfadmantel", "Fellrüstung", "Jägerweste", "Lederharnisch", "Wildnistunika", "Raues Leder"], 
-    rare: ["Eichenhaut", "Wildnisleder", "Späherpanzer", "Waldläufer-Wams", "Bärenfellrüstung", "Verstärkte Jägerweste"], 
-    epic: ["Nebelfell", "Sturmfeder", "Sturmmantel", "Schattenjägergewand", "Drachenschuppen-Leder", "Phantomjäger-Rüstung", "Windläuferpanzer"], 
-    legendary: ["Herbststurm", "Waldläuferkönig-Panzer", "Naturmacht", "Rüstung des Urwaldes", "Sturmreiter-Gewand", "Umhang der Bestie"] 
-  }
+  Ritter: { common: ["Eisenpanzer", "Kettenhemd", "Milizbrustpanzer"], rare: ["Schildmantel", "Plattenrock", "Stahlwams"], epic: ["Königswache", "Drachenschuppe", "Mithrilhemd"], legendary: ["Titanwall", "Aegis", "Drachenherz-Rüstung"] },
+  Magier: { common: ["Leinenrobe", "Schülergewand", "Flickengewand"], rare: ["Kristallrobe", "Zaubertunika", "Elementarmantel"], epic: ["Leerenrobe", "Erzmagierrobe", "Schattenzwirnrobe"], legendary: ["Kosmosgewand", "Zeitweberrobe", "Dimensionsgewand"] },
+  Schurke: { common: ["Lederwams", "Straßenkleidung", "Schmugglergewand"], rare: ["Schwarzleder", "Schleicheranzug", "Nebelmantel"], epic: ["Phantomhaut", "Blutgewand", "Nachtschattengewand"], legendary: ["Rabenhaut", "Meuchelmörderkutte", "Umhang des Phantoms"] },
+  Paladin: { common: ["Pilgerpanzer", "Klerikerwams", "Eisenwams"], rare: ["Heiligplatte", "Tempelritterrüstung", "Kreuzfahrerpanzer"], epic: ["Seraphhaut", "Sonnenwall", "Inquisitorenrüstung"], legendary: ["Ewiglicht", "Himmelsfestung", "Rüstung der Erlösung"] },
+  Waldläufer: { common: ["Pfadmantel", "Fellrüstung", "Raues Leder"], rare: ["Eichenhaut", "Wildnisleder", "Späherpanzer"], epic: ["Nebelfell", "Sturmmantel", "Windläuferpanzer"], legendary: ["Herbststurm", "Waldläuferkönig-Panzer", "Umhang der Bestie"] }
 };
 const SHOP_WEAPONS = {
   Ritter: [{name:"Breitschwert",dmg:13,cost:150}, {name:"Bastion-Axt",dmg:22,cost:360}, {name:"Ritter-Großschwert",dmg:35,cost:650}],
@@ -738,10 +546,9 @@ const SHOP_ARMORS = {
 };
 
 let p = null; 
-let state = { mode: 'menu', area: null, enemy: null, room: 0, dungeon: { active: false, type: 'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }, lock: false, tab: 'weapons', discovery: { weapons: [], armors: [] }, availQuests: [], selectedSkill: null, firstCombatHintShown: false };
+let state = { mode: 'menu', area: null, enemy: null, combatStats: { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 }, room: 0, dungeon: { active: false, type: 'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }, lock: false, tab: 'weapons', discovery: { weapons: [], armors: [] }, availQuests: [], selectedSkill: null, firstCombatHintShown: false };
 let isSkippingChest = false;
 
-// Tech Fix: Global Lock Recovery Mechanism
 let _lockTimeout = null;
 function applyLockRecovery(stateObj) {
     let _currentLock = stateObj.lock || false;
@@ -751,7 +558,6 @@ function applyLockRecovery(stateObj) {
             _currentLock = val;
             if (_lockTimeout) clearTimeout(_lockTimeout);
             if (val) {
-                // Auto-Unlock nach 3 Sekunden
                 _lockTimeout = setTimeout(() => {
                     if (_currentLock) {
                         _currentLock = false;
@@ -769,11 +575,7 @@ const $ = id => document.getElementById(id);
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-// Tech Fix: Verbesserte ID Generierung
-function makeId(prefix) { 
-  return prefix + '_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 6); 
-}
-
+function makeId(prefix) { return prefix + '_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 6); }
 function getWepEmoji(n) { const l=(n||'').toLowerCase(); return l.includes('stab')?'🪄':l.includes('bogen')?'🏹':l.includes('axt')?'🪓':'🗡️'; }
 function getArmEmoji(n) { const l=(n||'').toLowerCase(); return l.includes('robe')?'🥼':l.includes('panzer')?'🛡️':'👕'; }
 function pickByWeights(weights) { let t=0; for(let k in weights) t+=weights[k]; let r=Math.random()*t; for(let k in weights){r-=weights[k]; if(r<=0) return k;} }
@@ -794,36 +596,16 @@ function calculateSellValue(statValue, rarityId, type) {
 }
 function calculateShardValue(rarityId) {
   switch(rarityId) {
-    case 'r-common': return 1;
-    case 'r-rare': return 3;
-    case 'r-shop': return 2;
-    case 'r-epic': return 10;
-    case 'r-legendary': return 25;
-    case 'r-artefact': return 50;
-    default: return 1;
+    case 'r-common': return 1; case 'r-rare': return 3; case 'r-shop': return 2;
+    case 'r-epic': return 10; case 'r-legendary': return 25; case 'r-artefact': return 50; default: return 1;
   }
 }
 function rollRarity(chestType) {
   const luckBonus = (p && p.baseLuck) ? (p.baseLuck * 0.001) : 0;
   const r = Math.random() + luckBonus;
-  if (chestType === 'wooden') { 
-    if(r >= 0.998) return 'legendary';
-    if(r >= 0.950) return 'epic';
-    if(r >= 0.750) return 'rare';
-    return 'common';
-  } 
-  else if (chestType === 'iron') { 
-    if(r >= 0.995) return 'legendary';
-    if(r >= 0.900) return 'epic';
-    if(r >= 0.600) return 'rare';
-    return 'common';
-  } 
-  else { 
-    if(r >= 0.990) return 'legendary';
-    if(r >= 0.850) return 'epic';
-    if(r >= 0.450) return 'rare';
-    return 'common';
-  }
+  if (chestType === 'wooden') { if(r >= 0.998) return 'legendary'; if(r >= 0.950) return 'epic'; if(r >= 0.750) return 'rare'; return 'common'; } 
+  else if (chestType === 'iron') { if(r >= 0.995) return 'legendary'; if(r >= 0.900) return 'epic'; if(r >= 0.600) return 'rare'; return 'common'; } 
+  else { if(r >= 0.990) return 'legendary'; if(r >= 0.850) return 'epic'; if(r >= 0.450) return 'rare'; return 'common'; }
 }
 function discover(type, name) { if(!state.discovery[type].includes(name)) state.discovery[type].push(name); }
 function switchTab(tabId, element) {
@@ -837,17 +619,11 @@ function switchTab(tabId, element) {
   if(tabId === 'wd-tab-index') renderIndexList('weapons');
 }
 
-// UX Fix: Onboarding Toast
 function showToast(msg) {
-  const t = document.createElement('div');
-  t.textContent = msg;
+  const t = document.createElement('div'); t.textContent = msg;
   t.style.cssText = "position:absolute; top: 120px; left: 50%; transform: translateX(-50%); background: rgba(30,58,138,0.95); border: 2px solid var(--mp-glow); color: #fff; padding: 12px 25px; border-radius: 6px; z-index: 1000; font-family: 'Cinzel', serif; font-size: 1rem; animation: wdFadeIn 0.3s ease-out; box-shadow: 0 10px 25px rgba(0,0,0,0.9); pointer-events: none; text-shadow: 1px 1px 2px #000;";
   $('wd-wrapper').appendChild(t);
-  setTimeout(() => {
-    t.style.opacity = '0';
-    t.style.transition = 'opacity 0.6s';
-    setTimeout(() => t.remove(), 600);
-  }, 4500);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.6s'; setTimeout(() => t.remove(), 600); }, 4500);
 }
 
 function updateHUD() {
@@ -870,24 +646,41 @@ function updateHUD() {
   $('wd-ui-shards').textContent = p.inv.shards;
   $('wd-ui-dodge').textContent = `${p.baseDodge}%`;
   $('wd-ui-luck').textContent = p.baseLuck;
-  if (state.dungeon.active) {
-    $('wd-ui-location').textContent = `${DUNGEONS[state.dungeon.type].name} E${state.dungeon.floor}`;
-  } else {
-    $('wd-ui-location').textContent = state.area ? AREAS[state.area].name : "Dorf";
-  }
+  if (state.dungeon.active) { $('wd-ui-location').textContent = `${DUNGEONS[state.dungeon.type].name} E${state.dungeon.floor}`; } 
+  else { $('wd-ui-location').textContent = state.area ? AREAS[state.area].name : "Dorf"; }
   $('wd-ui-sp').textContent = p.sp;
   $('wd-eq-weapon').innerHTML = p.eq.weapon ? `<div class="wd-eq-icon">${getWepEmoji(p.eq.weapon.name)}</div><div class="wd-eq-details"><h4 class="${p.eq.weapon.rarity}">${p.eq.weapon.name}</h4><p>+${p.eq.weapon.val} ATK</p></div>` : `<div class="wd-eq-icon">🗡️</div><div class="wd-eq-details"><h4>Waffe</h4><p>Nichts</p></div>`;
   $('wd-eq-armor').innerHTML = p.eq.armor ? `<div class="wd-eq-icon">${getArmEmoji(p.eq.armor.name)}</div><div class="wd-eq-details"><h4 class="${p.eq.armor.rarity}">${p.eq.armor.name}</h4><p>+${p.eq.armor.val} RÜS</p></div>` : `<div class="wd-eq-icon">🛡️</div><div class="wd-eq-details"><h4>Rüstung</h4><p>Nichts</p></div>`;
   $('wd-eq-trinket').innerHTML = p.eq.trinket ? `<div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="${p.eq.trinket.rarity}">${p.eq.trinket.name}</h4><p>${p.eq.trinket.desc}</p></div><button class="wd-mini-btn" style="margin-left:auto" onclick="unequipTrinket()">Ablegen</button>` : `<div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="r-artefact">Artefakt</h4><p>Leerer Sockel</p></div>`;
+  
   let fxHtml = '';
   if(p.fx.shield > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--rare)">Schild (${p.fx.shield})</span>`;
   if(p.fx.dodge > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--xp-glow)">Waldläufer-Ausw. (${p.fx.dodge})</span>`;
   if(p.fx.combo > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--hp-glow)">Combo (${p.fx.combo})</span>`;
   if(p.fx.bossBuff) fxHtml += `<span class="wd-effect-chip" style="color:var(--gold)">Boss-Segen</span>`;
+  
+  if(p.fx.poison > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--hp-glow); border-color:var(--hp-glow)">Vergiftet (${p.fx.poison})</span>`;
+  if(p.fx.stun > 0) fxHtml += `<span class="wd-effect-chip" style="color:#d4d4d8; border-color:#d4d4d8">Betäubt (${p.fx.stun})</span>`;
+  if(p.fx.weak > 0) fxHtml += `<span class="wd-effect-chip" style="color:#fcd34d; border-color:#fcd34d">Geschwächt (${p.fx.weak})</span>`;
+  if(p.fx.regen > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--xp-glow); border-color:var(--xp-glow)">Regeneration (${p.fx.regen})</span>`;
   $('wd-status-effects').innerHTML = fxHtml;
+
+  const eFxContainer = $('wd-enemy-effects');
+  if (eFxContainer) {
+      if (state.enemy && state.enemy.fx) {
+          let eFxHtml = '';
+          if(state.enemy.fx.poison > 0) eFxHtml += `<span class="wd-effect-chip" style="color:var(--hp-glow); font-size:0.65rem; border-color:var(--hp-glow)">Gift (${state.enemy.fx.poison})</span>`;
+          if(state.enemy.fx.stun > 0) eFxHtml += `<span class="wd-effect-chip" style="color:#d4d4d8; font-size:0.65rem; border-color:#d4d4d8">Stun (${state.enemy.fx.stun})</span>`;
+          if(state.enemy.fx.weak > 0) eFxHtml += `<span class="wd-effect-chip" style="color:#fcd34d; font-size:0.65rem; border-color:#fcd34d">Schwach (${state.enemy.fx.weak})</span>`;
+          if(state.enemy.fx.regen > 0) eFxHtml += `<span class="wd-effect-chip" style="color:var(--xp-glow); font-size:0.65rem; border-color:var(--xp-glow)">Regen (${state.enemy.fx.regen})</span>`;
+          eFxContainer.innerHTML = eFxHtml;
+      } else {
+          eFxContainer.innerHTML = '';
+      }
+  }
+
   renderQuests();
 
-  // UX Fix: Dungeon Fortschrittsleiste
   let dProg = $('wd-dungeon-progress');
   if (!dProg) {
       dProg = document.createElement('div');
@@ -900,59 +693,38 @@ function updateHUD() {
       let rMax = state.dungeon.roomsPerFloor;
       let rCur = Math.min(state.dungeon.roomsCleared + 1, rMax);
       dProg.innerHTML = `<strong style="color:var(--accent)">Ebene ${state.dungeon.floor}</strong> &nbsp;|&nbsp; Raum ${rCur} von ${rMax} ${state.dungeon.bossPending ? '<span style="color:var(--hp-glow)">(Boss)</span>' : ''}`;
-  } else {
-      dProg.style.display = 'none';
-  }
+  } else { dProg.style.display = 'none'; }
 
-  // --- Low Health Warning ---
   const arena = $('wd-visual-arena');
   const panel = $('wd-action-panel');
   if (state.enemy && p.hp > 0 && (p.hp / p.maxHp) <= 0.25) {
-    if(arena) arena.classList.add('wd-danger-pulse');
-    if(panel) panel.classList.add('wd-danger-pulse');
+    if(arena) arena.classList.add('wd-danger-pulse'); if(panel) panel.classList.add('wd-danger-pulse');
   } else {
-    if(arena) arena.classList.remove('wd-danger-pulse');
-    if(panel) panel.classList.remove('wd-danger-pulse');
+    if(arena) arena.classList.remove('wd-danger-pulse'); if(panel) panel.classList.remove('wd-danger-pulse');
   }
 }
 
-// Tech Fix: Log Container Limitierung
 function log(text, type='info') {
-  const c = $('wd-log-container');
-  const div = document.createElement('div');
-  div.className = `wd-log-entry wd-log-${type}`;
-  div.innerHTML = text;
-  c.appendChild(div);
-  
-  while (c.children.length > 80) {
-    c.removeChild(c.firstChild);
-  }
-  
-  c.scrollTop = c.scrollHeight;
+  const c = $('wd-log-container'); const div = document.createElement('div');
+  div.className = `wd-log-entry wd-log-${type}`; div.innerHTML = text; c.appendChild(div);
+  while (c.children.length > 80) c.removeChild(c.firstChild); c.scrollTop = c.scrollHeight;
 }
-
 function clearLog() { $('wd-log-container').innerHTML = ''; }
 
-// UX Fix: Button Animation bei Ressourcen-Mangel
+// UI Überarbeitung: Buttons unterstützen cssClass
 function setActions(buttons) {
-  const c = $('wd-action-panel');
-  c.innerHTML = '';
+  const c = $('wd-action-panel'); c.innerHTML = '';
   buttons.forEach(b => {
-    const btn = document.createElement('button');
-    btn.className = 'wd-btn';
+    const btn = document.createElement('button'); 
+    btn.className = 'wd-btn'; 
+    if (b.cssClass) btn.classList.add(b.cssClass);
     btn.disabled = b.disabled || state.lock;
-    
     btn.onclick = (e) => {
       if (b.cost !== undefined && b.current !== undefined && b.current < b.cost) {
-        playSound('error');
-        btn.classList.remove('wd-error-shake');
-        void btn.offsetWidth; 
-        btn.classList.add('wd-error-shake');
-        return;
+        playSound('error'); btn.classList.remove('wd-error-shake'); void btn.offsetWidth; btn.classList.add('wd-error-shake'); return;
       }
       if (b.onclick) b.onclick();
     };
-    
     btn.innerHTML = `<span class="wd-btn-main-text">${b.label}</span>${b.sub ? `<span class="wd-btn-sub-text">${b.sub}</span>` : ''}`;
     c.appendChild(btn);
   });
@@ -960,19 +732,63 @@ function setActions(buttons) {
 
 function showCombatStage(show) {
   $('wd-combat-stage').style.display = show ? 'flex' : 'none';
-  $('wd-arena-title').textContent = state.enemy ? state.enemy.n : (state.area ? (state.area==='Dungeon'?DUNGEONS[state.dungeon.type].name:AREAS[state.area].name) : "Dorfplatz");
+  const titleEl = $('wd-arena-title');
+  titleEl.textContent = state.enemy ? state.enemy.n : (state.area ? (state.area==='Dungeon'?DUNGEONS[state.dungeon.type].name:AREAS[state.area].name) : "Dorfplatz");
+  
+  if (state.enemy && (state.enemy.elite || state.enemy.boss)) {
+      titleEl.style.color = "var(--epic)";
+      titleEl.style.textShadow = "0 2px 15px rgba(192, 132, 252, 0.6)";
+  } else {
+      titleEl.style.color = "rgba(255,255,255,0.2)";
+      titleEl.style.textShadow = "0 2px 10px rgba(0,0,0,1)";
+  }
+
   if(show && state.enemy) {
     $('wd-ui-enemy-hp').textContent = `HP: ${Math.max(0, state.enemy.h)}/${state.enemy.maxH}`;
     $('wd-sprite-enemy').textContent = state.enemy.s;
+    
+    // Boss Animation aufräumen
+    let el = $('wd-sprite-enemy');
+    if(state.enemy.boss && state.enemy.phase === 2) el.classList.add('wd-boss-phase-2');
+    else el.classList.remove('wd-boss-phase-2');
+    
     $('wd-sprite-hero').textContent = CLASSES[p.cls].avatar;
   }
+}
+
+function showMainMenu() {
+  $('wd-overlay').style.display = 'flex';
+  $('wd-overlay-content').innerHTML = `
+    <div id="wd-menu-screen">
+      <div class="wd-menu-header">
+        <h1 class="wd-menu-title">Web Dungeons</h1>
+        <h2 class="wd-menu-subtitle">ECLIPSE</h2>
+        <div class="wd-menu-divider"></div>
+      </div>
+      <div class="wd-menu-body">
+        <p class="wd-menu-quote">Trotze der Dunkelheit. Sammle Artefakte. Überlebe.</p>
+        <div class="wd-menu-actions">
+          <button class="wd-menu-btn" onclick="initGame()">
+            <span class="wd-icon">⚔️</span>
+            <span class="wd-menu-btn-text">Neues Spiel</span>
+          </button>
+          <button class="wd-menu-btn" onclick="loadGame()">
+            <span class="wd-icon">📂</span>
+            <span class="wd-menu-btn-text">Spiel laden</span>
+          </button>
+        </div>
+      </div>
+      <div class="wd-menu-footer">
+        <p>Web Dungeons v0.5 | Eclipse v1.3 | © 2024 CodetNiemalsHigh</p>
+      </div>
+    </div>
+  `;
 }
 
 function initGame() {
   $('wd-overlay').style.display = 'none'; p = null; state.area = null; state.enemy = null; state.selectedSkill = null;
   clearLog(); showCombatStage(false); $('wd-arena-title').textContent = "Web Dungeons: Eclipse";
   
-  // UX Fix: Erweitertes Onboarding
   log("Willkommen bei Web Dungeons: Eclipse!", "magic");
   log("Erkunde finstere Verliese, rüste dich mit epischen Artefakten aus und meistere deinen Talentbaum.", "info");
   log("Der Tod ist nicht das Ende, sondern macht dich stärker. Wähle nun deinen Weg:", "warn");
@@ -994,31 +810,23 @@ function createPlayer(cls, existingPrestige = null, preserveName = null) {
   p = {
     name, cls, lvl: 1, xp: 0, maxXp: 100, sp: 0, gold: 90,
     hp: maxHpBase, maxHp: maxHpBase, mp: c.maxMp, maxMp: c.maxMp, 
-    baseAtk: c.baseAtk + baseAtkBonus, baseDef: 0,
-    baseDodge: 0, baseLuck: 0,
+    baseAtk: c.baseAtk + baseAtkBonus, baseDef: 0, baseDodge: 0, baseLuck: 0,
     eq: { 
       weapon: { id: makeId('w'), type: 'weapon', name: c.defW, val: c.defDmg, rarity: 'r-common', sell: calculateSellValue(c.defDmg, 'r-common', 'weapon') }, 
       armor: { id: makeId('a'), type: 'armor', name: c.defA, val: c.defDef, rarity: 'r-common', sell: calculateSellValue(c.defDef, 'r-common', 'armor') }, 
       trinket: null 
     },
     inv: { weapons: [], armors: [], trinkets: [], potions: { hp: 2, mp: 1 }, chests: { wooden: 1, iron: 0, mystic: 0 }, shards: 0 },
-    fx: { shield: 0, dodge: 0, combo: 0, bossBuff: false },
-    talents: {}, quest: null, runStats: { kills: 0 },
-    prestige: prestige
+    fx: { shield: 0, dodge: 0, combo: 0, bossBuff: false, poison: 0, poisonDmg: 0, stun: 0, weak: 0, regen: 0, regenHeal: 0 },
+    talents: {}, quest: null, runStats: { kills: 0 }, prestige: prestige
   };
   
-  if (name === "CodetNiemalsHigh") {
-    p.gold = 99999999;
-    p.inv.chests = { wooden: 50, iron: 50, mystic: 50 };
-  }
+  if (name === "CodetNiemalsHigh") { p.gold = 99999999; p.inv.chests = { wooden: 50, iron: 50, mystic: 50 }; }
   p.inv.weapons.push(p.eq.weapon); p.inv.armors.push(p.eq.armor);
   state.discovery = { weapons: [p.eq.weapon.name], armors: [p.eq.armor.name] };
   state.selectedSkill = "t_hp1"; 
   generateQuestBoard(); playSound('magic');
   log(`Die Reise beginnt, ${name} der ${cls}.`, "good");
-  if (name === "CodetNiemalsHigh") {
-    log("Götter-Modus aktiviert: Die Kassen sind voll und die Truhen bersten!", "magic");
-  }
   goToTown();
 }
 function goToTown() {
@@ -1032,64 +840,26 @@ function goToTown() {
     { label: "⚖️ Händlerviertel", sub: "Schmied & Alchemist", onclick: openShopMenu },
     { label: "📜 Questbrett", sub: "Aufträge annehmen", onclick: () => switchTab('wd-tab-quests', document.querySelectorAll('.wd-tab-btn')[3]) }
   ];
-
-  if (p.lvl >= 25 || (p.prestige && p.prestige.level > 0)) {
-    actions.push({ label: "🌌 Astral-Altar", sub: "Wiedergeburt", onclick: showPrestigeMenu });
-  }
-
+  if (p.lvl >= 25 || (p.prestige && p.prestige.level > 0)) { actions.push({ label: "🌌 Astral-Altar", sub: "Wiedergeburt", onclick: showPrestigeMenu }); }
   setActions(actions);
 }
 
 function showPrestigeMenu() {
-  clearLog();
-  log("Der Astral-Altar summt vor kosmischer Energie. Hier kannst du deine weltliche Macht für permanenten Astralstaub opfern.", "magic");
-  
-  const canPrestige = p.lvl >= 25;
-  const dustReward = 5; 
-
+  clearLog(); log("Der Astral-Altar summt vor kosmischer Energie. Hier kannst du deine weltliche Macht für permanenten Astralstaub opfern.", "magic");
+  const canPrestige = p.lvl >= 25; const dustReward = 5; 
   setActions([
-    { 
-      label: "Wiedergeburt", 
-      sub: canPrestige ? `+${dustReward} Astralstaub` : "Ab Lvl 25", 
-      disabled: !canPrestige, 
-      onclick: () => doPrestige(dustReward) 
-    },
+    { label: "Wiedergeburt", sub: canPrestige ? `+${dustReward} Astralstaub` : "Ab Lvl 25", disabled: !canPrestige, onclick: () => doPrestige(dustReward) },
     { label: "Erfahrungs-Echo", sub: `1 Staub (+10% XP) [Lvl ${p.prestige.buffs.xp}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('xp') },
     { label: "Goldsog", sub: `1 Staub (+10% Gold) [Lvl ${p.prestige.buffs.gold}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('gold') },
     { label: "Macht des Kosmos", sub: `1 Staub (+15 HP, +2 ATK) [Lvl ${p.prestige.buffs.stats}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('stats') },
     { label: "Zurück", sub: "Zum Dorfplatz", onclick: goToTown }
   ]);
 }
-
-function buyPrestigeBuff(type) {
-  p.prestige.dust -= 1;
-  p.prestige.buffs[type] += 1;
-  
-  if (type === 'stats') {
-      p.maxHp += 15;
-      p.hp += 15;
-      p.baseAtk += 2;
-  }
-  
-  playSound('level');
-  updateHUD();
-  log(`Permanenter Buff verstärkt! Deine Macht überdauert den Tod.`, "magic");
-  showPrestigeMenu();
-}
-
+function buyPrestigeBuff(type) { p.prestige.dust -= 1; p.prestige.buffs[type] += 1; if (type === 'stats') { p.maxHp += 15; p.hp += 15; p.baseAtk += 2; } playSound('level'); updateHUD(); log(`Permanenter Buff verstärkt! Deine Macht überdauert den Tod.`, "magic"); showPrestigeMenu(); }
 function doPrestige(dustReward) {
   if(!confirm("WARNUNG: Du verlierst dein aktuelles Level, Gold, Inventar und Ausrüstung! Deine permanenten Buffs und dein Astralstaub bleiben erhalten. Fortfahren?")) return;
-  
-  playSound('magic');
-  const savedPrestige = JSON.parse(JSON.stringify(p.prestige));
-  savedPrestige.dust += dustReward;
-  savedPrestige.level += 1;
-  
-  const clsName = p.cls;
-  const pName = p.name;
-  createPlayer(clsName, savedPrestige, pName); 
-  
-  log(`WIEDERGEBURT ERFOLGREICH! Du startest neu, aber mächtiger als zuvor. (+${dustReward} Astralstaub)`, "warn");
+  playSound('magic'); const savedPrestige = JSON.parse(JSON.stringify(p.prestige)); savedPrestige.dust += dustReward; savedPrestige.level += 1;
+  createPlayer(p.cls, savedPrestige, p.name); log(`WIEDERGEBURT ERFOLGREICH! Du startest neu, aber mächtiger als zuvor. (+${dustReward} Astralstaub)`, "warn");
 }
 
 function showExpeditionSelection() {
@@ -1122,78 +892,35 @@ function openShopMenu() {
     { label: "Zurück", sub: "Zum Dorfplatz", onclick: goToTown }
   ]);
 }
-function visitBlacksmith() {
-  const acts = SHOP_WEAPONS[p.cls].map(o => ({ label: `${o.name} (+${o.dmg})`, sub: `${o.cost} G`, current: p.gold, cost: o.cost, onclick: () => buyGear(o, 'weapon') }));
-  acts.push({ label: "Zurück", sub: "Zum Marktplatz", onclick: openShopMenu }); setActions(acts);
-}
-function visitArmorer() {
-  const acts = SHOP_ARMORS[p.cls].map(o => ({ label: `${o.name} (+${o.def})`, sub: `${o.cost} G`, current: p.gold, cost: o.cost, onclick: () => buyGear(o, 'armor') }));
-  acts.push({ label: "Zurück", sub: "Zum Marktplatz", onclick: openShopMenu }); setActions(acts);
-}
-
+function visitBlacksmith() { const acts = SHOP_WEAPONS[p.cls].map(o => ({ label: `${o.name} (+${o.dmg})`, sub: `${o.cost} G`, current: p.gold, cost: o.cost, onclick: () => buyGear(o, 'weapon') })); acts.push({ label: "Zurück", sub: "Zum Marktplatz", onclick: openShopMenu }); setActions(acts); }
+function visitArmorer() { const acts = SHOP_ARMORS[p.cls].map(o => ({ label: `${o.name} (+${o.def})`, sub: `${o.cost} G`, current: p.gold, cost: o.cost, onclick: () => buyGear(o, 'armor') })); acts.push({ label: "Zurück", sub: "Zum Marktplatz", onclick: openShopMenu }); setActions(acts); }
 function visitForge() {
   clearLog(); log(`Die magischen Flammen der Arkanschmiede benötigen Splitter. Du besitzt ${p.inv.shards}.`, "magic");
-  const wCost = Math.floor(p.eq.weapon.val * 1.5) + 5;
-  const aCost = Math.floor(p.eq.armor.val * 1.5) + 5;
-  const wBonus = Math.max(2, Math.floor(p.eq.weapon.val * 0.15));
-  const aBonus = Math.max(1, Math.floor(p.eq.armor.val * 0.15));
+  const wCost = Math.floor(p.eq.weapon.val * 1.5) + 5; const aCost = Math.floor(p.eq.armor.val * 1.5) + 5;
+  const wBonus = Math.max(2, Math.floor(p.eq.weapon.val * 0.15)); const aBonus = Math.max(1, Math.floor(p.eq.armor.val * 0.15));
   setActions([
     { label: "Waffe aufwerten", sub: `${wCost} Splitter (+${wBonus} ATK)`, current: p.inv.shards, cost: wCost, onclick: () => upgradeGear('weapon', wCost, wBonus) },
     { label: "Rüstung aufwerten", sub: `${aCost} Splitter (+${aBonus} RÜS)`, current: p.inv.shards, cost: aCost, onclick: () => upgradeGear('armor', aCost, aBonus) },
     { label: "Zurück", sub: "Zum Marktplatz", onclick: openShopMenu }
   ]);
 }
-
 function upgradeGear(type, cost, bonus) {
-  if(p.inv.shards < cost) return;
-  p.inv.shards -= cost;
-  playSound('level');
-  
+  if(p.inv.shards < cost) return; p.inv.shards -= cost; playSound('level');
   if(type === 'weapon') {
-      p.eq.weapon.val += bonus;
-      p.eq.weapon.name = p.eq.weapon.name.includes('+') ? p.eq.weapon.name.replace(/\+\d+/, `+${parseInt(p.eq.weapon.name.match(/\+(\d+)/)[1]) + 1}`) : p.eq.weapon.name + ' +1';
-      p.eq.weapon.sell = calculateSellValue(p.eq.weapon.val, p.eq.weapon.rarity, 'weapon');
-      
-      let invItem = p.inv.weapons.find(i => i.id === p.eq.weapon.id);
-      if (invItem && invItem !== p.eq.weapon) {
-          invItem.val = p.eq.weapon.val;
-          invItem.name = p.eq.weapon.name;
-          invItem.sell = p.eq.weapon.sell;
-      }
-      
+      p.eq.weapon.val += bonus; p.eq.weapon.name = p.eq.weapon.name.includes('+') ? p.eq.weapon.name.replace(/\+\d+/, `+${parseInt(p.eq.weapon.name.match(/\+(\d+)/)[1]) + 1}`) : p.eq.weapon.name + ' +1'; p.eq.weapon.sell = calculateSellValue(p.eq.weapon.val, p.eq.weapon.rarity, 'weapon');
+      let invItem = p.inv.weapons.find(i => i.id === p.eq.weapon.id); if (invItem && invItem !== p.eq.weapon) { invItem.val = p.eq.weapon.val; invItem.name = p.eq.weapon.name; invItem.sell = p.eq.weapon.sell; }
       log(`${p.eq.weapon.name} glüht vor Energie!`, "good");
   } else {
-      p.eq.armor.val += bonus;
-      p.eq.armor.name = p.eq.armor.name.includes('+') ? p.eq.armor.name.replace(/\+\d+/, `+${parseInt(p.eq.armor.name.match(/\+(\d+)/)[1]) + 1}`) : p.eq.armor.name + ' +1';
-      p.eq.armor.sell = calculateSellValue(p.eq.armor.val, p.eq.armor.rarity, 'armor');
-      
-      let invItem = p.inv.armors.find(i => i.id === p.eq.armor.id);
-      if (invItem && invItem !== p.eq.armor) {
-          invItem.val = p.eq.armor.val;
-          invItem.name = p.eq.armor.name;
-          invItem.sell = p.eq.armor.sell;
-      }
-      
+      p.eq.armor.val += bonus; p.eq.armor.name = p.eq.armor.name.includes('+') ? p.eq.armor.name.replace(/\+\d+/, `+${parseInt(p.eq.armor.name.match(/\+(\d+)/)[1]) + 1}`) : p.eq.armor.name + ' +1'; p.eq.armor.sell = calculateSellValue(p.eq.armor.val, p.eq.armor.rarity, 'armor');
+      let invItem = p.inv.armors.find(i => i.id === p.eq.armor.id); if (invItem && invItem !== p.eq.armor) { invItem.val = p.eq.armor.val; invItem.name = p.eq.armor.name; invItem.sell = p.eq.armor.sell; }
       log(`${p.eq.armor.name} glüht vor Energie!`, "good");
   }
-  updateHUD();
-  visitForge();
+  updateHUD(); visitForge();
 }
-
 function buyGear(item, type) {
-  if (p.gold < item.cost) { return; } 
-  playSound('coin'); p.gold -= item.cost;
-  if(type === 'weapon') { 
-    const w = { id: makeId('w'), type: 'weapon', name: item.name, val: item.dmg, rarity: 'r-shop', sell: calculateSellValue(item.dmg, 'r-shop', 'weapon') };
-    p.inv.weapons.unshift(w); 
-    p.eq.weapon = JSON.parse(JSON.stringify(w)); // Tech Fix: Deep Copy
-    discover('weapons', w.name);
-  } else { 
-    const a = { id: makeId('a'), type: 'armor', name: item.name, val: item.def, rarity: 'r-shop', sell: calculateSellValue(item.def, 'r-shop', 'armor') };
-    p.inv.armors.unshift(a); 
-    p.eq.armor = JSON.parse(JSON.stringify(a)); // Tech Fix: Deep Copy
-    discover('armors', a.name);
-  }
+  if (p.gold < item.cost) return; playSound('coin'); p.gold -= item.cost;
+  if(type === 'weapon') { const w = { id: makeId('w'), type: 'weapon', name: item.name, val: item.dmg, rarity: 'r-shop', sell: calculateSellValue(item.dmg, 'r-shop', 'weapon') }; p.inv.weapons.unshift(w); p.eq.weapon = JSON.parse(JSON.stringify(w)); discover('weapons', w.name); } 
+  else { const a = { id: makeId('a'), type: 'armor', name: item.name, val: item.def, rarity: 'r-shop', sell: calculateSellValue(item.def, 'r-shop', 'armor') }; p.inv.armors.unshift(a); p.eq.armor = JSON.parse(JSON.stringify(a)); discover('armors', a.name); }
   log(`${item.name} gekauft und ausgerüstet.`, "good"); updateHUD(); type === 'weapon' ? visitBlacksmith() : visitArmorer();
 }
 function visitAlchemist() {
@@ -1207,8 +934,7 @@ function visitAlchemist() {
   ]);
 }
 function buyItem(type, cost) {
-  if (p.gold < cost) { return; }
-  playSound('coin'); p.gold -= cost;
+  if (p.gold < cost) return; playSound('coin'); p.gold -= cost;
   if(type === 'hp') { p.inv.potions.hp++; log("Heiltrank gekauft.", "good"); }
   else if(type === 'mp') { p.inv.potions.mp++; log("Manatrank gekauft.", "good"); }
   else { p.inv.chests[type]++; log(`${CHEST_DEFS[type].label} gekauft.`, "magic"); playSound('magic'); }
@@ -1223,8 +949,7 @@ function visitTavern() {
   ]);
 }
 function tavernRest(cost, pct) {
-  if (p.gold < cost) { return; }
-  playSound('heal'); p.gold -= cost; p.hp = Math.min(p.maxHp, p.hp + Math.floor(p.maxHp*pct)); p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp*pct));
+  if (p.gold < cost) return; playSound('heal'); p.gold -= cost; p.hp = Math.min(p.maxHp, p.hp + Math.floor(p.maxHp*pct)); p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp*pct));
   log("Wunden geheilt.", "good"); updateHUD(); visitTavern();
 }
 function startExploration(area) {
@@ -1243,175 +968,273 @@ async function resolveRoom(dangerMult) {
   if(state.lock) return; state.lock = true; setActions([]); log("Du gehst tiefer...", "muted"); await sleep(400);
   const roll = Math.random(); const combatChance = 0.5 * dangerMult;
   if (roll < combatChance) { spawnEnemy(dangerMult); }
-  else if (roll < combatChance + 0.05) { 
-    playSound('magic'); p.inv.chests[Math.random()<0.1?'mystic':(Math.random()<0.4?'iron':'wooden')]++; 
-    log("Truhe gefunden!", "magic"); await sleep(800); state.lock = false; enterRoom(); 
-  }
-  else if (roll < combatChance + 0.25) { 
-    playSound('hurt'); visualDamage('hero', 0, false); 
-    const dmg=Math.floor(rand(10,25)*dangerMult); p.hp-=dmg; log(`Falle! ${dmg} Schaden.`, "bad"); checkDeath(); 
-    if(p.hp>0){await sleep(800); state.lock=false; enterRoom();} 
-  }
-  else { 
-    playSound('heal'); const heal=Math.floor(p.maxHp*0.2); p.hp=Math.min(p.maxHp,p.hp+heal); p.mp=Math.min(p.maxMp,p.mp+Math.floor(p.maxMp*0.2)); 
-    log(`Rast: +${heal} HP/MP.`, "good"); await sleep(800); state.lock=false; enterRoom(); 
-  }
+  else if (roll < combatChance + 0.05) { playSound('magic'); p.inv.chests[Math.random()<0.1?'mystic':(Math.random()<0.4?'iron':'wooden')]++; log("Truhe gefunden!", "magic"); await sleep(800); state.lock = false; enterRoom(); }
+  else if (roll < combatChance + 0.25) { playSound('hurt'); visualDamage('hero', 0, false); const dmg=Math.floor(rand(10,25)*dangerMult); p.hp-=dmg; log(`Falle! ${dmg} Schaden.`, "bad"); checkDeath(); if(p.hp>0){await sleep(800); state.lock=false; enterRoom();} }
+  else { playSound('heal'); const heal=Math.floor(p.maxHp*0.2); p.hp=Math.min(p.maxHp,p.hp+heal); p.mp=Math.min(p.maxMp,p.mp+Math.floor(p.maxMp*0.2)); log(`Rast: +${heal} HP/MP.`, "good"); await sleep(800); state.lock=false; enterRoom(); }
 }
 function startDungeonRun(type) {
   state.area = 'Dungeon'; 
-  state.dungeon = { 
-    active: true, 
-    type: type, 
-    floor: 1, 
-    roomsCleared: 0, 
-    roomsPerFloor: 3, 
-    bossPending: false, 
-    rests: 1,
-    firstEnemyDefeated: false
-  };
+  state.dungeon = { active: true, type: type, floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false };
   clearLog(); log(`Du betrittst ${DUNGEONS[type].name}. Das Feuer brennt, aber du findest erst Ruhe, wenn der erste Feind bezwungen ist!`, "warn");
   showDungeonMenu();
 }
 function showDungeonMenu() {
   updateHUD(); showCombatStage(false); const d = state.dungeon; const acts = [];
-  if (d.bossPending) {
-    log(`Das Tor zum Boss liegt vor dir.`, "bad");
-    acts.push({ label: "Boss-Tor öffnen", sub: "Bereite dich vor", onclick: () => spawnEnemy(1.2, true) });
-  } else {
-    log(`Ebene ${d.floor} · Räume geklärt: ${d.roomsCleared} / ${d.roomsPerFloor}`, "info");
-    acts.push({ label: "Nächster Raum (Kampf)", sub: "Gegner besiegen, um voranzukommen", onclick: triggerDungeonRoom });
-  }
-  
+  if (d.bossPending) { log(`Das Tor zum Boss liegt vor dir.`, "bad"); acts.push({ label: "Boss-Tor öffnen", sub: "Bereite dich vor", onclick: () => spawnEnemy(1.2, true) }); } 
+  else { log(`Ebene ${d.floor} · Räume geklärt: ${d.roomsCleared} / ${d.roomsPerFloor}`, "info"); acts.push({ label: "Nächster Raum (Kampf)", sub: "Gegner besiegen, um voranzukommen", onclick: triggerDungeonRoom }); }
   const canRest = d.rests > 0 && d.firstEnemyDefeated;
-  acts.push({ 
-    label: "Am Feuer rasten", 
-    sub: d.firstEnemyDefeated ? `+20% HP/MP (${d.rests} übrig)` : "Erst Gegner besiegen!", 
-    disabled: !canRest, 
-    onclick: dungeonRest 
-  });
-  
-  acts.push({ label: "Dungeon verlassen", sub: "Zurück ins Dorf", onclick: goToTown });
-  setActions(acts);
+  acts.push({ label: "Am Feuer rasten", sub: d.firstEnemyDefeated ? `+20% HP/MP (${d.rests} übrig)` : "Erst Gegner besiegen!", disabled: !canRest, onclick: dungeonRest });
+  acts.push({ label: "Dungeon verlassen", sub: "Zurück ins Dorf", onclick: goToTown }); setActions(acts);
 }
 async function triggerDungeonRoom() {
   if(state.lock) return; state.lock = true; setActions([]); log("Eine schwere Eisentür öffnet sich...", "muted"); await sleep(400); spawnEnemy(1 + state.dungeon.floor * 0.1);
 }
 function dungeonRest() {
   if(!state.dungeon.firstEnemyDefeated || state.dungeon.rests <= 0) return; 
-  state.dungeon.rests--; playSound('heal');
-  p.hp = Math.min(p.maxHp, p.hp + Math.floor(p.maxHp * 0.2)); p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp * 0.2));
+  state.dungeon.rests--; playSound('heal'); p.hp = Math.min(p.maxHp, p.hp + Math.floor(p.maxHp * 0.2)); p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp * 0.2));
   log("Du rastest kurz am Feuer.", "good"); updateHUD(); showDungeonMenu();
 }
+
 function spawnEnemy(mult, forceBoss=false) {
   let isBoss = forceBoss; let t; let diff = 1; let lootMult = 1; const levelScale = 1 + (p.lvl * 0.05);
-  if(isBoss && state.area === 'Dungeon') { t = DUNGEONS[state.dungeon.type].boss; diff = DUNGEONS[state.dungeon.type].diff + (state.dungeon.floor * 0.2); lootMult = DUNGEONS[state.dungeon.type].loot; } 
-  else { diff = state.area === 'Dungeon' ? DUNGEONS[state.dungeon.type].diff + (state.dungeon.floor*0.1) : AREAS[state.area].diff; lootMult = state.area === 'Dungeon' ? DUNGEONS[state.dungeon.type].loot : 1; const pool = state.area === 'Dungeon' ? DUNGEON_ENEMIES : AREAS[state.area].enemies; t = pool[rand(0, pool.length-1)]; }
-  const h = Math.floor(t.h * diff * mult * levelScale); const a = Math.floor(t.a * diff * mult * levelScale);
-  const xpLevelScale = 1 + (p.lvl * 0.15); const xp = Math.floor((t.xp || 20) * Math.pow(diff, 1.3) * mult * (isBoss ? 5 : 1) * xpLevelScale);
   
-  state.enemy = { n: (isBoss?"BOSS: ":"")+t.n, s: t.s, h, maxH: h, a, xp, boss: isBoss, lootMult };
+  let isElite = false; let isMedium = false;
+  if (!isBoss) {
+      let r = Math.random();
+      if (r < 0.10) isElite = true; else if (r < 0.40) isMedium = true;
+  }
+
+  if(isBoss && state.area === 'Dungeon') { 
+      t = Object.assign({}, DUNGEONS[state.dungeon.type].boss); 
+      diff = DUNGEONS[state.dungeon.type].diff + (state.dungeon.floor * 0.2); 
+      lootMult = DUNGEONS[state.dungeon.type].loot; 
+  } else { 
+      diff = state.area === 'Dungeon' ? DUNGEONS[state.dungeon.type].diff + (state.dungeon.floor*0.1) : AREAS[state.area].diff; 
+      lootMult = state.area === 'Dungeon' ? DUNGEONS[state.dungeon.type].loot : 1; 
+      const pool = state.area === 'Dungeon' ? DUNGEON_ENEMIES : AREAS[state.area].enemies; 
+      t = Object.assign({}, pool[rand(0, pool.length-1)]); 
+  }
+  
+  if (isElite) { t.n = "Elite-" + t.n; mult *= 1.4; lootMult *= 2.0; } else if (isMedium) { mult *= 1.1; lootMult *= 1.2; }
+
+  const h = Math.floor(t.h * diff * mult * levelScale); const a = Math.floor(t.a * diff * mult * levelScale);
+  let xp = Math.floor((t.xp || 20) * Math.pow(diff, 1.3) * mult * (isBoss ? 5 : (isElite ? 2.5 : 1)) * (1 + (p.lvl * 0.15)));
+  
+  // Kampff-Zusammenfassung & Boss Phase initialisieren
+  state.combatStats = { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 };
+
+  state.enemy = { 
+    n: (isBoss?"BOSS: ":"")+t.n, s: t.s, h, maxH: h, a, xp, boss: isBoss, elite: isElite, phase: 1, lootMult, 
+    fx: { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }, cooldowns: {}, abilities: []
+  };
+
+  let areaKey = state.area || 'Dungeon';
+  let abilityPool = AREA_ABILITIES[areaKey] || AREA_ABILITIES['Dungeon'];
+  if (isBoss || isElite) {
+      let a1 = abilityPool[rand(0, abilityPool.length-1)]; let a2 = abilityPool[rand(0, abilityPool.length-1)];
+      while(a1 === a2 && abilityPool.length > 1) a2 = abilityPool[rand(0, abilityPool.length-1)];
+      state.enemy.abilities = [a1, a2];
+  } else if (isMedium) {
+      state.enemy.abilities = [abilityPool[rand(0, abilityPool.length-1)]];
+  }
 
   if (state.area === 'Dungeon' && state.dungeon.type === 'D4') {
-    const mutator = MUTATORS[rand(0, MUTATORS.length - 1)];
-    state.enemy.mutator = mutator;
-    state.enemy.n = `[${mutator.name}] ${state.enemy.n}`;
-    
-    if (mutator.id === 'brute') {
-      state.enemy.maxH = Math.floor(state.enemy.maxH * 1.5);
-      state.enemy.h = state.enemy.maxH;
-    }
-    if (mutator.id === 'frenzy') {
-      state.enemy.a = Math.floor(state.enemy.a * 1.3);
-    }
+    const mutator = MUTATORS[rand(0, MUTATORS.length - 1)]; state.enemy.mutator = mutator; state.enemy.n = `[${mutator.name}] ${state.enemy.n}`;
+    if (mutator.id === 'brute') { state.enemy.maxH = Math.floor(state.enemy.maxH * 1.5); state.enemy.h = state.enemy.maxH; }
+    if (mutator.id === 'frenzy') { state.enemy.a = Math.floor(state.enemy.a * 1.3); }
     log(`Mahlstrom-Effekt aktiv: ${mutator.desc}`, "magic");
   }
 
-  log(`${state.enemy.n} greift an!`, "bad"); showCombatStage(true); state.lock = false; renderCombatActions();
+  log(`${state.enemy.n} greift an! ${isElite ? '(Gefährlich)' : ''}`, "bad"); showCombatStage(true); state.lock = false; renderCombatActions();
 }
+
 function renderCombatActions() {
   const c = CLASSES[p.cls];
   setActions([
-    { label: "Angriff", sub: "Standard", onclick: () => doAttack('basic') },
-    { label: c.skill, sub: `${c.cost} MP`, current: p.mp, cost: c.cost, onclick: () => doAttack('skill') },
-    { label: c.ult, sub: `${c.uCost} MP`, current: p.mp, cost: c.uCost, onclick: () => doAttack('ult') },
+    // UX Fix: Neue CSS Klassen für farbige und große Buttons
+    { label: "Angriff", sub: "Standard", cssClass: "atk-btn", onclick: () => doAttack('basic') },
+    { label: c.skill, sub: `${c.cost} MP`, current: p.mp, cost: c.cost, cssClass: "skill-btn", onclick: () => doAttack('skill') },
+    { label: c.ult, sub: `${c.uCost} MP`, current: p.mp, cost: c.uCost, cssClass: "ult-btn", onclick: () => doAttack('ult') },
     { label: "Trank", sub: `${p.inv.potions.hp}x HP`, disabled: p.inv.potions.hp <= 0, onclick: () => usePotion('hp') },
     { label: "Fliehen", sub: "50% Chance", disabled: state.enemy.boss, onclick: tryFlee }
   ]);
   updateHUD();
-
-  // UX Fix: Onboarding Toast
-  if (!state.firstCombatHintShown) {
-     state.firstCombatHintShown = true;
-     showToast("Tipp: Nutze deine Klassenfähigkeit, sobald du genug Mana hast!");
-  }
+  if (!state.firstCombatHintShown) { state.firstCombatHintShown = true; showToast("Tipp: Nutze deine Klassenfähigkeit, sobald du genug Mana hast!"); }
 }
+
 async function tryFlee() {
   if(state.lock) return; state.lock = true; log("Fluchtversuch...", "info"); await sleep(400);
   if(Math.random() < 0.5) { log("Erfolgreich entkommen!", "good"); state.enemy = null; state.lock = false; updateHUD(); if(state.dungeon.active) showDungeonMenu(); else enterRoom(); } 
   else { log("Flucht fehlgeschlagen! Der Gegner schlägt zu.", "bad"); await sleep(400); enemyTurn(); }
 }
+
+// Boss-Phasen Check
+async function checkBossPhase() {
+    if (state.enemy && state.enemy.boss && state.enemy.phase === 1 && state.enemy.h > 0 && state.enemy.h <= state.enemy.maxH * 0.5) {
+        state.enemy.phase = 2;
+        state.enemy.a = Math.floor(state.enemy.a * 1.5);
+        state.enemy.fx.poison = 0; state.enemy.fx.weak = 0; state.enemy.fx.stun = 0;
+        
+        playSound('death');
+        
+        let arena = $('wd-visual-arena');
+        if (arena) { arena.classList.remove('wd-error-shake'); void arena.offsetWidth; arena.classList.add('wd-error-shake'); }
+        
+        let el = $('wd-sprite-enemy');
+        if (el) { el.classList.remove('wd-anim-hurt'); void el.offsetWidth; el.classList.add('wd-boss-phase-2'); }
+        
+        log(`Der Boss brüllt wütend! Seine Macht wächst!`, "bad");
+        updateHUD(); await sleep(1000);
+    }
+}
+
+async function tickEffects(entity, isPlayer) {
+  if (!entity) return false; let died = false;
+  if (entity.fx.poison > 0) {
+    let dmg = entity.fx.poisonDmg || 5;
+    if(isPlayer) { p.hp -= dmg; state.combatStats.dmgTaken += dmg; } else { state.enemy.h -= dmg; state.combatStats.dmgDealt += dmg; }
+    visualDamage(isPlayer ? 'hero' : 'enemy', dmg, false);
+    log(`${isPlayer ? 'Du erleidest' : state.enemy.n + ' erleidet'} ${dmg} Giftschaden.`, "bad");
+    entity.fx.poison--;
+    
+    if (!isPlayer) await checkBossPhase();
+    
+    if ((isPlayer && p.hp <= 0) || (!isPlayer && state.enemy.h <= 0)) died = true;
+    await sleep(400);
+  }
+  if (entity.fx.regen > 0 && !died) {
+    let heal = entity.fx.regenHeal || 5;
+    if(isPlayer) p.hp = Math.min(p.maxHp, p.hp + heal); else state.enemy.h = Math.min(state.enemy.maxH, state.enemy.h + heal);
+    log(`${isPlayer ? 'Du heilst' : state.enemy.n + ' heilt'} ${heal} HP durch Regeneration.`, "good");
+    playSound('heal'); visualDamage(isPlayer ? 'hero' : 'enemy', -heal, false);
+    entity.fx.regen--; await sleep(400);
+  }
+  updateHUD(); return died;
+}
+
 async function doAttack(type) {
   if(state.lock) return; state.lock = true; const c = CLASSES[p.cls];
+  
+  if (await tickEffects(p, true)) { checkDeath(); return; }
+  
+  if (p.fx.stun > 0) { p.fx.stun--; log("Du bist betäubt und setzt aus!", "bad"); updateHUD(); await sleep(800); await enemyTurn(); return; }
+
   let dmg = p.baseAtk + (p.eq.weapon ? p.eq.weapon.val : 0);
+  if (p.fx.weak > 0) { dmg = Math.floor(dmg * 0.7); p.fx.weak--; }
+
   let luckCritBonus = p.baseLuck * 0.005; 
   let critChance = c.crit + (p.eq.trinket && p.eq.trinket.effect==='crit' ? 0.2 : 0) + (p.fx.combo*0.05) + luckCritBonus;
   let isCrit = Math.random() < critChance;
+  
   if(type === 'skill') { p.mp -= c.cost; dmg = Math.floor(dmg * 1.5); }
   if(type === 'ult') { 
-    p.mp -= c.uCost; 
-    dmg = Math.floor(dmg * 2.8); 
+    p.mp -= c.uCost; dmg = Math.floor(dmg * 2.8); 
     if(p.fx.bossBuff && state.enemy.boss) { dmg=Math.floor(dmg*1.3); p.fx.bossBuff=false; log("Boss-Segen!","magic"); playSound('magic'); }
     progressQuest('ult');
   }
   if(isCrit) dmg = Math.floor(dmg * 1.8);
-  if(p.cls==='Ritter' && type==='skill') p.fx.shield=2; if(p.cls==='Schurke') p.fx.combo=Math.min(3,p.fx.combo+1); if(p.cls==='Waldläufer' && type==='skill') p.fx.dodge=1;
+  
+  if(p.cls==='Ritter' && type==='skill') p.fx.shield=2; 
+  if(p.cls==='Schurke') p.fx.combo=Math.min(3,p.fx.combo+1); 
+  if(p.cls==='Waldläufer' && type==='skill') p.fx.dodge=1;
+  
+  if (p.cls === 'Schurke' && isCrit) { state.enemy.fx.poison = 3; state.enemy.fx.poisonDmg = Math.floor(p.lvl * 1.5) + 2; log("Schurke: Gegner vergiftet!", "magic"); }
+  if (p.cls === 'Magier' && type === 'ult') { state.enemy.fx.stun = 1; log("Magier: Gegner betäubt!", "magic"); }
+  if (p.cls === 'Ritter' && type === 'skill') { state.enemy.fx.weak = 2; log("Ritter: Gegner geschwächt!", "magic"); }
+  if (p.cls === 'Paladin' && type === 'ult') { p.fx.regen = 3; p.fx.regenHeal = Math.floor(p.maxHp * 0.1); log("Paladin: Regeneration aktiv!", "magic"); }
+  if (p.cls === 'Waldläufer' && type === 'skill') { state.enemy.fx.poison = 2; state.enemy.fx.poisonDmg = Math.floor(dmg * 0.3) + 1; log("Waldläufer: Pfeilregen vergiftet!", "magic"); }
+
   visualHit('hero', 'right'); await sleep(200); playSound(isCrit ? 'crit' : 'hit');
   
+  state.combatStats.dmgDealt += dmg;
+  if (isCrit) state.combatStats.crits++;
+
   state.enemy.h -= dmg; visualDamage('enemy', dmg, isCrit);
   log(`Treffer für ${dmg}! ${isCrit?'(Krit)':''}`, isCrit?'warn':'info');
   
+  await checkBossPhase();
+
   if (state.enemy.mutator && state.enemy.mutator.id === 'thorns' && state.enemy.h > 0) {
-    let thornsDmg = Math.max(1, Math.floor(dmg * 0.1));
-    p.hp -= thornsDmg;
-    visualDamage('hero', thornsDmg, false);
-    log(`Dornenrüstung wirft ${thornsDmg} Schaden zurück!`, "bad");
+    let thornsDmg = Math.max(1, Math.floor(dmg * 0.1)); p.hp -= thornsDmg; state.combatStats.dmgTaken += thornsDmg; visualDamage('hero', thornsDmg, false); log(`Dornenrüstung wirft ${thornsDmg} Schaden zurück!`, "bad");
   }
 
   if(p.eq.trinket && p.eq.trinket.effect === 'lifesteal') { p.hp = Math.min(p.maxHp, p.hp + Math.floor(dmg * 0.2)); }
   updateHUD(); if(state.enemy.h <= 0) { await winCombat(); return; }
   await sleep(600); await enemyTurn();
 }
+
 async function enemyTurn() {
+  if (await tickEffects(state.enemy, false)) { await winCombat(); return; }
+  
+  if (state.enemy.fx.stun > 0) {
+    state.enemy.fx.stun--; log(`${state.enemy.n} ist betäubt und setzt aus!`, "good"); updateHUD();
+    state.lock = false; renderCombatActions(); return;
+  }
+
   const dodgeChance = (p.baseDodge * 0.01) + (p.fx.dodge > 0 ? 0.4 : 0);
   if(Math.random() < dodgeChance) { 
     if(p.fx.dodge > 0) p.fx.dodge--; 
     log("Du weichst geschickt aus!", "good"); playSound('hover'); 
+    state.combatStats.dodges++;
+    state.lock = false; renderCombatActions(); return; 
   } 
-  else {
-    visualHit('enemy', 'left'); await sleep(200);
-    let eDmg = state.enemy.a;
-    let def = p.baseDef + (p.eq.armor ? p.eq.armor.val : 0);
-    if(p.eq.trinket && p.eq.trinket.effect==='armor') def = Math.floor(def * 1.25);
-    let mitigation = Math.min(0.85, def / (def + 40)); 
-    eDmg = Math.max(1, Math.floor(eDmg * (1 - mitigation)));
-    if(p.fx.shield > 0) { eDmg = Math.floor(eDmg * 0.5); p.fx.shield--; }
-    playSound('hurt'); p.hp -= eDmg; visualDamage('hero', eDmg, false); log(`${state.enemy.n} trifft für ${eDmg}.`, "bad");
 
-    if (state.enemy.mutator && state.enemy.mutator.id === 'vampiric' && p.hp > 0) {
-      let healAmt = Math.floor(eDmg * 0.2);
-      state.enemy.h = Math.min(state.enemy.maxH, state.enemy.h + healAmt);
-      log(`${state.enemy.n} heilt sich um ${healAmt}!`, "warn");
-    }
+  let chosenAbility = null;
+  if (state.enemy.abilities && state.enemy.abilities.length > 0) {
+      let available = state.enemy.abilities.filter(ab => (state.enemy.cooldowns[ab] || 0) <= 0);
+      if (available.length > 0 && Math.random() < 0.4) { chosenAbility = available[Math.floor(Math.random() * available.length)]; }
+  }
+
+  for(let k in state.enemy.cooldowns) { if(state.enemy.cooldowns[k] > 0) state.enemy.cooldowns[k]--; }
+
+  let atkMultiplier = state.enemy.fx.atkBuff || 1.0; state.enemy.fx.atkBuff = 1.0; let skipAttack = false;
+
+  if (chosenAbility) {
+      let ab = ENEMY_ABILITIES[chosenAbility]; state.enemy.cooldowns[chosenAbility] = ab.cd; log(`${state.enemy.n} nutzt ${ab.name}!`, "bad");
+      if (ab.type === 'buff') { state.enemy.fx.atkBuff = 1.5; playSound('magic'); skipAttack = true; } 
+      else if (ab.type === 'heal') { let healAmt = Math.floor(state.enemy.maxH * 0.25); state.enemy.h = Math.min(state.enemy.maxH, state.enemy.h + healAmt); playSound('heal'); visualDamage('enemy', -healAmt, false); skipAttack = true; } 
+      else if (ab.type === 'poison') { p.fx.poison = 3; p.fx.poisonDmg = Math.max(1, Math.floor(state.enemy.a * 0.3)); playSound('hurt'); atkMultiplier = 0.5; } 
+      else if (ab.type === 'stun') { p.fx.stun = 1; playSound('hurt'); atkMultiplier = 0.5; } 
+      else if (ab.type === 'heavy') { atkMultiplier = 1.5; }
+  }
+
+  if (!skipAttack) {
+      visualHit('enemy', 'left'); await sleep(200);
+      let eDmg = Math.floor(state.enemy.a * atkMultiplier);
+      if (state.enemy.fx.weak > 0) { eDmg = Math.floor(eDmg * 0.7); state.enemy.fx.weak--; }
+      
+      let def = p.baseDef + (p.eq.armor ? p.eq.armor.val : 0);
+      if(p.eq.trinket && p.eq.trinket.effect==='armor') def = Math.floor(def * 1.25);
+      let mitigation = Math.min(0.85, def / (def + 40)); 
+      eDmg = Math.max(1, Math.floor(eDmg * (1 - mitigation)));
+      if(p.fx.shield > 0) { eDmg = Math.floor(eDmg * 0.5); p.fx.shield--; }
+      
+      playSound('hurt'); p.hp -= eDmg; visualDamage('hero', eDmg, false); 
+      state.combatStats.dmgTaken += eDmg;
+      
+      let hitStr = chosenAbility ? `mit ${ENEMY_ABILITIES[chosenAbility].name}` : `trifft`;
+      log(`${state.enemy.n} ${hitStr} für ${eDmg}.`, "bad");
+
+      if (!chosenAbility && Math.random() < 0.15 && p.hp > 0) {
+          let eff = ['poison', 'weak', 'stun'][Math.floor(Math.random() * 3)];
+          if (eff === 'poison') { p.fx.poison = 3; p.fx.poisonDmg = Math.max(1, Math.floor(eDmg * 0.2)); log("Gegner hat dich vergiftet!", "bad"); }
+          else if (eff === 'weak') { p.fx.weak = 2; log("Gegner hat dich geschwächt!", "bad"); }
+          else if (eff === 'stun' && p.fx.stun === 0) { p.fx.stun = 1; log("Gegner hat dich betäubt!", "bad"); }
+      }
+
+      if (state.enemy.mutator && state.enemy.mutator.id === 'vampiric' && p.hp > 0) {
+        let healAmt = Math.floor(eDmg * 0.2); state.enemy.h = Math.min(state.enemy.maxH, state.enemy.h + healAmt); log(`${state.enemy.n} heilt sich um ${healAmt}!`, "warn");
+      }
   }
   
   if(p.eq.trinket && p.eq.trinket.effect === 'manareg') p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp * 0.1));
   updateHUD(); if(p.hp <= 0) { checkDeath(); return; }
   state.lock = false; renderCombatActions();
 }
+
 async function winCombat() {
   $('wd-sprite-enemy').textContent = '☠️'; await sleep(500);
   const luckGoldMult = 1 + (p.baseLuck * 0.03);
-  
   const prestigeGoldBuff = 1 + ((p.prestige?.buffs?.gold || 0) * 0.1);
   const prestigeXpBuff = 1 + ((p.prestige?.buffs?.xp || 0) * 0.1);
 
@@ -1420,25 +1243,23 @@ async function winCombat() {
   
   p.gold += gold; p.xp += gainedXp; p.runStats.kills++;
   playSound('coin'); log(`Sieg! +${gold} Gold, +${gainedXp} XP.`, "good");
+  
+  // UX Fix: Kampf-Zusammenfassung
+  log(`--- Kampf-Zusammenfassung ---`, "magic");
+  log(`Schaden ausgeteilt: ${state.combatStats.dmgDealt} (${state.combatStats.crits}x Krit)`, "info");
+  log(`Schaden erlitten: ${state.combatStats.dmgTaken} (${state.combatStats.dodges}x Ausgewichen)`, "info");
+  
   progressQuest(state.enemy.boss ? 'boss' : 'kill');
   
   const luckChestChance = p.baseLuck * 0.01;
   if (state.dungeon.active) {
     state.dungeon.firstEnemyDefeated = true;
     if (state.enemy.boss) { 
-      p.inv.chests['mystic']++; 
-      log("Boss-Drop: Arkankiste!", "magic"); 
-      
+      p.inv.chests['mystic']++; log("Boss-Drop: Arkankiste!", "magic"); 
       let artChance = state.dungeon.type === 'D4' ? 0.02 : (state.dungeon.type === 'D3' ? 0.0133 : (state.dungeon.type === 'D2' ? 0.0115 : 0.01));
       if (Math.random() < artChance + (p.baseLuck * 0.0005)) {
-        const tBase = TRINKETS[rand(0, TRINKETS.length-1)];
-        const t = Object.assign({}, tBase);
-        t.id = makeId('t'); 
-        t.type = 'trinket'; 
-        t.sell = 1500;
-        p.inv.trinkets.push(t);
-        playSound('level');
-        log(`MÄCHTIGE BEUTE: Artefakt '${t.name}' gefunden!`, "magic");
+        const tBase = TRINKETS[rand(0, TRINKETS.length-1)]; const t = Object.assign({}, tBase); t.id = makeId('t'); t.type = 'trinket'; t.sell = 1500;
+        p.inv.trinkets.push(t); playSound('level'); log(`MÄCHTIGE BEUTE: Artefakt '${t.name}' gefunden!`, "magic");
       }
     } 
     else {
@@ -1472,43 +1293,20 @@ function usePotion(type) {
   playSound('heal'); p.inv.potions[type]--;
   
   let healAmt = 0;
-  if(type === 'hp') { 
-    healAmt = 50; 
-    p.hp = Math.min(p.maxHp, p.hp + 50); 
-    log("Heiltrank: +50 HP", "good"); 
-  } else { 
-    healAmt = 40; 
-    p.mp = Math.min(p.maxMp, p.mp + 40); 
-    log("Manatrank: +40 MP", "good"); 
-  }
+  if(type === 'hp') { healAmt = 50; p.hp = Math.min(p.maxHp, p.hp + 50); log("Heiltrank: +50 HP", "good"); } 
+  else { healAmt = 40; p.mp = Math.min(p.maxMp, p.mp + 40); log("Manatrank: +40 MP", "good"); }
   
   updateHUD(); renderInventoryList('consumables');
   
-  const arena = $('wd-visual-arena');
-  const sprite = $('wd-sprite-hero');
+  const arena = $('wd-visual-arena'); const sprite = $('wd-sprite-hero');
   if(arena && sprite) {
-    arena.classList.remove('wd-anim-potion-hp-arena', 'wd-anim-potion-mp-arena');
-    sprite.classList.remove('wd-anim-potion-hp-sprite', 'wd-anim-potion-mp-sprite');
-    void arena.offsetWidth;
-    void sprite.offsetWidth;
+    arena.classList.remove('wd-anim-potion-hp-arena', 'wd-anim-potion-mp-arena'); sprite.classList.remove('wd-anim-potion-hp-sprite', 'wd-anim-potion-mp-sprite');
+    void arena.offsetWidth; void sprite.offsetWidth;
     
-    if(type === 'hp') {
-      arena.classList.add('wd-anim-potion-hp-arena');
-      sprite.classList.add('wd-anim-potion-hp-sprite');
-    } else {
-      arena.classList.add('wd-anim-potion-mp-arena');
-      sprite.classList.add('wd-anim-potion-mp-sprite');
-    }
+    if(type === 'hp') { arena.classList.add('wd-anim-potion-hp-arena'); sprite.classList.add('wd-anim-potion-hp-sprite'); } 
+    else { arena.classList.add('wd-anim-potion-mp-arena'); sprite.classList.add('wd-anim-potion-mp-sprite'); }
 
-    const rect = sprite.getBoundingClientRect(); 
-    const fct = document.createElement('div'); 
-    fct.className = 'wd-fct'; 
-    fct.textContent = `+${healAmt} ${type.toUpperCase()}`; 
-    fct.style.color = type === 'hp' ? 'var(--hp-glow)' : 'var(--mp-glow)'; 
-    fct.style.left = `${rect.left + rect.width/2}px`; 
-    fct.style.top = `${rect.top - 20}px`; 
-    $('wd-wrapper').appendChild(fct); 
-    setTimeout(() => fct.remove(), 1200);
+    const rect = sprite.getBoundingClientRect(); const fct = document.createElement('div'); fct.className = 'wd-fct'; fct.textContent = `+${healAmt} ${type.toUpperCase()}`; fct.style.color = type === 'hp' ? 'var(--hp-glow)' : 'var(--mp-glow)'; fct.style.left = `${rect.left + rect.width/2}px`; fct.style.top = `${rect.top - 20}px`; $('wd-wrapper').appendChild(fct); setTimeout(() => fct.remove(), 1200);
   }
 
   if(state.enemy) { state.lock=true; setTimeout(enemyTurn, 600); }
@@ -1520,18 +1318,14 @@ function visualHit(target, dir) {
 function visualDamage(target, amt, crit) {
   const el = $(`wd-sprite-${target}`); if(target === 'enemy') $('wd-ui-enemy-hp').textContent = `HP: ${Math.max(0, state.enemy.h)}/${state.enemy.maxH}`;
   if(!el) return; el.classList.remove('wd-anim-hurt'); void el.offsetWidth; el.classList.add('wd-anim-hurt');
-  if (amt > 0) {
-    const rect = el.getBoundingClientRect(); const fct = document.createElement('div'); fct.className = 'wd-fct'; fct.textContent = `-${amt}${crit?'!':''}`; fct.style.color = crit ? 'var(--gold)' : 'var(--hp-glow)'; fct.style.left = `${rect.left + rect.width/2}px`; fct.style.top = `${rect.top}px`; $('wd-wrapper').appendChild(fct); setTimeout(() => fct.remove(), 1200);
+  if (amt !== 0) {
+    const isHeal = amt < 0; const displayAmt = isHeal ? `+${Math.abs(amt)}` : `-${amt}${crit?'!':''}`; const color = isHeal ? 'var(--xp-glow)' : (crit ? 'var(--gold)' : 'var(--hp-glow)');
+    const rect = el.getBoundingClientRect(); const fct = document.createElement('div'); fct.className = 'wd-fct'; fct.textContent = displayAmt; fct.style.color = color; fct.style.left = `${rect.left + rect.width/2}px`; fct.style.top = `${rect.top}px`; $('wd-wrapper').appendChild(fct); setTimeout(() => fct.remove(), 1200);
   }
 }
 function renderInventoryList(type) {
   state.tab = type; const c = $('wd-inv-list'); c.innerHTML = '';
-  
-  // UX Fix: Aktiven Filter Button hervorheben
-  const filterBtns = document.querySelectorAll('#wd-tab-inv > div:nth-child(2) .wd-mini-btn');
-  filterBtns.forEach(b => b.classList.remove('wd-active-filter'));
-  const typeMap = { 'weapons': 0, 'armors': 1, 'trinkets': 2, 'consumables': 3 };
-  if(filterBtns[typeMap[type]]) filterBtns[typeMap[type]].classList.add('wd-active-filter');
+  const filterBtns = document.querySelectorAll('#wd-tab-inv > div:nth-child(2) .wd-mini-btn'); filterBtns.forEach(b => b.classList.remove('wd-active-filter')); const typeMap = { 'weapons': 0, 'armors': 1, 'trinkets': 2, 'consumables': 3 }; if(filterBtns[typeMap[type]]) filterBtns[typeMap[type]].classList.add('wd-active-filter');
 
   if(type === 'consumables') {
     c.innerHTML = `<div class="wd-list-item"><div class="wd-list-info"><h4>Heiltränke</h4><p>Stellt 50 HP her</p></div><div class="wd-list-actions"><span style="font-weight:bold">${p.inv.potions.hp}x</span><button class="wd-mini-btn" onclick="usePotion('hp')">Nutzen</button></div></div>
@@ -1555,31 +1349,18 @@ function renderInventoryList(type) {
 }
 function equipItem(type, id) { 
   const item = p.inv[type].find(i => i.id === id); 
-  // Tech Fix: Deep Copy
-  if(type === 'weapons') p.eq.weapon = JSON.parse(JSON.stringify(item)); 
-  else if(type === 'armors') p.eq.armor = JSON.parse(JSON.stringify(item)); 
-  else if(type === 'trinkets') p.eq.trinket = JSON.parse(JSON.stringify(item)); 
-  updateHUD(); 
-  renderInventoryList(type); 
+  if(type === 'weapons') p.eq.weapon = JSON.parse(JSON.stringify(item)); else if(type === 'armors') p.eq.armor = JSON.parse(JSON.stringify(item)); else if(type === 'trinkets') p.eq.trinket = JSON.parse(JSON.stringify(item)); 
+  updateHUD(); renderInventoryList(type); 
 }
 function unequipTrinket() { p.eq.trinket = null; updateHUD(); renderInventoryList('trinkets'); }
 function sellItem(type, id) { const idx = p.inv[type].findIndex(i => i.id === id); p.gold += p.inv[type][idx].sell; p.inv[type].splice(idx, 1); playSound('coin'); updateHUD(); renderInventoryList(type); }
 function dismantleItem(type, id) { 
-  const idx = p.inv[type].findIndex(i => i.id === id); 
-  const item = p.inv[type][idx];
-  const shards = calculateShardValue(item.rarity);
-  if(p.inv.shards === undefined) p.inv.shards = 0;
-  p.inv.shards += shards;
-  progressQuest('dismantle');
-  p.inv[type].splice(idx, 1);
-  playSound('magic');
-  log(`${item.name} zerschlagen! +${shards} Arkane Splitter.`, "magic");
-  updateHUD(); renderInventoryList(type); 
+  const idx = p.inv[type].findIndex(i => i.id === id); const item = p.inv[type][idx]; const shards = calculateShardValue(item.rarity);
+  if(p.inv.shards === undefined) p.inv.shards = 0; p.inv.shards += shards; progressQuest('dismantle'); p.inv[type].splice(idx, 1);
+  playSound('magic'); log(`${item.name} zerschlagen! +${shards} Arkane Splitter.`, "magic"); updateHUD(); renderInventoryList(type); 
 }
 function chestRewardVisualClass(rewardText, rewardClass='') {
-  const text = (rewardText||'').toLowerCase(); 
-  if (text.includes('mana')) return 'reward-mana'; if (text.includes('trank')) return 'reward-potion'; if (text.includes('gold')) return 'reward-gold'; 
-  return rewardClass || 'r-common';
+  const text = (rewardText||'').toLowerCase(); if (text.includes('mana')) return 'reward-mana'; if (text.includes('trank')) return 'reward-potion'; if (text.includes('gold')) return 'reward-gold'; return rewardClass || 'r-common';
 }
 function skipChestAnimation() { isSkippingChest = true; }
 async function playChestOpeningAnimation(type, results) {
@@ -1587,28 +1368,16 @@ async function playChestOpeningAnimation(type, results) {
   const filler = [
     {title:'Rostiges Schwert', sub:'Gewöhnlich', cls:'r-common'}, {title:'Stabile Klinge', sub:'Selten', cls:'r-rare'}, {title:'Arkantrank', sub:'Mana', cls:'reward-mana'}, {title:'Heiltrank', sub:'Leben', cls:'reward-potion'}, {title:'Königsreif', sub:'Episch', cls:'r-epic'}, {title:'Goldschatz', sub:'Gold', cls:'reward-gold'}, {title:'Götterklinge', sub:'Legendär', cls:'r-legendary'}
   ];
-  container.innerHTML = '';
-  const tracks = []; const winnerEls = []; const resultEls = [];
-  const totalItems = 75; const winnerIndex = 65;
+  container.innerHTML = ''; const tracks = []; const winnerEls = []; const resultEls = []; const totalItems = 75; const winnerIndex = 65;
   results.forEach((res, index) => {
     const rewardText = res.rewardText; const rewardClass = res.rewardClass; const rewardVisual = chestRewardVisualClass(rewardText, rewardClass);
     const card = document.createElement('div'); card.className = 'wd-chest-open-card';
-    const title = document.createElement('div');
-    title.style.cssText = "font-family:'Cinzel', serif;color:var(--accent);font-weight:bold;font-size:1.2rem;margin-bottom:8px;letter-spacing:2px;text-shadow:0 0 10px rgba(212, 175, 55, 0.4)";
-    title.textContent = def.label + (results.length > 1 ? ` #${index+1}` : '') + ' wird entsiegelt...';
-    const reel = document.createElement('div'); reel.className = 'wd-chest-open-reel';
-    const centerLine = document.createElement('div'); centerLine.className = 'wd-chest-open-centerline';
-    const track = document.createElement('div'); track.className = 'wd-chest-open-track';
+    const title = document.createElement('div'); title.style.cssText = "font-family:'Cinzel', serif;color:var(--accent);font-weight:bold;font-size:1.2rem;margin-bottom:8px;letter-spacing:2px;text-shadow:0 0 10px rgba(212, 175, 55, 0.4)"; title.textContent = def.label + (results.length > 1 ? ` #${index+1}` : '') + ' wird entsiegelt...';
+    const reel = document.createElement('div'); reel.className = 'wd-chest-open-reel'; const centerLine = document.createElement('div'); centerLine.className = 'wd-chest-open-centerline'; const track = document.createElement('div'); track.className = 'wd-chest-open-track';
     for(let i=0; i<totalItems; i++) {
       const div = document.createElement('div');
-      if(i === winnerIndex) {
-        div.className = 'wd-chest-open-item ' + rewardVisual;
-        div.innerHTML = `<span>${rewardText}</span><span class="wd-small">Loot</span>`;
-      } else {
-        const item = filler[rand(0, filler.length-1)];
-        div.className = 'wd-chest-open-item ' + item.cls;
-        div.innerHTML = `<span>${item.title}</span><span class="wd-small">${item.sub}</span>`;
-      }
+      if(i === winnerIndex) { div.className = 'wd-chest-open-item ' + rewardVisual; div.innerHTML = `<span>${rewardText}</span><span class="wd-small">Loot</span>`; } 
+      else { const item = filler[rand(0, filler.length-1)]; div.className = 'wd-chest-open-item ' + item.cls; div.innerHTML = `<span>${item.title}</span><span class="wd-small">${item.sub}</span>`; }
       track.appendChild(div);
     }
     const resDiv = document.createElement('div'); resDiv.className = 'wd-chest-open-result';
@@ -1621,343 +1390,116 @@ async function playChestOpeningAnimation(type, results) {
     track.style.transition = 'none'; track.style.transform = 'translateX(0px)';
     const winnerEl = winnerEls[idx]; const reelWidth = track.parentElement.clientWidth || 800; const itemWidth = winnerEl.offsetWidth || 140;
     const centerLine = reelWidth / 2; const randomOffset = rand(-Math.floor(itemWidth/2 - 15), Math.floor(itemWidth/2 - 15));
-    const target = Math.round(centerLine - (winnerEl.offsetLeft + itemWidth/2) + randomOffset);
-    targets.push(target);
+    const target = Math.round(centerLine - (winnerEl.offsetLeft + itemWidth/2) + randomOffset); targets.push(target);
   });
   await sleep(50);
-  tracks.forEach((track, idx) => {
-    track.style.transition = 'transform 6.5s cubic-bezier(0.1, 0.85, 0.15, 1)';
-    track.style.transform = `translateX(${targets[idx]}px)`;
-  });
-  for(let i=0; i<65; i++) {
-    if(isSkippingChest) {
-      tracks.forEach((track, idx) => { track.style.transition = 'none'; track.style.transform = `translateX(${targets[idx]}px)`; });
-      break;
-    }
-    playSound('tick'); await sleep(100);
-  }
-  winnerEls.forEach(el => el.classList.add('winner')); playSound('level');
-  resultEls.forEach(res => { res.div.innerHTML = `Erbeutet: <span class="${res.cls}">${res.text}</span>`; });
+  tracks.forEach((track, idx) => { track.style.transition = 'transform 6.5s cubic-bezier(0.1, 0.85, 0.15, 1)'; track.style.transform = `translateX(${targets[idx]}px)`; });
+  for(let i=0; i<65; i++) { if(isSkippingChest) { tracks.forEach((track, idx) => { track.style.transition = 'none'; track.style.transform = `translateX(${targets[idx]}px)`; }); break; } playSound('tick'); await sleep(100); }
+  winnerEls.forEach(el => el.classList.add('winner')); playSound('level'); resultEls.forEach(res => { res.div.innerHTML = `Erbeutet: <span class="${res.cls}">${res.text}</span>`; });
   await sleep(isSkippingChest ? 800 : 2000); overlay.classList.remove('show');
 }
 function generateChestReward(type) {
-  const def = CHEST_DEFS[type]; let rewardText = "", rewardClass = "";
-  const category = pickByWeights(def.weights);
-  if(category === 'trinket') {
-    const t = Object.assign({}, TRINKETS[rand(0, TRINKETS.length-1)]); t.id = makeId('t'); t.type = 'trinket'; t.sell = 100;
-    p.inv.trinkets.push(t); rewardText = t.name; rewardClass = "r-artefact";
-  } else if (category === 'weapon') {
-    const rarity = rollRarity(type); const pool = WEAPON_POOLS[p.cls][rarity]; const name = pool[rand(0, pool.length-1)];
-    const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
-    const val = Math.floor((rand(4, 10) + p.lvl * 1.5) * def.rewardMult * rarityMult);
-    const w = { id: makeId('w'), type:'weapon', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'weapon') };
-    p.inv.weapons.push(w); discover('weapons', w.name); rewardText = w.name + ` (+${val})`; rewardClass = 'r-'+rarity;
-  } else if (category === 'armor') {
-    const rarity = rollRarity(type); const pool = ARMOR_POOLS[p.cls][rarity]; const name = pool[rand(0, pool.length-1)];
-    const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
-    const val = Math.floor((rand(2, 6) + p.lvl) * def.rewardMult * rarityMult);
-    const a = { id: makeId('a'), type:'armor', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') };
-    p.inv.armors.push(a); discover('armors', a.name); rewardText = a.name + ` (+${val})`; rewardClass = 'r-'+rarity;
-  } else if (category === 'potions') {
-    p.inv.potions.hp += 2; p.inv.potions.mp += 1; rewardText = `Tränke (HP/MP)`; rewardClass = 'reward-potion';
-  } else {
-    const g = Math.floor(rand(50, 150) * def.rewardMult); p.gold += g; rewardText = `${g} Gold`; rewardClass = 'reward-gold';
-  }
+  const def = CHEST_DEFS[type]; let rewardText = "", rewardClass = ""; const category = pickByWeights(def.weights);
+  if(category === 'trinket') { const t = Object.assign({}, TRINKETS[rand(0, TRINKETS.length-1)]); t.id = makeId('t'); t.type = 'trinket'; t.sell = 100; p.inv.trinkets.push(t); rewardText = t.name; rewardClass = "r-artefact"; } 
+  else if (category === 'weapon') { const rarity = rollRarity(type); const pool = WEAPON_POOLS[p.cls][rarity]; const name = pool[rand(0, pool.length-1)]; const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1; const val = Math.floor((rand(4, 10) + p.lvl * 1.5) * def.rewardMult * rarityMult); const w = { id: makeId('w'), type:'weapon', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'weapon') }; p.inv.weapons.push(w); discover('weapons', w.name); rewardText = w.name + ` (+${val})`; rewardClass = 'r-'+rarity; } 
+  else if (category === 'armor') { const rarity = rollRarity(type); const pool = ARMOR_POOLS[p.cls][rarity]; const name = pool[rand(0, pool.length-1)]; const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1; const val = Math.floor((rand(2, 6) + p.lvl) * def.rewardMult * rarityMult); const a = { id: makeId('a'), type:'armor', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.armors.push(a); discover('armors', a.name); rewardText = a.name + ` (+${val})`; rewardClass = 'r-'+rarity; } 
+  else if (category === 'potions') { p.inv.potions.hp += 2; p.inv.potions.mp += 1; rewardText = `Tränke (HP/MP)`; rewardClass = 'reward-potion'; } 
+  else { const g = Math.floor(rand(50, 150) * def.rewardMult); p.gold += g; rewardText = `${g} Gold`; rewardClass = 'reward-gold'; }
   return { rewardText, rewardClass };
 }
 async function openChest(type, count = 1) {
-  if(p.inv.chests[type] < count || state.lock || state.enemy) return;
-  state.lock = true; p.inv.chests[type] -= count;
-  let results = [];
-  for(let i=0; i<count; i++) {
-    progressQuest('chest');
-    results.push(generateChestReward(type));
-  }
-  updateHUD(); renderInventoryList('consumables');
-  await playChestOpeningAnimation(type, results);
-  if (count === 1) { log(`Kiste geöffnet: ${results[0].rewardText}`, "good"); } 
-  else { log(`${count} Kisten geöffnet!`, "good"); }
+  if(p.inv.chests[type] < count || state.lock || state.enemy) return; state.lock = true; p.inv.chests[type] -= count; let results = [];
+  for(let i=0; i<count; i++) { progressQuest('chest'); results.push(generateChestReward(type)); }
+  updateHUD(); renderInventoryList('consumables'); await playChestOpeningAnimation(type, results);
+  if (count === 1) { log(`Kiste geöffnet: ${results[0].rewardText}`, "good"); } else { log(`${count} Kisten geöffnet!`, "good"); }
   state.lock = false; renderInventoryList('consumables'); 
 }
 function rarityLabel(r) { const labels = { common: 'Gewöhnlich', rare: 'Selten', epic: 'Episch', legendary: 'Legendär' }; return labels[r] || r; }
 function renderIndexList(type) {
-  const c = $('wd-index-list'); c.innerHTML = '';
-  const items = type === 'weapons' ? WEAPON_POOLS[p.cls] : ARMOR_POOLS[p.cls];
-  const discovered = state.discovery[type] || [];
-  for(let rarity in items) {
-    items[rarity].forEach(name => {
-      const isKnown = discovered.includes(name);
-      c.innerHTML += `
-        <div class="wd-index-item ${isKnown ? '' : 'undiscovered'}" style="border-color: ${isKnown ? `var(--${rarity})` : 'var(--border)'}">
-          <h4 style="color: ${isKnown ? `var(--${rarity})` : 'var(--text-muted)'}">${isKnown ? name : '???'}</h4>
-          <span style="color:var(--text-muted)">${rarityLabel(rarity)}</span>
-        </div>
-      `;
-    });
-  }
+  const c = $('wd-index-list'); c.innerHTML = ''; const items = type === 'weapons' ? WEAPON_POOLS[p.cls] : ARMOR_POOLS[p.cls]; const discovered = state.discovery[type] || [];
+  for(let rarity in items) { items[rarity].forEach(name => { const isKnown = discovered.includes(name); c.innerHTML += `<div class="wd-index-item ${isKnown ? '' : 'undiscovered'}" style="border-color: ${isKnown ? `var(--${rarity})` : 'var(--border)'}"><h4 style="color: ${isKnown ? `var(--${rarity})` : 'var(--text-muted)'}">${isKnown ? name : '???'}</h4><span style="color:var(--text-muted)">${rarityLabel(rarity)}</span></div>`; }); }
 }
-function selectSkill(id) {
-  state.selectedSkill = id;
-  playSound('click');
-  renderSkills();
-}
+function selectSkill(id) { state.selectedSkill = id; playSound('click'); renderSkills(); }
 function renderSkills() {
-  const c = $('wd-skill-list');
-  c.innerHTML = ``;
-  
-  let treeHtml = `<div class="wd-skill-tree-container">`;
-  treeHtml += `
-    <div class="wd-skill-path" style="left:30%; top:50px; bottom:50px;"></div>
-    <div class="wd-skill-path" style="left:70%; top:50px; bottom:50px;"></div>
-    <div class="wd-skill-path" style="left:50%; top:50px; bottom:50px; width:1px; background: rgba(255,255,255,0.05); box-shadow:none; border-left: 1px dashed rgba(255,255,255,0.1);"></div>
-  `;
-  
+  const c = $('wd-skill-list'); c.innerHTML = ``;
+  let treeHtml = `<div class="wd-skill-tree-container"><div class="wd-skill-path" style="left:30%; top:50px; bottom:50px;"></div><div class="wd-skill-path" style="left:70%; top:50px; bottom:50px;"></div><div class="wd-skill-path" style="left:50%; top:50px; bottom:50px; width:1px; background: rgba(255,255,255,0.05); box-shadow:none; border-left: 1px dashed rgba(255,255,255,0.1);"></div>`;
   SKILL_TIERS.forEach(tier => {
     treeHtml += `<div style="display:flex; justify-content:space-around; width:100%; position:relative; z-index:2;">`;
     tier.forEach(skillId => {
-       const t = SKILL_TREE.find(s => s.id === skillId);
-       const rank = p.talents[skillId] || 0;
-       
-       let locked = false;
-       for (let reqId in t.req) {
-         if ((p.talents[reqId] || 0) < t.req[reqId]) locked = true;
-       }
-       
-       let nodeClass = "wd-skill-node";
-       if (locked) nodeClass += " locked";
-       else if (rank >= t.max) nodeClass += " maxed";
-       else if (rank > 0) nodeClass += " active";
-       else nodeClass += " unlocked";
-       
+       const t = SKILL_TREE.find(s => s.id === skillId); const rank = p.talents[skillId] || 0; let locked = false;
+       for (let reqId in t.req) { if ((p.talents[reqId] || 0) < t.req[reqId]) locked = true; }
+       let nodeClass = "wd-skill-node"; if (locked) nodeClass += " locked"; else if (rank >= t.max) nodeClass += " maxed"; else if (rank > 0) nodeClass += " active"; else nodeClass += " unlocked";
        if (state.selectedSkill === skillId) nodeClass += " selected";
-       
-       treeHtml += `
-         <div class="${nodeClass}" onclick="selectSkill('${skillId}')" title="${t.name}">
-           <div class="wd-skill-icon">${t.icon}</div>
-           <div class="wd-skill-rank">${rank}/${t.max}</div>
-         </div>
-       `;
+       treeHtml += `<div class="${nodeClass}" onclick="selectSkill('${skillId}')" title="${t.name}"><div class="wd-skill-icon">${t.icon}</div><div class="wd-skill-rank">${rank}/${t.max}</div></div>`;
     });
     treeHtml += `</div>`;
   });
-  treeHtml += `</div>`;
-  c.innerHTML += treeHtml;
+  treeHtml += `</div>`; c.innerHTML += treeHtml;
   
   if (state.selectedSkill) {
-     const t = SKILL_TREE.find(s => s.id === state.selectedSkill);
-     const rank = p.talents[state.selectedSkill] || 0;
-     const pct = (rank / t.max) * 100;
-     
-     let locked = false;
-     let reqText = [];
-     for (let reqId in t.req) {
-       const reqRank = p.talents[reqId] || 0;
-       if (reqRank < t.req[reqId]) {
-         locked = true;
-         const reqNode = SKILL_TREE.find(n => n.id === reqId);
-         reqText.push(`${reqNode.name} (Lvl ${t.req[reqId]})`);
-       }
-     }
-     
-     let detailsHtml = `
-        <div class="wd-skill-detail-card" style="border-left-color: ${locked ? 'var(--hp-glow)' : (rank >= t.max ? 'var(--gold)' : 'var(--rare)')};">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-             <div>
-               <h4 style="color:var(--text-main); font-size:1.3rem; margin:0; font-family:'Cinzel', serif; text-shadow: 0 2px 4px #000;">
-                 ${t.icon} ${t.name}
-               </h4>
-               <span style="color:var(--accent); font-size:0.8rem; letter-spacing: 1px; text-transform:uppercase;">Rang ${rank} von ${t.max}</span>
-             </div>
-          </div>
-          
-          <div class="wd-bar-bg" style="height:4px; margin-bottom:15px; border-color:var(--border);">
-            <div class="wd-bar-fill" style="width:${pct}%; background: ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'}; box-shadow: 0 0 8px ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'};"></div>
-          </div>
-          
-          <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.5; margin-bottom:15px; font-style:italic;">"${t.desc}"</p>
-     `;
-     
-     if (locked) {
-       detailsHtml += `<p style="background: rgba(153, 27, 27, 0.2); padding: 8px; border-left: 2px solid var(--hp-glow); color:var(--hp-glow); font-size:0.8rem; margin-bottom:15px; font-weight:bold;">❌ Erfordert: ${reqText.join(', ')}</p>`;
-     } else if (rank >= t.max) {
-       detailsHtml += `<p style="color:var(--gold); font-size:0.8rem; margin-bottom:15px; font-weight:bold; text-shadow: 0 0 5px rgba(212,175,55,0.4);">✔️ Ultimative Meisterschaft erreicht</p>`;
-     }
-     
-     detailsHtml += `
-          <button class="wd-btn" style="width:100%; padding:12px; font-size: 1rem;" ${p.sp <= 0 || rank >= t.max || locked ? 'disabled' : ''} onclick="buyTalent('${t.id}')">
-            ${locked ? 'Wissen versiegelt' : (rank >= t.max ? 'Maximiert' : 'Talent studieren (1 SP)')}
-          </button>
-        </div>
-     `;
+     const t = SKILL_TREE.find(s => s.id === state.selectedSkill); const rank = p.talents[state.selectedSkill] || 0; const pct = (rank / t.max) * 100;
+     let locked = false; let reqText = [];
+     for (let reqId in t.req) { const reqRank = p.talents[reqId] || 0; if (reqRank < t.req[reqId]) { locked = true; const reqNode = SKILL_TREE.find(n => n.id === reqId); reqText.push(`${reqNode.name} (Lvl ${t.req[reqId]})`); } }
+     let detailsHtml = `<div class="wd-skill-detail-card" style="border-left-color: ${locked ? 'var(--hp-glow)' : (rank >= t.max ? 'var(--gold)' : 'var(--rare)')};"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;"><div><h4 style="color:var(--text-main); font-size:1.3rem; margin:0; font-family:'Cinzel', serif; text-shadow: 0 2px 4px #000;">${t.icon} ${t.name}</h4><span style="color:var(--accent); font-size:0.8rem; letter-spacing: 1px; text-transform:uppercase;">Rang ${rank} von ${t.max}</span></div></div><div class="wd-bar-bg" style="height:4px; margin-bottom:15px; border-color:var(--border);"><div class="wd-bar-fill" style="width:${pct}%; background: ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'}; box-shadow: 0 0 8px ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'};"></div></div><p style="color:var(--text-muted); font-size:0.95rem; line-height:1.5; margin-bottom:15px; font-style:italic;">"${t.desc}"</p>`;
+     if (locked) { detailsHtml += `<p style="background: rgba(153, 27, 27, 0.2); padding: 8px; border-left: 2px solid var(--hp-glow); color:var(--hp-glow); font-size:0.8rem; margin-bottom:15px; font-weight:bold;">❌ Erfordert: ${reqText.join(', ')}</p>`; } else if (rank >= t.max) { detailsHtml += `<p style="color:var(--gold); font-size:0.8rem; margin-bottom:15px; font-weight:bold; text-shadow: 0 0 5px rgba(212,175,55,0.4);">✔️ Ultimative Meisterschaft erreicht</p>`; }
+     detailsHtml += `<button class="wd-btn" style="width:100%; padding:12px; font-size: 1rem;" ${p.sp <= 0 || rank >= t.max || locked ? 'disabled' : ''} onclick="buyTalent('${t.id}')">${locked ? 'Wissen versiegelt' : (rank >= t.max ? 'Maximiert' : 'Talent studieren (1 SP)')}</button></div>`;
      c.innerHTML += detailsHtml;
   }
 }
 function buyTalent(id) {
   const t = SKILL_TREE.find(x => x.id === id); const rank = p.talents[id] || 0;
-  if(p.sp <= 0 || rank >= t.max) return; 
-  for (let reqId in t.req) if ((p.talents[reqId] || 0) < t.req[reqId]) return;
+  if(p.sp <= 0 || rank >= t.max) return; for (let reqId in t.req) if ((p.talents[reqId] || 0) < t.req[reqId]) return;
   playSound('magic'); p.sp--; p.talents[id] = rank + 1;
-  if(t.type === 'hp') { p.maxHp += t.val; p.hp += t.val; } 
-  if(t.type === 'mp') { p.maxMp += t.val; p.mp += t.val; }
-  if(t.type === 'atk') { p.baseAtk += t.val; } 
-  if(t.type === 'def') { p.baseDef += t.val; } 
-  if(t.type === 'dodge') { p.baseDodge += t.val; } 
-  if(t.type === 'luck') { p.baseLuck += t.val; } 
+  if(t.type === 'hp') { p.maxHp += t.val; p.hp += t.val; } if(t.type === 'mp') { p.maxMp += t.val; p.mp += t.val; } if(t.type === 'atk') { p.baseAtk += t.val; } if(t.type === 'def') { p.baseDef += t.val; } if(t.type === 'dodge') { p.baseDodge += t.val; } if(t.type === 'luck') { p.baseLuck += t.val; } 
   updateHUD(); renderSkills();
 }
 function getRandomQuest() {
-  const lvl = p ? p.lvl : 1;
-  const maxXp = p ? p.maxXp : 100;
-  
-  const xpEasy = Math.floor(maxXp * 0.15); 
-  const xpMed = Math.floor(maxXp * 0.25);  
-  const xpHard = Math.floor(maxXp * 0.40); 
-
+  const lvl = p ? p.lvl : 1; const maxXp = p ? p.maxXp : 100;
+  const xpEasy = Math.floor(maxXp * 0.15); const xpMed = Math.floor(maxXp * 0.25); const xpHard = Math.floor(maxXp * 0.40); 
   const questPool = [
-    { 
-      id: "q1_"+makeId(), title: "Säuberung", 
-      desc: `Besiege ${4 + lvl} Gegner im Kampf.`, goal: 4 + lvl, req: "kill", 
-      rewardGold: 50 + lvl * 15, rewardXP: xpEasy, extra: null 
-    },
-    { 
-      id: "q2_"+makeId(), title: "Gieriger Blick", 
-      desc: `Öffne ${2 + Math.floor(lvl/4)} Truhen.`, goal: 2 + Math.floor(lvl/4), req: "chest", 
-      rewardGold: 80 + lvl * 20, rewardXP: xpMed, extra: {type: 'hp', text: '1x Heiltrank', val: 1} 
-    },
-    { 
-      id: "q3_"+makeId(), title: "Kopfgeld", 
-      desc: `Besiege 1 Boss-Monster.`, goal: 1, req: "boss", 
-      rewardGold: 150 + lvl * 40, rewardXP: xpHard, extra: {type: 'shards', text: `${5 + lvl*2} Arkane Splitter`, val: 5 + lvl*2} 
-    },
-    { 
-      id: "q4_"+makeId(), title: "Machtdemonstration", 
-      desc: `Nutze deine ultimative Fähigkeit ${3 + Math.floor(lvl/2)} mal.`, goal: 3 + Math.floor(lvl/2), req: "ult", 
-      rewardGold: 60 + lvl * 15, rewardXP: xpEasy, extra: {type: 'mp', text: '1x Manatrank', val: 1} 
-    },
-    { 
-      id: "q5_"+makeId(), title: "Schmiedekunst", 
-      desc: `Zerschlage ${2 + Math.floor(lvl/3)} Items für Splitter.`, goal: 2 + Math.floor(lvl/3), req: "dismantle", 
-      rewardGold: 70 + lvl * 20, rewardXP: xpMed, extra: {type: 'chest_wooden', text: '1x Holzkiste', val: 1} 
-    },
-    { 
-      id: "q6_"+makeId(), title: "Der unerbittliche Jäger", 
-      desc: `Besiege ${8 + lvl*2} Gegner.`, goal: 8 + lvl*2, req: "kill", 
-      rewardGold: 180 + lvl * 40, rewardXP: xpHard, extra: {type: 'chest_iron', text: '1x Eisenkiste', val: 1} 
-    }
+    { id: "q1_"+makeId(), title: "Säuberung", desc: `Besiege ${4 + lvl} Gegner im Kampf.`, goal: 4 + lvl, req: "kill", rewardGold: 50 + lvl * 15, rewardXP: xpEasy, extra: null },
+    { id: "q2_"+makeId(), title: "Gieriger Blick", desc: `Öffne ${2 + Math.floor(lvl/4)} Truhen.`, goal: 2 + Math.floor(lvl/4), req: "chest", rewardGold: 80 + lvl * 20, rewardXP: xpMed, extra: {type: 'hp', text: '1x Heiltrank', val: 1} },
+    { id: "q3_"+makeId(), title: "Kopfgeld", desc: `Besiege 1 Boss-Monster.`, goal: 1, req: "boss", rewardGold: 150 + lvl * 40, rewardXP: xpHard, extra: {type: 'shards', text: `${5 + lvl*2} Arkane Splitter`, val: 5 + lvl*2} },
+    { id: "q4_"+makeId(), title: "Machtdemonstration", desc: `Nutze deine ultimative Fähigkeit ${3 + Math.floor(lvl/2)} mal.`, goal: 3 + Math.floor(lvl/2), req: "ult", rewardGold: 60 + lvl * 15, rewardXP: xpEasy, extra: {type: 'mp', text: '1x Manatrank', val: 1} },
+    { id: "q5_"+makeId(), title: "Schmiedekunst", desc: `Zerschlage ${2 + Math.floor(lvl/3)} Items für Splitter.`, goal: 2 + Math.floor(lvl/3), req: "dismantle", rewardGold: 70 + lvl * 20, rewardXP: xpMed, extra: {type: 'chest_wooden', text: '1x Holzkiste', val: 1} },
+    { id: "q6_"+makeId(), title: "Der unerbittliche Jäger", desc: `Besiege ${8 + lvl*2} Gegner.`, goal: 8 + lvl*2, req: "kill", rewardGold: 180 + lvl * 40, rewardXP: xpHard, extra: {type: 'chest_iron', text: '1x Eisenkiste', val: 1} }
   ];
   return questPool[Math.floor(Math.random() * questPool.length)];
 }
-function generateQuestBoard() {
-  state.availQuests = [getRandomQuest(), getRandomQuest(), getRandomQuest()];
-}
+function generateQuestBoard() { state.availQuests = [getRandomQuest(), getRandomQuest(), getRandomQuest()]; }
 function renderQuests() {
-  const board = $('wd-quest-board'); 
-  const active = $('wd-quest-active'); 
-  if(!board) return;
+  const board = $('wd-quest-board'); const active = $('wd-quest-active'); if(!board) return;
   if(p.quest) {
-    const ready = p.quest.progress >= p.quest.goal;
-    const pct = Math.min(100, (p.quest.progress / p.quest.goal) * 100);
+    const ready = p.quest.progress >= p.quest.goal; const pct = Math.min(100, (p.quest.progress / p.quest.goal) * 100);
     let extraHTML = p.quest.extra ? `<div class="wd-reward-badge" style="color:#d8b4e2; border-color:rgba(192,132,252,0.3)">🎁 ${p.quest.extra.text}</div>` : '';
-    active.innerHTML = `
-    <div class="wd-active-quest-box ${ready ? 'ready' : ''}">
-      <div class="wd-aq-header">${ready ? 'Pakt Erfüllt!' : 'Aktiver Pakt'}</div>
-      <h4 style="color:var(--text-main); font-size:1.1rem; margin-bottom:5px;">${p.quest.title}</h4>
-      <p style="font-size:0.85rem; color:var(--text-muted); font-style:italic; margin-bottom:12px;">${p.quest.desc}</p>
-      <div class="wd-quest-rewards" style="justify-content:center; margin-bottom:12px;">
-        <div class="wd-reward-badge" style="color:var(--gold)">🪙 ${p.quest.rewardGold} G</div>
-        <div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${p.quest.rewardXP} XP</div>
-        ${extraHTML}
-      </div>
-      <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); font-weight:bold; margin-bottom:6px; font-family:'Cinzel', serif;">
-        <span>Fortschritt</span>
-        <span style="color:${ready ? 'var(--xp-glow)' : 'var(--accent)'}">${p.quest.progress} / ${p.quest.goal}</span>
-      </div>
-      <div class="wd-bar-bg" style="height:8px; margin-bottom:15px; border-color:var(--border-light)">
-        <div class="wd-bar-fill" style="width:${pct}%; background:${ready ? 'linear-gradient(90deg, #065f46, var(--xp-glow))' : 'linear-gradient(90deg, #78350f, var(--accent))'}; box-shadow: 0 0 10px ${ready ? 'var(--xp-glow)' : 'var(--accent)'};"></div>
-      </div>
-      ${ready 
-        ? `<button class="wd-btn" style="width:100%; padding:10px; border-color:var(--xp-glow); color:var(--xp-glow); text-shadow: 0 0 5px rgba(16,185,129,0.5);" onclick="claimQuest()">Belohnung einfordern</button>` 
-        : `<button class="wd-mini-btn" style="width:100%; border-style:dashed; opacity:0.7;" onclick="p.quest=null; updateHUD();">Pakt abbrechen</button>`
-      }
-    </div>`;
-  } else {
-     active.innerHTML = `<div style="text-align:center; padding:25px 20px; border:1px dashed var(--border); border-radius:4px; color:var(--text-muted); font-style:italic; background:rgba(0,0,0,0.3)">Kein aktiver Pakt. Wähle unten einen Auftrag vom Brett.</div>`;
-  }
+    active.innerHTML = `<div class="wd-active-quest-box ${ready ? 'ready' : ''}"><div class="wd-aq-header">${ready ? 'Pakt Erfüllt!' : 'Aktiver Pakt'}</div><h4 style="color:var(--text-main); font-size:1.1rem; margin-bottom:5px;">${p.quest.title}</h4><p style="font-size:0.85rem; color:var(--text-muted); font-style:italic; margin-bottom:12px;">${p.quest.desc}</p><div class="wd-quest-rewards" style="justify-content:center; margin-bottom:12px;"><div class="wd-reward-badge" style="color:var(--gold)">🪙 ${p.quest.rewardGold} G</div><div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${p.quest.rewardXP} XP</div>${extraHTML}</div><div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); font-weight:bold; margin-bottom:6px; font-family:'Cinzel', serif;"><span>Fortschritt</span><span style="color:${ready ? 'var(--xp-glow)' : 'var(--accent)'}">${p.quest.progress} / ${p.quest.goal}</span></div><div class="wd-bar-bg" style="height:8px; margin-bottom:15px; border-color:var(--border-light)"><div class="wd-bar-fill" style="width:${pct}%; background:${ready ? 'linear-gradient(90deg, #065f46, var(--xp-glow))' : 'linear-gradient(90deg, #78350f, var(--accent))'}; box-shadow: 0 0 10px ${ready ? 'var(--xp-glow)' : 'var(--accent)'};"></div></div>${ready ? `<button class="wd-btn" style="width:100%; padding:10px; border-color:var(--xp-glow); color:var(--xp-glow); text-shadow: 0 0 5px rgba(16,185,129,0.5);" onclick="claimQuest()">Belohnung einfordern</button>` : `<button class="wd-mini-btn" style="width:100%; border-style:dashed; opacity:0.7;" onclick="p.quest=null; updateHUD();">Pakt abbrechen</button>`}</div>`;
+  } else { active.innerHTML = `<div style="text-align:center; padding:25px 20px; border:1px dashed var(--border); border-radius:4px; color:var(--text-muted); font-style:italic; background:rgba(0,0,0,0.3)">Kein aktiver Pakt. Wähle unten einen Auftrag vom Brett.</div>`; }
   board.innerHTML = '';
   state.availQuests.forEach(q => {
     let extraHTML = q.extra ? `<div class="wd-reward-badge" style="color:#d8b4e2">🎁 ${q.extra.text}</div>` : '';
-    board.innerHTML += `
-    <div class="wd-quest-card">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="flex:1; padding-right:15px;">
-          <div class="wd-quest-title">${q.title}</div>
-          <div class="wd-quest-desc">${q.desc}</div>
-          <div class="wd-quest-rewards">
-            <div class="wd-reward-badge" style="color:var(--gold)">🪙 ${q.rewardGold}</div>
-            <div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${q.rewardXP}</div>
-            ${extraHTML}
-          </div>
-        </div>
-        <button class="wd-mini-btn" style="padding:10px 15px; height:fit-content;" ${p.quest?'disabled':''} onclick="acceptQuest('${q.id}')">Pakt<br>besiegeln</button>
-      </div>
-    </div>`;
+    board.innerHTML += `<div class="wd-quest-card"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="flex:1; padding-right:15px;"><div class="wd-quest-title">${q.title}</div><div class="wd-quest-desc">${q.desc}</div><div class="wd-quest-rewards"><div class="wd-reward-badge" style="color:var(--gold)">🪙 ${q.rewardGold}</div><div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${q.rewardXP}</div>${extraHTML}</div></div><button class="wd-mini-btn" style="padding:10px 15px; height:fit-content;" ${p.quest?'disabled':''} onclick="acceptQuest('${q.id}')">Pakt<br>besiegeln</button></div></div>`;
   });
 }
-function acceptQuest(id) { 
-  const q = state.availQuests.find(x => x.id === id); 
-  p.quest = JSON.parse(JSON.stringify(q)); 
-  p.quest.progress = 0; 
-  playSound('magic'); 
-  log(`Pakt geschlossen: ${q.title}`, "warn"); 
-  updateHUD(); 
-}
+function acceptQuest(id) { const q = state.availQuests.find(x => x.id === id); p.quest = JSON.parse(JSON.stringify(q)); p.quest.progress = 0; playSound('magic'); log(`Pakt geschlossen: ${q.title}`, "warn"); updateHUD(); }
 function progressQuest(reqType) { 
   if(!p.quest || p.quest.progress >= p.quest.goal) return; 
-  if(p.quest.req === reqType || (p.quest.req === 'kill' && reqType === 'boss')) { 
-    p.quest.progress++; 
-    if(p.quest.progress >= p.quest.goal) { 
-      playSound('level'); 
-      log(`Questziel erreicht: ${p.quest.title}!`, "good"); 
-    } 
-    updateHUD(); 
-  } 
+  if(p.quest.req === reqType || (p.quest.req === 'kill' && reqType === 'boss')) { p.quest.progress++; if(p.quest.progress >= p.quest.goal) { playSound('level'); log(`Questziel erreicht: ${p.quest.title}!`, "good"); } updateHUD(); } 
 }
 function claimQuest() {
   if(!p.quest || p.quest.progress < p.quest.goal) return; 
-  playSound('coin'); 
-  p.gold += p.quest.rewardGold; 
-  p.xp += p.quest.rewardXP; 
-  let logText = `Pakt erfüllt! +${p.quest.rewardGold}G, +${p.quest.rewardXP}XP`;
+  playSound('coin'); p.gold += p.quest.rewardGold; p.xp += p.quest.rewardXP; let logText = `Pakt erfüllt! +${p.quest.rewardGold}G, +${p.quest.rewardXP}XP`;
   if(p.quest.extra) {
-      if(p.quest.extra.type === 'hp') p.inv.potions.hp += p.quest.extra.val;
-      else if(p.quest.extra.type === 'mp') p.inv.potions.mp += p.quest.extra.val;
-      else if(p.quest.extra.type === 'shards') p.inv.shards += p.quest.extra.val;
-      else if(p.quest.extra.type === 'chest_wooden') p.inv.chests.wooden += p.quest.extra.val;
-      else if(p.quest.extra.type === 'chest_iron') p.inv.chests.iron += p.quest.extra.val;
-      else if(p.quest.extra.type === 'chest_mystic') p.inv.chests.mystic += p.quest.extra.val;
+      if(p.quest.extra.type === 'hp') p.inv.potions.hp += p.quest.extra.val; else if(p.quest.extra.type === 'mp') p.inv.potions.mp += p.quest.extra.val; else if(p.quest.extra.type === 'shards') p.inv.shards += p.quest.extra.val; else if(p.quest.extra.type === 'chest_wooden') p.inv.chests.wooden += p.quest.extra.val; else if(p.quest.extra.type === 'chest_iron') p.inv.chests.iron += p.quest.extra.val; else if(p.quest.extra.type === 'chest_mystic') p.inv.chests.mystic += p.quest.extra.val;
       logText += `, +${p.quest.extra.text}`;
   }
-  log(logText, "good"); 
-  const idx = state.availQuests.findIndex(q => q.id === p.quest.id);
-  if(idx !== -1) {
-      state.availQuests[idx] = getRandomQuest();
-  } else {
-      state.availQuests.push(getRandomQuest());
-      if (state.availQuests.length > 3) state.availQuests.shift();
-  }
-  p.quest = null;
-  if(p.xp >= p.maxXp) { 
-    playSound('level'); p.xp -= p.maxXp; p.lvl++; p.maxXp = Math.floor(p.maxXp * 1.5); p.maxHp += 15; p.hp = p.maxHp; p.sp += 1; 
-    log(`LEVEL UP! Stufe ${p.lvl}.`, "warn"); 
-  }
-  updateHUD();
+  log(logText, "good"); const idx = state.availQuests.findIndex(q => q.id === p.quest.id);
+  if(idx !== -1) { state.availQuests[idx] = getRandomQuest(); } else { state.availQuests.push(getRandomQuest()); if (state.availQuests.length > 3) state.availQuests.shift(); }
+  p.quest = null; if(p.xp >= p.maxXp) { playSound('level'); p.xp -= p.maxXp; p.lvl++; p.maxXp = Math.floor(p.maxXp * 1.5); p.maxHp += 15; p.hp = p.maxHp; p.sp += 1; log(`LEVEL UP! Stufe ${p.lvl}.`, "warn"); } updateHUD();
 }
 function saveHighscore() {
   try {
-    let hs = JSON.parse(localStorage.getItem('webDungeonsHighscores') || "[]");
-    let score = (p.lvl * 1000) + p.gold + (p.runStats.kills * 150) + ((state.dungeon.floor - 1) * 2000);
-    hs.push({ name: p.name, cls: p.cls, lvl: p.lvl, floor: state.dungeon.floor, score: score }); hs.sort((a,b) => b.score - a.score); hs = hs.slice(0, 10); 
-    localStorage.setItem('webDungeonsHighscores', JSON.stringify(hs)); return score;
+    let hs = JSON.parse(localStorage.getItem('webDungeonsHighscores') || "[]"); let score = (p.lvl * 1000) + p.gold + (p.runStats.kills * 150) + ((state.dungeon.floor - 1) * 2000);
+    hs.push({ name: p.name, cls: p.cls, lvl: p.lvl, floor: state.dungeon.floor, score: score }); hs.sort((a,b) => b.score - a.score); hs = hs.slice(0, 10); localStorage.setItem('webDungeonsHighscores', JSON.stringify(hs)); return score;
   } catch(e) { return (p.lvl * 1000) + p.gold + (p.runStats.kills * 150); }
 }
 function showHighscores() {
@@ -1968,43 +1510,17 @@ function showHighscores() {
 }
 function saveGame() {
   if(!p) return; let slot = prompt(`Spielstand sichern.\nWähle Slot (1-${SAVE_SLOTS}):`, "1"); if(!slot || isNaN(slot) || slot < 1 || slot > SAVE_SLOTS) return;
-  try {
-    let saves = JSON.parse(localStorage.getItem('webDungeonsSaves') || "{}"); saves[`slot_${slot}`] = { p, state, timestamp: new Date().toLocaleString() }; localStorage.setItem('webDungeonsSaves', JSON.stringify(saves)); playSound('magic'); log(`Spielstand auf Slot ${slot} gesichert.`, "good");
-  } catch(e) { log("Speicherfehler!", "bad"); }
+  try { let saves = JSON.parse(localStorage.getItem('webDungeonsSaves') || "{}"); saves[`slot_${slot}`] = { p, state, timestamp: new Date().toLocaleString() }; localStorage.setItem('webDungeonsSaves', JSON.stringify(saves)); playSound('magic'); log(`Spielstand auf Slot ${slot} gesichert.`, "good"); } catch(e) { log("Speicherfehler!", "bad"); }
 }
 function loadGame() {
   try {
     let saves = JSON.parse(localStorage.getItem('webDungeonsSaves') || "{}"); let info = "Spielstand laden. Wähle Slot:\n\n"; for(let i=1; i<=SAVE_SLOTS; i++) { let s = saves[`slot_${i}`]; info += `Slot ${i}: ${s ? s.p.name + ' (' + s.p.cls + ' Lvl ' + s.p.lvl + ') - ' + s.timestamp : 'Leer'}\n`; }
     let slot = prompt(info, "1"); if(!slot || !saves[`slot_${slot}`]) { log("Kein gültiger Spielstand.", "bad"); return; }
     const data = saves[`slot_${slot}`]; p = data.p; state = data.state;
-    
-    // Tech Fix: Lock Recovery anwenden
     applyLockRecovery(state);
     
-    if (p.eq.weapon) {
-      let invWep = p.inv.weapons.find(i => i.id === p.eq.weapon.id);
-      if (invWep) {
-        if (p.eq.weapon.val > invWep.val) {
-          invWep.val = p.eq.weapon.val;
-          invWep.name = p.eq.weapon.name;
-          invWep.sell = p.eq.weapon.sell;
-        }
-        p.eq.weapon = invWep; 
-      }
-    }
-    
-    if (p.eq.armor) {
-      let invArm = p.inv.armors.find(i => i.id === p.eq.armor.id);
-      if (invArm) {
-        if (p.eq.armor.val > invArm.val) {
-          invArm.val = p.eq.armor.val;
-          invArm.name = p.eq.armor.name;
-          invArm.sell = p.eq.armor.sell;
-        }
-        p.eq.armor = invArm;
-      }
-    }
-    
+    if (p.eq.weapon) { let invWep = p.inv.weapons.find(i => i.id === p.eq.weapon.id); if (invWep) { if (p.eq.weapon.val > invWep.val) { invWep.val = p.eq.weapon.val; invWep.name = p.eq.weapon.name; invWep.sell = p.eq.weapon.sell; } p.eq.weapon = invWep; } }
+    if (p.eq.armor) { let invArm = p.inv.armors.find(i => i.id === p.eq.armor.id); if (invArm) { if (p.eq.armor.val > invArm.val) { invArm.val = p.eq.armor.val; invArm.name = p.eq.armor.name; invArm.sell = p.eq.armor.sell; } p.eq.armor = invArm; } }
     if (p.eq.trinket) p.eq.trinket = p.inv.trinkets.find(i => i.id === p.eq.trinket.id) || p.eq.trinket;
 
     if (!state.dungeon) state.dungeon = { active: false, type:'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }; if (!state.discovery) state.discovery = { weapons: [], armors: [] }; if (!state.availQuests) generateQuestBoard();
@@ -2012,48 +1528,21 @@ function loadGame() {
     if (p.inv.shards === undefined) p.inv.shards = 0;
     if (p.baseDodge === undefined) p.baseDodge = 0; 
     if (p.baseLuck === undefined) p.baseLuck = 0;
-    
     if (!p.prestige) p.prestige = { level: 0, dust: 0, buffs: { xp: 0, gold: 0, stats: 0 } };
+    
+    if (p.fx.poison === undefined) { p.fx.poison = 0; p.fx.poisonDmg = 0; p.fx.stun = 0; p.fx.weak = 0; p.fx.regen = 0; p.fx.regenHeal = 0; }
+    if (state.enemy) { 
+        if(state.enemy.fx === undefined) state.enemy.fx = { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }; 
+        if(state.enemy.cooldowns === undefined) state.enemy.cooldowns = {};
+        if(state.enemy.abilities === undefined) state.enemy.abilities = [];
+    }
+    if (!state.combatStats) state.combatStats = { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 };
        
     $('wd-overlay').style.display = 'none'; log(`Spielstand von Slot ${slot} geladen.`, "magic"); updateHUD(); playSound('magic');
     if(state.enemy) { showCombatStage(true); renderCombatActions(); } else if(state.dungeon.active) { showCombatStage(false); showDungeonMenu(); } else if(state.area) { showCombatStage(false); enterRoom(); } else { goToTown(); }
   } catch(e) { log("Ladefehler!", "bad"); }
 }
 
-// --- NEU: Hauptmenü beim Start ---
-function showMainMenu() {
-  $('wd-overlay').style.display = 'flex';
-  
-  $('wd-overlay-content').innerHTML = `
-    <div id="wd-menu-screen">
-      <div class="wd-menu-header">
-        <h1 class="wd-menu-title">Web Dungeons</h1>
-        <h2 class="wd-menu-subtitle">ECLIPSE</h2>
-        <div class="wd-menu-divider"></div>
-      </div>
-      
-      <div class="wd-menu-body">
-        <p class="wd-menu-quote">Trotze der Dunkelheit. Sammle Artefakte. Überlebe.</p>
-        <div class="wd-menu-actions">
-          <button class="wd-menu-btn" onclick="initGame()">
-            <span class="wd-icon">⚔️</span>
-            <span class="wd-menu-btn-text">Neues Spiel</span>
-          </button>
-          <button class="wd-menu-btn" onclick="loadGame()">
-            <span class="wd-icon">📂</span>
-            <span class="wd-menu-btn-text">Spiel laden</span>
-          </button>
-        </div>
-      </div>
-      
-      <div class="wd-menu-footer">
-        <p>Web Dungeons v0.2 | Eclipse v1.0 | © 2024 CodetNiemalsHigh</p>
-      </div>
-    </div>
-  `;
-}
-
-// Start des Spiels mit dem verbesserten Hauptmenü
 showMainMenu();
 </script>
 </body>
