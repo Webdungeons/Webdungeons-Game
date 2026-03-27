@@ -271,6 +271,7 @@
         <button class="wd-tab-btn" onclick="switchTab('wd-tab-skills', this)">Talente</button>
         <button class="wd-tab-btn" onclick="switchTab('wd-tab-quests', this)">Pakte</button>
         <button class="wd-tab-btn" onclick="switchTab('wd-tab-index', this)">Archiv</button>
+        <button class="wd-tab-btn" onclick="switchTab('wd-tab-hero', this)">Heldenbuch</button>
       </div>
       <div id="wd-tab-gear" class="wd-tab-content active" style="overflow-y:auto;max-height:100%">
         <h3>Aktiv ausgerüstet</h3>
@@ -305,6 +306,9 @@
            <button class="wd-mini-btn" style="flex:1" onclick="renderIndexList('weapons')">Waffen</button><button class="wd-mini-btn" style="flex:1" onclick="renderIndexList('armors')">Rüstung</button><button class="wd-mini-btn" style="flex:1" onclick="renderIndexList('lore')">Lore</button>
         </div>
         <div id="wd-index-list" class="wd-index-grid"></div>
+      </div>
+      <div id="wd-tab-hero" class="wd-tab-content">
+        <div id="wd-hero-book"></div>
       </div>
     </aside>
   </div>
@@ -390,8 +394,57 @@ const ACC_POOLS = { common: ["Kupferring", "Knochenamulett", "Lederband"], rare:
 const SHOP_WEAPONS = { Ritter: [{name:"Breitschwert",dmg:13,cost:150}, {name:"Bastion-Axt",dmg:22,cost:360}, {name:"Ritter-Großschwert",dmg:35,cost:650}], Magier: [{name:"Runenstab",dmg:13,cost:150}, {name:"Fokuszepter",dmg:22,cost:360}, {name:"Meisterstab",dmg:35,cost:650}], Schurke: [{name:"Eisendolch",dmg:13,cost:150}, {name:"Nachtklinge",dmg:22,cost:360}, {name:"Korsarendolch",dmg:35,cost:650}], Paladin: [{name:"Glaubensklinge",dmg:12,cost:150}, {name:"Lichtstreitkolben",dmg:22,cost:360}, {name:"Richtschwert",dmg:34,cost:650}], Waldläufer: [{name:"Jagdbogen",dmg:12,cost:150}, {name:"Stachelset",dmg:22,cost:360}, {name:"Meisterbogen",dmg:34,cost:650}] };
 const SHOP_ARMORS = { Ritter: [{name:"Turmschild-Panzer",def:5,cost:140}, {name:"Ordensharnisch",def:8,cost:330}, {name:"Plattenrüstung",def:15,cost:600}], Magier: [{name:"Runenrobe",def:3,cost:140}, {name:"Astralmantel",def:5,cost:330}, {name:"Seidenrobe",def:10,cost:600}], Schurke: [{name:"Jägerleder",def:4,cost:140}, {name:"Schattenweste",def:6,cost:330}, {name:"Meisterleder",def:12,cost:600}], Paladin: [{name:"Kapellenpanzer",def:4,cost:140}, {name:"Sonnensegel",def:7,cost:330}, {name:"Inquisitorenrüstung",def:14,cost:600}], Waldläufer: [{name:"Pfadleder",def:4,cost:140}, {name:"Jägerhaut",def:6,cost:330}, {name:"Drachenleder",def:12,cost:600}] };
 
+const DUNGEON_START_BONUSES = [
+  { id: 'floor_gold', title: "Goldrausch", desc: "+20% Gold auf dieser Ebene.", apply: () => { state.dungeon.floorGoldBonus = (state.dungeon.floorGoldBonus || 0) + 0.2; } },
+  { id: 'full_mp', title: "Arkane Flut", desc: "Fülle dein Mana sofort vollständig auf.", apply: () => { p.mp = p.maxMp; } },
+  { id: 'free_skill', title: "Freizauber", desc: "Die nächste Klassenfähigkeit kostet kein Mana.", apply: () => { state.dungeon.runBonuses.firstSkillFreeAvailable = true; } },
+  { id: 'hp_boon', title: "Blutsegen", desc: "Heile 35% deiner max. HP.", apply: () => { p.hp = Math.min(p.maxHp, p.hp + Math.floor(p.maxHp * 0.35)); } },
+  { id: 'atk_boon', title: "Klinge im Wind", desc: "Nächster Angriff verursacht +35% Schaden.", apply: () => { p.fx.eventAtkBuff = Math.max(p.fx.eventAtkBuff || 1, 1.35); } },
+  { id: 'luck_boon', title: "Sternenblick", desc: "+4 Glück bis zum Ende des Dungeons.", apply: () => { state.dungeon.runBonuses.luckBonus = (state.dungeon.runBonuses.luckBonus || 0) + 4; } },
+  { id: 'barrier', title: "Astralschild", desc: "Erhalte 2 Schildstapel für den nächsten Kampf.", apply: () => { p.fx.shield += 2; } }
+];
+
+const DUNGEON_EVENTS = [
+  { id: 'altar', title: "Verlassener Altar", text: "Ein uralter Altar fordert ein Opfer.", a: { label: "Blutopfer", sub: "Verliere 12% HP, erhalte 30% mehr Gold diese Ebene.", outcome: { type: 'blood_gold' } }, b: { label: "Gebet", sub: "Heile 15% HP, aber -8% Angriffsbonus im nächsten Kampf.", outcome: { type: 'pray' } } },
+  { id: 'chest_spirit', title: "Kiste mit Flüstern", text: "Eine versiegelte Truhe lockt mit Macht.", a: { label: "Öffnen", sub: "Erhalte Beute, riskiere Fluch.", outcome: { type: 'cursed_chest' } }, b: { label: "Ignorieren", sub: "Erhalte 1 Heiltrank.", outcome: { type: 'safe_potion' } } },
+  { id: 'fountain', title: "Mondbrunnen", text: "Silbernes Wasser pulsiert in der Dunkelheit.", a: { label: "Trinken", sub: "+40% MP, möglicher Giftschaden.", outcome: { type: 'mana_or_pain' } }, b: { label: "Segnen", sub: "+12% Schaden im nächsten Kampf.", outcome: { type: 'next_atk_buff' } } },
+  { id: 'echoes', title: "Echos gefallener Helden", text: "Stimmen bieten Wissen gegen Opfer.", a: { label: "Wissen nehmen", sub: "+1 Talentpunkt, verliere Gold.", outcome: { type: 'sp_for_gold' } }, b: { label: "Ablehnen", sub: "Erhalte kleine Goldspende.", outcome: { type: 'small_gold' } } },
+  { id: 'blacksmith', title: "Vergessene Schmiede", text: "Eine geisterhafte Klinge ruht im Amboss.", a: { label: "Neu schmieden", sub: "+2 Basis-ATK für diesen Run.", outcome: { type: 'run_atk' } }, b: { label: "Demontieren", sub: "Erhalte Splitter.", outcome: { type: 'shards' } } },
+  { id: 'shadow_deal', title: "Schattenpakt", text: "Eine Silhouette bietet ein gefährliches Geschäft an.", a: { label: "Pakt schließen", sub: "Nächste Fähigkeit gratis & +20% XP, aber nimm Schaden.", outcome: { type: 'shadow_deal' } }, b: { label: "Zurückweisen", sub: "Nichts passiert.", outcome: { type: 'none' } } }
+];
+
+const ACHIEVEMENTS = [
+  { id: 'c_kill_10', cat: 'Kampf', title: "Erstes Blut", desc: "10 Gegner besiegt.", type: 'kills', target: 10, bonus: { type: 'goldPct', val: 0.02, text: "+2% Gold" } },
+  { id: 'c_kill_50', cat: 'Kampf', title: "Klingensturm", desc: "50 Gegner besiegt.", type: 'kills', target: 50, bonus: { type: 'baseAtk', val: 1, text: "+1 Basis-ATK" } },
+  { id: 'c_kill_100', cat: 'Kampf', title: "Hundertfacher Untergang", desc: "100 Gegner besiegt.", type: 'kills', target: 100, bonus: { type: 'xpPct', val: 0.03, text: "+3% XP" } },
+  { id: 'c_boss_1', cat: 'Kampf', title: "Erster Boss besiegt", desc: "1 Boss besiegt.", type: 'bossKills', target: 1, bonus: { type: 'maxHp', val: 10, text: "+10 max HP" } },
+  { id: 'c_boss_10', cat: 'Kampf', title: "Bossjäger", desc: "10 Bosse besiegt.", type: 'bossKills', target: 10, bonus: { type: 'luck', val: 1, text: "+1 Glück" } },
+  { id: 'c_crit_25', cat: 'Kampf', title: "Kritische Präzision", desc: "25 kritische Treffer gelandet.", type: 'critHits', target: 25, bonus: { type: 'crit', val: 0.02, text: "+2% Krit-Chance" } },
+  { id: 'c_dodge_20', cat: 'Kampf', title: "Phantomschritt", desc: "20 Angriffen ausgewichen.", type: 'dodges', target: 20, bonus: { type: 'dodge', val: 2, text: "+2% Ausweichen" } },
+  { id: 'c_floor_8', cat: 'Kampf', title: "Tiefenwanderer", desc: "Dungeon-Ebene 8 erreicht.", type: 'maxDungeonFloor', target: 8, bonus: { type: 'goldPct', val: 0.03, text: "+3% Gold" } },
+
+  { id: 's_leg_1', cat: 'Sammlung', title: "Erste legendäre Waffe", desc: "1 legendäres Item gefunden.", type: 'legendaryFound', target: 1, bonus: { type: 'luck', val: 1, text: "+1 Glück" } },
+  { id: 's_leg_5', cat: 'Sammlung', title: "Goldene Sammlung", desc: "5 legendäre Items gefunden.", type: 'legendaryFound', target: 5, bonus: { type: 'baseAtk', val: 1, text: "+1 Basis-ATK" } },
+  { id: 's_art_1', cat: 'Sammlung', title: "Artefaktjäger", desc: "Erstes Artefakt gefunden.", type: 'artefactsFound', target: 1, bonus: { type: 'xpPct', val: 0.03, text: "+3% XP" } },
+  { id: 's_chest_25', cat: 'Sammlung', title: "Truhenknacker", desc: "25 Truhen geöffnet.", type: 'chestsOpened', target: 25, bonus: { type: 'goldPct', val: 0.03, text: "+3% Gold" } },
+  { id: 's_dism_30', cat: 'Sammlung', title: "Schrottkönig", desc: "30 Items zerlegt.", type: 'itemsDismantled', target: 30, bonus: { type: 'def', val: 1, text: "+1 Basis-Rüstung" } },
+  { id: 's_shards_300', cat: 'Sammlung', title: "Splitterhorter", desc: "300 Splitter gesammelt.", type: 'shardsEarned', target: 300, bonus: { type: 'maxMp', val: 12, text: "+12 max MP" } },
+  { id: 's_wep_20', cat: 'Sammlung', title: "Waffenkundiger", desc: "20 Waffen entdeckt.", type: 'weaponsDiscovered', target: 20, bonus: { type: 'crit', val: 0.01, text: "+1% Krit-Chance" } },
+  { id: 's_arm_20', cat: 'Sammlung', title: "Rüstungsarchivar", desc: "20 Rüstungen entdeckt.", type: 'armorsDiscovered', target: 20, bonus: { type: 'def', val: 1, text: "+1 Basis-Rüstung" } },
+  { id: 's_loot_gold_3000', cat: 'Sammlung', title: "Goldhunger", desc: "3000 Gold erbeutet.", type: 'goldEarned', target: 3000, bonus: { type: 'goldPct', val: 0.04, text: "+4% Gold" } },
+
+  { id: 'p_lvl_10', cat: 'Progression', title: "Aufsteiger", desc: "Level 10 erreicht.", type: 'level', target: 10, bonus: { type: 'maxHp', val: 12, text: "+12 max HP" } },
+  { id: 'p_lvl_20', cat: 'Progression', title: "Veteran", desc: "Level 20 erreicht.", type: 'level', target: 20, bonus: { type: 'baseAtk', val: 2, text: "+2 Basis-ATK" } },
+  { id: 'p_prestige_1', cat: 'Progression', title: "Wiedergeboren", desc: "1x Prestige durchgeführt.", type: 'prestiges', target: 1, bonus: { type: 'xpPct', val: 0.05, text: "+5% XP" } },
+  { id: 'p_prestige_5', cat: 'Progression', title: "Astraler Zyklus", desc: "5x Prestige durchgeführt.", type: 'prestiges', target: 5, bonus: { type: 'goldPct', val: 0.05, text: "+5% Gold" } },
+  { id: 'p_talent_15', cat: 'Progression', title: "Talentiert", desc: "15 Talente investiert.", type: 'talentsSpent', target: 15, bonus: { type: 'maxMp', val: 10, text: "+10 max MP" } },
+  { id: 'p_quests_15', cat: 'Progression', title: "Paktmeister", desc: "15 Pakte erfüllt.", type: 'questsCompleted', target: 15, bonus: { type: 'luck', val: 1, text: "+1 Glück" } },
+  { id: 'p_floor_12', cat: 'Progression', title: "Jenseits der Angst", desc: "Dungeon-Ebene 12 erreicht.", type: 'maxDungeonFloor', target: 12, bonus: { type: 'dodge', val: 2, text: "+2% Ausweichen" } },
+  { id: 'p_play_24', cat: 'Progression', title: "Vollständiger Held", desc: "24 Achievements freischalten.", type: 'achievementCount', target: 24, bonus: { type: 'xpPct', val: 0.06, text: "+6% XP" } }
+];
+
 let p = null; 
-let state = { mode: 'menu', area: null, enemy: null, combatStats: { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 }, room: 0, dungeon: { active: false, type: 'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }, lock: false, tab: 'weapons', discovery: { weapons: [], armors: [], helms: [], accessories: [] }, lore: [], availQuests: [], selectedSkill: null, firstCombatHintShown: false };
+let state = { mode: 'menu', area: null, enemy: null, combatStats: { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 }, room: 0, dungeon: { active: false, type: 'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false, floorGoldBonus: 0, runBonuses: { firstSkillFreeAvailable: false, luckBonus: 0, atkBonus: 0, xpBonus: 0 }, startBonusChoicePending: false }, lock: false, tab: 'weapons', discovery: { weapons: [], armors: [], helms: [], accessories: [] }, lore: [], availQuests: [], selectedSkill: null, firstCombatHintShown: false };
 let isSkippingChest = false;
 let _lockTimeout = null;
 
@@ -411,9 +464,75 @@ function pickByWeights(weights) { let t=0; for(let k in weights) t+=weights[k]; 
 function calculateSellValue(val, rar, type) { const base = type === 'weapon' ? 2.5 : 2.0; const m = { 'r-common':1, 'r-rare':1.5, 'r-shop':2, 'r-epic':2.5, 'r-legendary':4, 'r-artefact':5 }[rar] || 1; return Math.floor((val * base * m) * (1 + val * 0.02)); }
 function calculateShardValue(rar) { return { 'r-common':1, 'r-rare':3, 'r-shop':2, 'r-epic':10, 'r-legendary':25, 'r-artefact':50 }[rar] || 1; }
 function rollRarity(chestType) { const r = Math.random() + ((p && p.baseLuck) ? p.baseLuck * 0.001 : 0); if (chestType === 'wooden') { return r>=0.998?'legendary':r>=0.95?'epic':r>=0.75?'rare':'common'; } else if (chestType === 'iron') { return r>=0.995?'legendary':r>=0.9?'epic':r>=0.6?'rare':'common'; } else { return r>=0.99?'legendary':r>=0.85?'epic':r>=0.45?'rare':'common'; } }
-function discover(type, name) { if(!state.discovery[type].includes(name)) state.discovery[type].push(name); }
-function switchTab(tabId, element) { document.querySelectorAll('.wd-tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.wd-tab-content').forEach(c => c.classList.remove('active')); if(element) element.classList.add('active'); $(tabId).classList.add('active'); if(tabId === 'wd-tab-inv') renderInventoryList(state.tab); if(tabId === 'wd-tab-skills') renderSkills(); if(tabId === 'wd-tab-quests') renderQuests(); if(tabId === 'wd-tab-index') renderIndexList('weapons'); }
+function discover(type, name) { if(!state.discovery[type].includes(name)) { state.discovery[type].push(name); evaluateAchievements(); } }
+function switchTab(tabId, element) { document.querySelectorAll('.wd-tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.wd-tab-content').forEach(c => c.classList.remove('active')); if(element) element.classList.add('active'); $(tabId).classList.add('active'); if(tabId === 'wd-tab-inv') renderInventoryList(state.tab); if(tabId === 'wd-tab-skills') renderSkills(); if(tabId === 'wd-tab-quests') renderQuests(); if(tabId === 'wd-tab-index') renderIndexList('weapons'); if(tabId === 'wd-tab-hero') renderHeroBook(); }
 function showToast(msg) { const t = document.createElement('div'); t.textContent = msg; t.style.cssText = "position:absolute; top: 120px; left: 50%; transform: translateX(-50%); background: rgba(30,58,138,0.95); border: 2px solid var(--mp-glow); color: #fff; padding: 12px 25px; border-radius: 6px; z-index: 1000; font-family: 'Cinzel', serif; font-size: 1rem; animation: wdFadeIn 0.3s ease-out; box-shadow: 0 10px 25px rgba(0,0,0,0.9); pointer-events: none; text-shadow: 1px 1px 2px #000;"; $('wd-wrapper').appendChild(t); setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.6s'; setTimeout(() => t.remove(), 600); }, 4500); }
+
+function ensureMetaSystems() {
+  if (!p) return;
+  if (!p.metaBonuses) p.metaBonuses = { xpPct: 0, goldPct: 0, crit: 0, dodge: 0 };
+  if (!p.achievements) p.achievements = { unlocked: [], progress: {} };
+  if (!p.metaStats) p.metaStats = { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 };
+}
+
+function getAchievementProgress(def) {
+  ensureMetaSystems();
+  if (!p) return 0;
+  if (def.type === 'level') return p.lvl || 1;
+  if (def.type === 'weaponsDiscovered') return (state.discovery?.weapons || []).length;
+  if (def.type === 'armorsDiscovered') return (state.discovery?.armors || []).length;
+  if (def.type === 'achievementCount') return p.achievements.unlocked.length;
+  return p.metaStats[def.type] || 0;
+}
+
+function applyAchievementBonus(bonus) {
+  if (!bonus || !p) return;
+  if (bonus.type === 'baseAtk') p.baseAtk += bonus.val;
+  if (bonus.type === 'def') p.baseDef += bonus.val;
+  if (bonus.type === 'luck') p.baseLuck += bonus.val;
+  if (bonus.type === 'maxHp') { p.maxHp += bonus.val; p.hp += bonus.val; }
+  if (bonus.type === 'maxMp') { p.maxMp += bonus.val; p.mp += bonus.val; }
+  if (bonus.type === 'xpPct') p.metaBonuses.xpPct += bonus.val;
+  if (bonus.type === 'goldPct') p.metaBonuses.goldPct += bonus.val;
+  if (bonus.type === 'crit') p.metaBonuses.crit += bonus.val;
+  if (bonus.type === 'dodge') p.metaBonuses.dodge += bonus.val;
+}
+
+function evaluateAchievements() {
+  if (!p) return;
+  ensureMetaSystems();
+  let unlockedAny = false;
+  ACHIEVEMENTS.forEach(a => {
+    if (p.achievements.unlocked.includes(a.id)) return;
+    const progress = getAchievementProgress(a);
+    p.achievements.progress[a.id] = Math.min(progress, a.target);
+    if (progress >= a.target) {
+      p.achievements.unlocked.push(a.id);
+      applyAchievementBonus(a.bonus);
+      log(`🏆 Achievement freigeschaltet: ${a.title} (${a.bonus.text})`, "magic");
+      showToast(`🏆 ${a.title}`);
+      unlockedAny = true;
+    }
+  });
+  if (unlockedAny) updateHUD();
+}
+
+function getEffectiveStatSnapshot() {
+  ensureMetaSystems();
+  const weaponAtk = p.eq.weapon ? p.eq.weapon.val : 0;
+  const armorDef = p.eq.armor ? p.eq.armor.val : 0;
+  const helmDef = p.eq.helm ? p.eq.helm.val : 0;
+  const accessoryLuck = p.eq.accessory ? p.eq.accessory.val : 0;
+  const runLuck = state.dungeon?.active ? (state.dungeon.runBonuses?.luckBonus || 0) : 0;
+  let totalAtk = p.baseAtk + weaponAtk + (p.bonusStats ? p.bonusStats.atk : 0) + (state.dungeon?.active ? (state.dungeon.runBonuses?.atkBonus || 0) : 0);
+  let totalDef = p.baseDef + armorDef + helmDef + (p.bonusStats ? p.bonusStats.def : 0);
+  if (p.eq.trinket && p.eq.trinket.effect === 'armor') totalDef = Math.floor(totalDef * 1.25);
+  const mitigation = Math.min(0.85, totalDef / (totalDef + 40));
+  const totalLuck = p.baseLuck + accessoryLuck + (p.bonusStats ? p.bonusStats.luck : 0) + runLuck;
+  const critPct = Math.round((CLASSES[p.cls].crit + (p.bonusStats ? p.bonusStats.crit : 0) + (p.metaBonuses?.crit || 0)) * 1000) / 10;
+  const dodgePct = Math.round(((p.baseDodge + (p.metaBonuses?.dodge || 0)) + (p.bonusStats ? p.bonusStats.dodge : 0)) * 10) / 10;
+  return { totalAtk, totalDef, totalLuck, mitigationPct: Math.round(mitigation * 1000) / 10, critPct, dodgePct };
+}
 
 const AFFIX_TYPES = ['atk', 'def', 'crit', 'dodge', 'luck'];
 function generateAffix(rarity) {
@@ -431,10 +550,15 @@ function generateAffix(rarity) {
 
 function updateHUD() {
   if (!p) return;
+  ensureMetaSystems();
   
   let totalAtk = p.baseAtk + (p.eq.weapon ? p.eq.weapon.val : 0);
   let totalDef = p.baseDef + (p.eq.armor ? p.eq.armor.val : 0) + (p.eq.helm ? p.eq.helm.val : 0);
   let totalLuck = p.baseLuck + (p.eq.accessory ? p.eq.accessory.val : 0);
+  if (state.dungeon?.active) {
+    totalAtk += state.dungeon.runBonuses?.atkBonus || 0;
+    totalLuck += state.dungeon.runBonuses?.luckBonus || 0;
+  }
   let bCrit = 0, bDodge = 0;
 
   ['weapon', 'armor', 'helm', 'accessory'].forEach(s => {
@@ -460,7 +584,7 @@ function updateHUD() {
   let defPct = Math.floor(Math.min(0.85, totalDef / (totalDef + 40)) * 100);
   $('wd-ui-def').textContent = `${totalDef} (${defPct}%)`; 
   $('wd-ui-gold').textContent = p.gold; $('wd-ui-shards').textContent = p.inv.shards; 
-  $('wd-ui-dodge').textContent = `${p.baseDodge + bDodge}%`; $('wd-ui-luck').textContent = totalLuck;
+  $('wd-ui-dodge').textContent = `${p.baseDodge + bDodge + (p.metaBonuses?.dodge || 0)}%`; $('wd-ui-luck').textContent = totalLuck;
   $('wd-ui-location').textContent = state.dungeon.active ? `${DUNGEONS[state.dungeon.type].name} E${state.dungeon.floor}` : (state.area ? AREAS[state.area].name : "Dorf");
   $('wd-ui-sp').textContent = p.sp;
   
@@ -488,6 +612,7 @@ function updateHUD() {
   }
 
   renderQuests();
+  renderHeroBook();
 
   let dProg = $('wd-dungeon-progress');
   if (!dProg) { dProg = document.createElement('div'); dProg.id = 'wd-dungeon-progress'; dProg.style.cssText = "text-align:center; padding: 8px; background: rgba(0,0,0,0.8); color: var(--text-muted); font-family: 'Cinzel', serif; font-size: 0.85rem; border-bottom: 2px ridge var(--border); border-top: 2px ridge var(--border); display: none; letter-spacing: 1px;"; $('wd-main-stage').insertBefore(dProg, $('wd-action-panel')); }
@@ -556,11 +681,14 @@ function createPlayer(cls, existingPrestige = null, preserveName = null) {
     baseAtk: c.baseAtk + (prestige.buffs.stats * 2), baseDef: 0, baseDodge: 0, baseLuck: 0, bonusStats: { crit: 0, dodge: 0, atk: 0, def: 0, luck: 0 },
     eq: { weapon: { id: makeId('w'), type: 'weapon', name: c.defW, val: c.defDmg, rarity: 'r-common', sell: calculateSellValue(c.defDmg, 'r-common', 'weapon') }, armor: { id: makeId('a'), type: 'armor', name: c.defA, val: c.defDef, rarity: 'r-common', sell: calculateSellValue(c.defDef, 'r-common', 'armor') }, helm: null, accessory: null, trinket: null },
     inv: { weapons: [], armors: [], helms: [], accessories: [], trinkets: [], potions: { hp: 2, mp: 1 }, chests: { wooden: 1, iron: 0, mystic: 0 }, shards: 0 },
-    fx: { shield: 0, dodge: 0, combo: 0, bossBuff: false, poison: 0, poisonDmg: 0, stun: 0, weak: 0, regen: 0, regenHeal: 0 }, talents: {}, quest: null, runStats: { kills: 0 }, prestige: prestige
+    fx: { shield: 0, dodge: 0, combo: 0, bossBuff: false, poison: 0, poisonDmg: 0, stun: 0, weak: 0, regen: 0, regenHeal: 0, eventAtkBuff: 1 }, talents: {}, quest: null, runStats: { kills: 0 }, prestige: prestige,
+    metaBonuses: { xpPct: 0, goldPct: 0, crit: 0, dodge: 0 },
+    achievements: { unlocked: [], progress: {} },
+    metaStats: { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 }
   };
   if (name === "CodetNiemalsHigh") { p.gold = 99999999; p.inv.chests = { wooden: 50, iron: 50, mystic: 50 }; }
   p.inv.weapons.push(p.eq.weapon); p.inv.armors.push(p.eq.armor); state.discovery = { weapons: [p.eq.weapon.name], armors: [p.eq.armor.name], helms: [], accessories: [] }; state.lore = []; state.selectedSkill = "t_hp1"; 
-  generateQuestBoard(); playSound('magic'); log(`Die Reise beginnt, ${name} der ${cls}.`, "good"); goToTown();
+  generateQuestBoard(); ensureMetaSystems(); evaluateAchievements(); playSound('magic'); log(`Die Reise beginnt, ${name} der ${cls}.`, "good"); goToTown();
 }
 
 function showHelpCenter() {
@@ -575,7 +703,7 @@ function showHelpCenter() {
 }
 
 function goToTown() {
-  state.area = null; state.enemy = null; state.room = 0; state.dungeon.active = false; updateHUD(); showCombatStage(false); clearLog(); log("Du befindest dich im Dorf. Bereite dich gut vor.", "info");
+  state.area = null; state.enemy = null; state.room = 0; state.dungeon.active = false; state.dungeon.floorGoldBonus = 0; if (state.dungeon.runBonuses) { state.dungeon.runBonuses.firstSkillFreeAvailable = false; state.dungeon.runBonuses.luckBonus = 0; state.dungeon.runBonuses.atkBonus = 0; state.dungeon.runBonuses.xpBonus = 0; } updateHUD(); showCombatStage(false); clearLog(); log("Du befindest dich im Dorf. Bereite dich gut vor.", "info");
   const actions = [ 
       { label: "🗺️ Expedition", sub: "Ressourcen farmen", onclick: showExpeditionSelection }, 
       { label: "🏰 Dungeons", sub: "Endloser Boss-Modus", onclick: showDungeonSelection }, 
@@ -589,7 +717,7 @@ function goToTown() {
 
 function showPrestigeMenu() { clearLog(); log("Der Astral-Altar summt vor kosmischer Energie. Hier kannst du deine weltliche Macht für permanenten Astralstaub opfern.", "magic"); const canPrestige = p.lvl >= 25; const dustReward = 5; setActions([ { label: "Wiedergeburt", sub: canPrestige ? `+${dustReward} Astralstaub` : "Ab Lvl 25", disabled: !canPrestige, onclick: () => doPrestige(dustReward) }, { label: "Erfahrungs-Echo", sub: `1 Staub (+10% XP) [Lvl ${p.prestige.buffs.xp}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('xp') }, { label: "Goldsog", sub: `1 Staub (+10% Gold) [Lvl ${p.prestige.buffs.gold}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('gold') }, { label: "Macht des Kosmos", sub: `1 Staub (+15 HP, +2 ATK) [Lvl ${p.prestige.buffs.stats}]`, disabled: p.prestige.dust < 1, onclick: () => buyPrestigeBuff('stats') }, { label: "Zurück", sub: "Zum Dorfplatz", cssClass: "back-btn", onclick: goToTown } ]); }
 function buyPrestigeBuff(type) { p.prestige.dust -= 1; p.prestige.buffs[type] += 1; if (type === 'stats') { p.maxHp += 15; p.hp += 15; p.baseAtk += 2; } playSound('level'); updateHUD(); log(`Permanenter Buff verstärkt! Deine Macht überdauert den Tod.`, "magic"); showPrestigeMenu(); }
-function doPrestige(dustReward) { if(!confirm("WARNUNG: Du verlierst dein aktuelles Level, Gold, Inventar und Ausrüstung! Deine permanenten Buffs und dein Astralstaub bleiben erhalten. Fortfahren?")) return; playSound('magic'); const savedPrestige = JSON.parse(JSON.stringify(p.prestige)); savedPrestige.dust += dustReward; savedPrestige.level += 1; createPlayer(p.cls, savedPrestige, p.name); log(`WIEDERGEBURT ERFOLGREICH! Du startest neu, aber mächtiger als zuvor. (+${dustReward} Astralstaub)`, "warn"); }
+function doPrestige(dustReward) { if(!confirm("WARNUNG: Du verlierst dein aktuelles Level, Gold, Inventar und Ausrüstung! Deine permanenten Buffs und dein Astralstaub bleiben erhalten. Fortfahren?")) return; playSound('magic'); const savedPrestige = JSON.parse(JSON.stringify(p.prestige)); savedPrestige.dust += dustReward; savedPrestige.level += 1; const retainedMetaBonuses = JSON.parse(JSON.stringify(p.metaBonuses || { xpPct: 0, goldPct: 0, crit: 0, dodge: 0 })); const retainedAchievements = JSON.parse(JSON.stringify(p.achievements || { unlocked: [], progress: {} })); const retainedMetaStats = JSON.parse(JSON.stringify(p.metaStats || {})); retainedMetaStats.prestiges = (retainedMetaStats.prestiges || 0) + 1; createPlayer(p.cls, savedPrestige, p.name); p.metaBonuses = retainedMetaBonuses; p.achievements = retainedAchievements; p.metaStats = Object.assign(p.metaStats || {}, retainedMetaStats); evaluateAchievements(); log(`WIEDERGEBURT ERFOLGREICH! Du startest neu, aber mächtiger als zuvor. (+${dustReward} Astralstaub)`, "warn"); }
 
 function showExpeditionSelection() { clearLog(); log("Die Tore stehen offen. Wohin führt dein Weg?", "info"); setActions([ { label: "🌲 "+AREAS.Forest.name, sub: "Geringe Gefahr", onclick: () => startExploration('Forest') }, { label: "🏛️ "+AREAS.Ruins.name, sub: "Mittlere Gefahr", onclick: () => startExploration('Ruins') }, { label: "🌋 "+AREAS.Volcano.name, sub: "Hohe Gefahr", onclick: () => startExploration('Volcano') }, { label: "Zurück", sub: "Zum Dorfplatz", cssClass: "back-btn", onclick: goToTown } ]); }
 function showDungeonSelection() { clearLog(); log("Wähle einen Dungeon. Jeder Raum bedeutet Kampf, jede Etage einen Boss.", "warn"); setActions([ { label: "Katakomben (Leicht)", sub: "Basis-Loot", onclick: () => startDungeonRun('D1') }, { label: "Schattenfestung (Mittel)", sub: "1.5x Loot Chance", onclick: () => startDungeonRun('D2') }, { label: "Abgrund (Schwer)", sub: "2.2x Loot Chance", onclick: () => startDungeonRun('D3') }, { label: "Mahlstrom (Endlos)", sub: "Mutatoren ab Lvl 20", disabled: (p.lvl < 20 && (!p.prestige || p.prestige.level === 0)), onclick: () => startDungeonRun('D4') }, { label: "Zurück", sub: "Zum Dorfplatz", cssClass: "back-btn", onclick: goToTown } ]); }
@@ -686,9 +814,72 @@ async function resolveRoom(dangerMult) {
 
 function showFloorIntro(text) { const fct = document.createElement('div'); fct.className = 'wd-floor-intro-text'; fct.textContent = text; $('wd-visual-arena').appendChild(fct); setTimeout(() => fct.remove(), 3600); }
 
-function startDungeonRun(type) { state.area = 'Dungeon'; state.dungeon = { active: true, type: type, floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }; clearLog(); log(`--- ${DUNGEONS[type].name} ---`, "warn"); log(DUNGEONS[type].intro, "magic"); showFloorIntro(`EBENE 1`); showDungeonMenu(); }
-function showDungeonMenu() { updateHUD(); showCombatStage(false); const d = state.dungeon; const acts = []; if (d.bossPending) { log(`Das Tor zum Boss liegt vor dir.`, "bad"); acts.push({ label: "Boss-Tor öffnen", sub: "Bereite dich vor", onclick: () => spawnEnemy(1.2, true) }); } else { log(`Ebene ${d.floor} · Räume geklärt: ${d.roomsCleared} / ${d.roomsPerFloor}`, "info"); acts.push({ label: "Nächster Raum (Kampf)", sub: "Gegner besiegen, um voranzukommen", onclick: triggerDungeonRoom }); } const canRest = d.rests > 0 && d.firstEnemyDefeated; acts.push({ label: "Am Feuer rasten", sub: d.firstEnemyDefeated ? `+20% HP/MP (${d.rests} übrig)` : "Erst Gegner besiegen!", disabled: !canRest, onclick: dungeonRest }); acts.push({ label: "Dungeon verlassen", sub: "Zurück ins Dorf", cssClass: "back-btn", onclick: goToTown }); setActions(acts); }
-async function triggerDungeonRoom() { if(state.lock) return; state.lock = true; setActions([]); log("Eine schwere Eisentür öffnet sich...", "muted"); await sleep(400); spawnEnemy(1 + state.dungeon.floor * 0.1); }
+function getRandomUniqueBonuses(pool, count) {
+  const copy = [...pool];
+  const picked = [];
+  while (copy.length > 0 && picked.length < count) {
+    const idx = rand(0, copy.length - 1);
+    picked.push(copy.splice(idx, 1)[0]);
+  }
+  return picked;
+}
+
+function showDungeonStartBonusChoice() {
+  const choices = getRandomUniqueBonuses(DUNGEON_START_BONUSES, 3);
+  state.lock = false;
+  state.dungeon.startBonusChoicePending = true;
+  log("Wähle einen Startbonus für deinen Run.", "magic");
+  setActions(choices.map(b => ({
+    label: `✨ ${b.title}`,
+    sub: b.desc,
+    onclick: () => chooseDungeonStartBonus(b.id)
+  })).concat([{ label: "Ohne Segen", sub: "Kein Bonus", cssClass: "back-btn", onclick: () => chooseDungeonStartBonus(null) }]));
+}
+
+function chooseDungeonStartBonus(id) {
+  state.dungeon.startBonusChoicePending = false;
+  if (id) {
+    const bonus = DUNGEON_START_BONUSES.find(b => b.id === id);
+    if (bonus) { bonus.apply(); log(`Startbonus gewählt: ${bonus.title}`, "good"); }
+  } else {
+    log("Du betrittst den Dungeon ohne Startbonus.", "muted");
+  }
+  updateHUD();
+  showDungeonMenu();
+}
+
+function startDungeonRun(type) { state.area = 'Dungeon'; state.dungeon = { active: true, type: type, floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false, floorGoldBonus: 0, runBonuses: { firstSkillFreeAvailable: false, luckBonus: 0, atkBonus: 0, xpBonus: 0 }, startBonusChoicePending: true }; clearLog(); log(`--- ${DUNGEONS[type].name} ---`, "warn"); log(DUNGEONS[type].intro, "magic"); showFloorIntro(`EBENE 1`); showDungeonStartBonusChoice(); }
+function showDungeonMenu() { if (state.dungeon.startBonusChoicePending) { showDungeonStartBonusChoice(); return; } updateHUD(); showCombatStage(false); const d = state.dungeon; const acts = []; if (d.bossPending) { log(`Das Tor zum Boss liegt vor dir.`, "bad"); acts.push({ label: "Boss-Tor öffnen", sub: "Bereite dich vor", onclick: () => spawnEnemy(1.2, true) }); } else { log(`Ebene ${d.floor} · Räume geklärt: ${d.roomsCleared} / ${d.roomsPerFloor}`, "info"); acts.push({ label: "Nächster Raum", sub: "Kampf oder Event", onclick: triggerDungeonRoom }); } const canRest = d.rests > 0 && d.firstEnemyDefeated; acts.push({ label: "Am Feuer rasten", sub: d.firstEnemyDefeated ? `+20% HP/MP (${d.rests} übrig)` : "Erst Gegner besiegen!", disabled: !canRest, onclick: dungeonRest }); acts.push({ label: "Dungeon verlassen", sub: "Zurück ins Dorf", cssClass: "back-btn", onclick: goToTown }); setActions(acts); }
+function applyDungeonEventOutcome(outcome) {
+  if (!outcome) return;
+  const floorScale = 1 + (state.dungeon.floor * 0.12);
+  if (outcome.type === 'blood_gold') { const loss = Math.floor(p.maxHp * 0.12); p.hp = Math.max(1, p.hp - loss); state.dungeon.floorGoldBonus += 0.3; log(`Der Altar fordert ${loss} HP. Goldbonus auf dieser Ebene erhöht!`, "bad"); }
+  else if (outcome.type === 'pray') { const heal = Math.floor(p.maxHp * 0.15); p.hp = Math.min(p.maxHp, p.hp + heal); p.fx.weak = Math.max(p.fx.weak, 1); log(`Du heilst ${heal} HP, fühlst dich aber geschwächt.`, "good"); }
+  else if (outcome.type === 'cursed_chest') { p.inv.chests[Math.random() < 0.4 ? 'iron' : 'wooden']++; if (Math.random() < 0.45) { const dmg = Math.floor(p.maxHp * 0.1); p.hp = Math.max(1, p.hp - dmg); log(`Die Kiste ist verflucht! -${dmg} HP.`, "bad"); } else { log("Beute gesichert – kein Fluch ausgelöst.", "magic"); } }
+  else if (outcome.type === 'safe_potion') { p.inv.potions.hp++; log("Du findest einen Heiltrank.", "good"); }
+  else if (outcome.type === 'mana_or_pain') { p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp * 0.4)); if (Math.random() < 0.35) { const dmg = Math.floor(p.maxHp * 0.08); p.hp = Math.max(1, p.hp - dmg); log(`Das Wasser brennt! -${dmg} HP.`, "bad"); } else { log("Arkane Energie durchströmt dich.", "magic"); } }
+  else if (outcome.type === 'next_atk_buff') { p.fx.eventAtkBuff = Math.max(p.fx.eventAtkBuff || 1, 1.12 + (state.dungeon.floor * 0.01)); log("Der nächste Angriff wird verstärkt.", "good"); }
+  else if (outcome.type === 'sp_for_gold') { const loss = Math.min(p.gold, Math.floor((40 + p.lvl * 6) * floorScale)); p.gold -= loss; p.sp += 1; log(`Du opferst ${loss} Gold für 1 Talentpunkt.`, "magic"); }
+  else if (outcome.type === 'small_gold') { const gain = Math.floor((25 + p.lvl * 8) * floorScale); p.gold += gain; p.metaStats.goldEarned += gain; log(`Du findest ${gain} Gold im Staub.`, "good"); }
+  else if (outcome.type === 'run_atk') { state.dungeon.runBonuses.atkBonus += 2; log("Die Schmiede stärkt deinen Angriff für diesen Run (+2).", "magic"); }
+  else if (outcome.type === 'shards') { const gain = Math.floor((10 + p.lvl * 2) * floorScale); p.inv.shards += gain; p.metaStats.shardsEarned += gain; log(`Du zerlegst uralte Klingen (+${gain} Splitter).`, "good"); }
+  else if (outcome.type === 'shadow_deal') { state.dungeon.runBonuses.firstSkillFreeAvailable = true; p.hp = Math.max(1, p.hp - Math.floor(p.maxHp * 0.1)); state.dungeon.runBonuses.xpBonus = (state.dungeon.runBonuses.xpBonus || 0) + 0.2; log("Der Schattenpakt stärkt dich, verlangt aber Blut.", "warn"); }
+  else { log("Nichts geschieht.", "muted"); }
+  evaluateAchievements();
+  updateHUD();
+}
+
+function showDungeonEventRoom() {
+  const ev = DUNGEON_EVENTS[rand(0, DUNGEON_EVENTS.length - 1)];
+  state.lock = false;
+  log(`📜 ${ev.title}: ${ev.text}`, "magic");
+  setActions([
+    { label: ev.a.label, sub: ev.a.sub, onclick: () => { applyDungeonEventOutcome(ev.a.outcome); state.lock = false; showDungeonMenu(); } },
+    { label: ev.b.label, sub: ev.b.sub, onclick: () => { applyDungeonEventOutcome(ev.b.outcome); state.lock = false; showDungeonMenu(); } }
+  ]);
+}
+
+async function triggerDungeonRoom() { if(state.lock) return; state.lock = true; setActions([]); log("Eine schwere Eisentür öffnet sich...", "muted"); await sleep(400); if (Math.random() < 0.28) { showDungeonEventRoom(); return; } spawnEnemy(1 + state.dungeon.floor * 0.1); }
 function dungeonRest() { if(!state.dungeon.firstEnemyDefeated || state.dungeon.rests <= 0) return; state.dungeon.rests--; playSound('heal'); p.hp = Math.min(p.maxHp, p.hp + Math.floor(p.maxHp * 0.2)); p.mp = Math.min(p.maxMp, p.mp + Math.floor(p.maxMp * 0.2)); log("Du rastest kurz am Feuer.", "good"); updateHUD(); showDungeonMenu(); }
 
 function spawnEnemy(mult, forceBoss=false) {
@@ -711,9 +902,10 @@ function spawnEnemy(mult, forceBoss=false) {
 
 function renderCombatActions() {
   const c = CLASSES[p.cls];
+  const freeSkillReady = !!(state.dungeon?.active && state.dungeon?.runBonuses?.firstSkillFreeAvailable);
   setActions([
     { label: "Angriff", sub: "Standard", cssClass: "atk-btn", onclick: () => doAttack('basic') },
-    { label: c.skill, sub: `${c.cost} MP`, current: p.mp, cost: c.cost, cssClass: "skill-btn", onclick: () => doAttack('skill') },
+    { label: c.skill, sub: freeSkillReady ? "0 MP (Startbonus)" : `${c.cost} MP`, current: p.mp, cost: freeSkillReady ? 0 : c.cost, cssClass: "skill-btn", onclick: () => doAttack('skill') },
     { label: c.ult, sub: `${c.uCost} MP`, current: p.mp, cost: c.uCost, cssClass: "ult-btn", onclick: () => doAttack('ult') },
     { label: "Trank", sub: `${p.inv.potions.hp}x HP`, disabled: p.inv.potions.hp <= 0, onclick: () => usePotion('hp') },
     { label: "Fliehen", sub: "50% Chance", disabled: state.enemy.boss, onclick: tryFlee }
@@ -753,12 +945,18 @@ async function doAttack(type) {
   if (await tickEffects(p, true)) { checkDeath(); return; }
   if (p.fx.stun > 0) { p.fx.stun--; log("Du bist betäubt und setzt aus!", "bad"); updateHUD(); await sleep(800); await enemyTurn(); return; }
 
-  let dmg = p.baseAtk + (p.eq.weapon ? p.eq.weapon.val : 0) + (p.bonusStats ? p.bonusStats.atk : 0);
+  let dmg = p.baseAtk + (p.eq.weapon ? p.eq.weapon.val : 0) + (p.bonusStats ? p.bonusStats.atk : 0) + (state.dungeon?.active ? (state.dungeon.runBonuses?.atkBonus || 0) : 0);
   if (p.fx.weak > 0) { dmg = Math.floor(dmg * 0.7); p.fx.weak--; }
-  let luckCritBonus = p.baseLuck * 0.005; let critChance = c.crit + (p.eq.trinket && p.eq.trinket.effect==='crit' ? 0.2 : 0) + (p.fx.combo*0.05) + luckCritBonus + (p.bonusStats ? p.bonusStats.crit : 0); let isCrit = Math.random() < critChance;
+  let luckCritBonus = p.baseLuck * 0.005; let critChance = c.crit + (p.eq.trinket && p.eq.trinket.effect==='crit' ? 0.2 : 0) + (p.fx.combo*0.05) + luckCritBonus + (p.bonusStats ? p.bonusStats.crit : 0) + (p.metaBonuses?.crit || 0); let isCrit = Math.random() < critChance;
   
-  if(type === 'skill') { p.mp -= c.cost; dmg = Math.floor(dmg * 1.5); }
+  if(type === 'skill') {
+    const freeSkill = !!(state.dungeon?.active && state.dungeon?.runBonuses?.firstSkillFreeAvailable);
+    if (!freeSkill) p.mp -= c.cost;
+    else { state.dungeon.runBonuses.firstSkillFreeAvailable = false; log("Startbonus: Fähigkeit kostet kein Mana!", "magic"); }
+    dmg = Math.floor(dmg * 1.5);
+  }
   if(type === 'ult') { p.mp -= c.uCost; dmg = Math.floor(dmg * 2.8); if(p.fx.bossBuff && state.enemy.boss) { dmg=Math.floor(dmg*1.3); p.fx.bossBuff=false; log("Boss-Segen!","magic"); playSound('magic'); } progressQuest('ult'); }
+  if (p.fx.eventAtkBuff && p.fx.eventAtkBuff > 1) { dmg = Math.floor(dmg * p.fx.eventAtkBuff); log("Ereignisbonus verstärkt deinen Schlag!", "magic"); p.fx.eventAtkBuff = 1; }
   if(isCrit) dmg = Math.floor(dmg * 1.8);
   
   if(p.cls==='Ritter' && type==='skill') p.fx.shield=2; if(p.cls==='Schurke') p.fx.combo=Math.min(3,p.fx.combo+1); if(p.cls==='Waldläufer' && type==='skill') p.fx.dodge=1;
@@ -780,7 +978,7 @@ async function doAttack(type) {
 async function enemyTurn() {
   if (await tickEffects(state.enemy, false)) { await winCombat(); return; }
   if (state.enemy.fx.stun > 0) { state.enemy.fx.stun--; log(`${state.enemy.n} ist betäubt und setzt aus!`, "good"); updateHUD(); state.lock = false; renderCombatActions(); return; }
-  const dodgeChance = (p.baseDodge * 0.01) + (p.fx.dodge > 0 ? 0.4 : 0) + ((p.bonusStats ? p.bonusStats.dodge : 0) * 0.01);
+  const dodgeChance = ((p.baseDodge + (p.metaBonuses?.dodge || 0)) * 0.01) + (p.fx.dodge > 0 ? 0.4 : 0) + ((p.bonusStats ? p.bonusStats.dodge : 0) * 0.01);
   if(Math.random() < dodgeChance) { if(p.fx.dodge > 0) p.fx.dodge--; log("Du weichst geschickt aus!", "good"); playSound('hover'); state.combatStats.dodges++; state.lock = false; renderCombatActions(); return; } 
 
   let chosenAbility = null;
@@ -821,9 +1019,20 @@ async function winCombat() {
   const isBoss = state.enemy.boss; const eName = state.enemy.n; const loreText = state.enemy.lore;
   let el = $('wd-sprite-enemy'); el.classList.add('wd-enemy-dead'); await sleep(600);
   
-  const luckGoldMult = 1 + ((p.baseLuck + (p.bonusStats ? p.bonusStats.luck : 0)) * 0.03); const prestigeGoldBuff = 1 + ((p.prestige?.buffs?.gold || 0) * 0.1); const prestigeXpBuff = 1 + ((p.prestige?.buffs?.xp || 0) * 0.1);
-  const gold = Math.floor(rand(10, 30) * state.enemy.lootMult * (isBoss?5:1) * luckGoldMult * prestigeGoldBuff); const gainedXp = Math.floor(state.enemy.xp * prestigeXpBuff);
+  ensureMetaSystems();
+  const runLuck = state.dungeon?.active ? (state.dungeon.runBonuses?.luckBonus || 0) : 0;
+  const luckGoldMult = 1 + ((p.baseLuck + runLuck + (p.bonusStats ? p.bonusStats.luck : 0)) * 0.03);
+  const prestigeGoldBuff = 1 + ((p.prestige?.buffs?.gold || 0) * 0.1);
+  const prestigeXpBuff = 1 + ((p.prestige?.buffs?.xp || 0) * 0.1);
+  const achGoldBuff = 1 + (p.metaBonuses?.goldPct || 0);
+  const achXpBuff = 1 + (p.metaBonuses?.xpPct || 0);
+  const floorGoldBuff = state.dungeon?.active ? (1 + (state.dungeon.floorGoldBonus || 0)) : 1;
+  const runXpBuff = state.dungeon?.active ? (1 + (state.dungeon.runBonuses?.xpBonus || 0)) : 1;
+  const gold = Math.floor(rand(10, 30) * state.enemy.lootMult * (isBoss?5:1) * luckGoldMult * prestigeGoldBuff * achGoldBuff * floorGoldBuff);
+  const gainedXp = Math.floor(state.enemy.xp * prestigeXpBuff * achXpBuff * runXpBuff);
   p.gold += gold; p.xp += gainedXp; p.runStats.kills++;
+  p.metaStats.kills++; p.metaStats.goldEarned += gold; p.metaStats.critHits += state.combatStats.crits; p.metaStats.dodges += state.combatStats.dodges;
+  if (isBoss) p.metaStats.bossKills++;
   playSound('coin'); log(`Sieg! +${gold} Gold, +${gainedXp} XP.`, "good");
   
   log(`--- Kampf-Zusammenfassung ---`, "magic"); log(`Schaden ausgeteilt: ${state.combatStats.dmgDealt} (${state.combatStats.crits}x Krit)`, "info"); log(`Schaden erlitten: ${state.combatStats.dmgTaken} (${state.combatStats.dodges}x Ausgewichen)`, "info");
@@ -838,16 +1047,19 @@ async function winCombat() {
     if (isBoss) { 
       p.inv.chests['mystic']++; log("Boss-Drop: Arkankiste!", "magic"); 
       let artChance = state.dungeon.type === 'D4' ? 0.02 : (state.dungeon.type === 'D3' ? 0.0133 : (state.dungeon.type === 'D2' ? 0.0115 : 0.01));
-      if (Math.random() < artChance + ((p.baseLuck + (p.bonusStats ? p.bonusStats.luck : 0)) * 0.0005)) { const tBase = TRINKETS[rand(0, TRINKETS.length-1)]; const t = Object.assign({}, tBase); t.id = makeId('t'); t.type = 'trinket'; t.sell = 1500; p.inv.trinkets.push(t); playSound('level'); log(`MÄCHTIGE BEUTE: Artefakt '${t.name}' gefunden!`, "magic"); }
+      if (Math.random() < artChance + ((p.baseLuck + (p.bonusStats ? p.bonusStats.luck : 0)) * 0.0005)) { const tBase = TRINKETS[rand(0, TRINKETS.length-1)]; const t = Object.assign({}, tBase); t.id = makeId('t'); t.type = 'trinket'; t.sell = 1500; p.inv.trinkets.push(t); p.metaStats.artefactsFound++; playSound('level'); log(`MÄCHTIGE BEUTE: Artefakt '${t.name}' gefunden!`, "magic"); }
     } 
     else { state.dungeon.roomsCleared++; if (state.dungeon.roomsCleared >= state.dungeon.roomsPerFloor) state.dungeon.bossPending = true; if (Math.random() < (0.15 * state.enemy.lootMult) + luckChestChance) { p.inv.chests[Math.random()<0.3?'iron':'wooden']++; log("Gegner ließ eine Kiste fallen!", "magic"); } }
   } else { if (Math.random() < 0.08 + luckChestChance) { p.inv.chests.wooden++; log("Holzkiste gefunden!", "magic"); } }
   
   if(p.xp >= p.maxXp) { playSound('level'); p.xp -= p.maxXp; p.lvl++; p.maxXp = Math.floor(p.maxXp * 1.5); p.maxHp += 15; p.hp = p.maxHp; p.sp += 1; log(`LEVEL UP! Stufe ${p.lvl}. (+1 Talent)`, "warn"); }
   if(isBoss && state.dungeon.active) {
-    state.dungeon.floor++; state.dungeon.roomsCleared = 0; state.dungeon.roomsPerFloor = Math.min(8, 3 + Math.floor(state.dungeon.floor / 2)); state.dungeon.bossPending = false; state.dungeon.rests = 1;
+    state.dungeon.floor++; state.dungeon.roomsCleared = 0; state.dungeon.roomsPerFloor = Math.min(8, 3 + Math.floor(state.dungeon.floor / 2)); state.dungeon.bossPending = false; state.dungeon.rests = 1; state.dungeon.floorGoldBonus = 0;
+    if (p.metaStats.maxDungeonFloor < state.dungeon.floor) p.metaStats.maxDungeonFloor = state.dungeon.floor;
+    if (Math.random() < 0.85) { state.dungeon.startBonusChoicePending = true; }
     log(`Dungeon Ebene ${state.dungeon.floor} betreten!`, "magic"); showFloorIntro(`EBENE ${state.dungeon.floor}`); state.enemy = null; state.lock = false; updateHUD(); showDungeonMenu(); return;
   }
+  evaluateAchievements();
   state.enemy = null; state.lock = false; updateHUD();
   if(state.dungeon.active) showDungeonMenu(); else enterRoom();
 }
@@ -935,7 +1147,7 @@ function sellItem(type, id) {
 function dismantleItem(type, id) {
   const { itemList, idx, item } = getInventoryItem(type, id);
   if(itemList === null || idx === -1 || item === undefined) { log("Item nicht gefunden", "bad"); return; }
-  const shards = calculateShardValue(item.rarity); if(p.inv.shards === undefined) p.inv.shards = 0; p.inv.shards += shards; progressQuest('dismantle'); itemList.splice(idx, 1); playSound('magic'); log(`${item.name} zerschlagen! +${shards} Arkane Splitter.`, "magic"); updateHUD(); renderInventoryList(type);
+  const shards = calculateShardValue(item.rarity); if(p.inv.shards === undefined) p.inv.shards = 0; p.inv.shards += shards; p.metaStats.itemsDismantled++; p.metaStats.shardsEarned += shards; progressQuest('dismantle'); itemList.splice(idx, 1); playSound('magic'); log(`${item.name} zerschlagen! +${shards} Arkane Splitter.`, "magic"); evaluateAchievements(); updateHUD(); renderInventoryList(type);
 }
 function chestRewardVisualClass(rewardText, rewardClass='') { const text = (rewardText||'').toLowerCase(); if (text.includes('mana')) return 'reward-mana'; if (text.includes('trank')) return 'reward-potion'; if (text.includes('gold')) return 'reward-gold'; return rewardClass || 'r-common'; }
 function skipChestAnimation() { isSkippingChest = true; }
@@ -962,20 +1174,84 @@ function generateChestReward(type) {
       const rarity = rollRarity(type); let pool, name, val, itemObj;
       const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
       
-      if (category === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * def.rewardMult * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); }
-      else if (category === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * def.rewardMult * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); }
-      else if (category === 'helm') { pool = HELM_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(1, 4) + p.lvl * 0.5) * def.rewardMult * rarityMult); itemObj = { id: makeId('h'), type:'helm', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.helms.push(itemObj); discover('helms', name); }
-      else if (category === 'accessory') { pool = ACC_POOLS[rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor(rand(1, 3) * rarityMult); itemObj = { id: makeId('acc'), type:'accessory', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val*2, 'r-'+rarity, 'weapon') }; p.inv.accessories.push(itemObj); discover('accessories', name); }
+      if (category === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * def.rewardMult * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); if (rarity === 'legendary') p.metaStats.legendaryFound++; }
+      else if (category === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * def.rewardMult * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); if (rarity === 'legendary') p.metaStats.legendaryFound++; }
+      else if (category === 'helm') { pool = HELM_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(1, 4) + p.lvl * 0.5) * def.rewardMult * rarityMult); itemObj = { id: makeId('h'), type:'helm', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.helms.push(itemObj); discover('helms', name); if (rarity === 'legendary') p.metaStats.legendaryFound++; }
+      else if (category === 'accessory') { pool = ACC_POOLS[rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor(rand(1, 3) * rarityMult); itemObj = { id: makeId('acc'), type:'accessory', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val*2, 'r-'+rarity, 'weapon') }; p.inv.accessories.push(itemObj); discover('accessories', name); if (rarity === 'legendary') p.metaStats.legendaryFound++; }
       
       let affix = generateAffix('r-'+rarity); if (affix) itemObj.affix = affix;
       let statSuf = (category === 'accessory') ? 'LUCK' : (category === 'weapon' ? 'ATK' : 'RÜS');
       rewardText = itemObj.name + ` (+${val} ${statSuf})` + (affix ? ' ✧' : ''); rewardClass = 'r-'+rarity; 
   } 
   else if (category === 'potions') { p.inv.potions.hp += 2; p.inv.potions.mp += 1; rewardText = `Tränke (HP/MP)`; rewardClass = 'reward-potion'; } 
-  else { const g = Math.floor(rand(50, 150) * def.rewardMult); p.gold += g; rewardText = `${g} Gold`; rewardClass = 'reward-gold'; } return { rewardText, rewardClass };
+  else { const g = Math.floor(rand(50, 150) * def.rewardMult); p.gold += g; p.metaStats.goldEarned += g; rewardText = `${g} Gold`; rewardClass = 'reward-gold'; } return { rewardText, rewardClass };
 }
-async function openChest(type, count = 1) { if(p.inv.chests[type] < count || state.lock || state.enemy) return; state.lock = true; p.inv.chests[type] -= count; let results = []; for(let i=0; i<count; i++) { progressQuest('chest'); results.push(generateChestReward(type)); } updateHUD(); renderInventoryList('consumables'); await playChestOpeningAnimation(type, results); if (count === 1) { log(`Kiste geöffnet: ${results[0].rewardText}`, "good"); } else { log(`${count} Kisten geöffnet!`, "good"); } state.lock = false; renderInventoryList('consumables'); }
+async function openChest(type, count = 1) { if(p.inv.chests[type] < count || state.lock || state.enemy) return; state.lock = true; p.inv.chests[type] -= count; let results = []; for(let i=0; i<count; i++) { progressQuest('chest'); results.push(generateChestReward(type)); } p.metaStats.chestsOpened += count; evaluateAchievements(); updateHUD(); renderInventoryList('consumables'); await playChestOpeningAnimation(type, results); if (count === 1) { log(`Kiste geöffnet: ${results[0].rewardText}`, "good"); } else { log(`${count} Kisten geöffnet!`, "good"); } state.lock = false; renderInventoryList('consumables'); }
 function rarityLabel(r) { const labels = { common: 'Gewöhnlich', rare: 'Selten', epic: 'Episch', legendary: 'Legendär' }; return labels[r] || r; }
+
+function renderHeroBook() {
+  const container = $('wd-hero-book');
+  if (!container || !p) return;
+  ensureMetaSystems();
+  const stats = getEffectiveStatSnapshot();
+  const unlocked = p.achievements.unlocked || [];
+  const grouped = { Kampf: [], Sammlung: [], Progression: [] };
+  ACHIEVEMENTS.forEach(a => grouped[a.cat].push(a));
+
+  const makeAchievementRow = (a) => {
+    const progress = Math.min(getAchievementProgress(a), a.target);
+    const done = unlocked.includes(a.id);
+    const pct = Math.floor((progress / a.target) * 100);
+    return `<div class="wd-quest-card" style="margin-bottom:10px; opacity:${done ? 1 : 0.75}; border-left-color:${done ? 'var(--xp-glow)' : 'var(--border-light)'}">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+        <div style="flex:1">
+          <div class="wd-quest-title">${done ? '✅ ' : '⬜ '}${a.title}</div>
+          <div class="wd-quest-desc">${a.desc}</div>
+          <div class="wd-quest-rewards"><div class="wd-reward-badge" style="color:${done ? 'var(--xp-glow)' : 'var(--text-muted)'}">${a.bonus.text}</div></div>
+          <div class="wd-bar-bg" style="height:6px; margin-top:8px;"><div class="wd-bar-fill" style="width:${pct}%; background:${done ? 'linear-gradient(90deg,#065f46,var(--xp-glow))' : 'linear-gradient(90deg,#444,#888)'}"></div></div>
+        </div>
+        <div style="font-family:'Cinzel',serif; color:${done ? 'var(--xp-glow)' : 'var(--text-muted)'}; min-width:74px; text-align:right">${progress}/${a.target}</div>
+      </div>
+    </div>`;
+  };
+
+  const activeRunBonuses = [];
+  if (state.dungeon?.active) {
+    if ((state.dungeon.floorGoldBonus || 0) > 0) activeRunBonuses.push(`+${Math.round(state.dungeon.floorGoldBonus * 100)}% Gold (Ebene)`);
+    if (state.dungeon.runBonuses?.firstSkillFreeAvailable) activeRunBonuses.push(`Nächste Fähigkeit kostet 0 Mana`);
+    if ((state.dungeon.runBonuses?.luckBonus || 0) > 0) activeRunBonuses.push(`+${state.dungeon.runBonuses.luckBonus} Glück (Run)`);
+    if ((state.dungeon.runBonuses?.atkBonus || 0) > 0) activeRunBonuses.push(`+${state.dungeon.runBonuses.atkBonus} ATK (Run)`);
+  }
+
+  container.innerHTML = `
+    <h3>📖 Heldenbuch</h3>
+    <div class="wd-active-quest-box" style="text-align:left; margin-bottom:12px">
+      <div class="wd-aq-header">Vollständige Werte</div>
+      <div class="wd-quest-rewards">
+        <div class="wd-reward-badge">ATK: <b>${stats.totalAtk}</b></div>
+        <div class="wd-reward-badge">Rüstung: <b>${stats.totalDef}</b></div>
+        <div class="wd-reward-badge">Mitigation: <b>${stats.mitigationPct}%</b></div>
+        <div class="wd-reward-badge">Krit: <b>${stats.critPct}%</b></div>
+        <div class="wd-reward-badge">Ausweichen: <b>${stats.dodgePct}%</b></div>
+        <div class="wd-reward-badge">Glück: <b>${stats.totalLuck}</b></div>
+      </div>
+      <div style="margin-top:10px; font-size:0.8rem; color:var(--text-muted)">
+        Prestige: <b style="color:var(--accent)">${p.prestige.level}</b> · Astralstaub: <b style="color:var(--accent)">${p.prestige.dust}</b><br>
+        Permanente Boni: XP +${Math.round((p.metaBonuses.xpPct || 0) * 100)}% · Gold +${Math.round((p.metaBonuses.goldPct || 0) * 100)}% · Krit +${Math.round((p.metaBonuses.crit || 0) * 100)}% · Ausweichen +${p.metaBonuses.dodge || 0}%
+      </div>
+      <div style="margin-top:10px; font-size:0.8rem; color:var(--text-muted)">
+        Aktive Run-Buffs: ${activeRunBonuses.length ? activeRunBonuses.join(' • ') : 'Keine'}
+      </div>
+    </div>
+    <h3>🏆 Achievements (${unlocked.length}/${ACHIEVEMENTS.length})</h3>
+    <div style="margin-bottom:6px; color:var(--text-muted); font-size:0.8rem">Kampf</div>
+    ${grouped.Kampf.map(makeAchievementRow).join('')}
+    <div style="margin:10px 0 6px; color:var(--text-muted); font-size:0.8rem">Sammlung</div>
+    ${grouped.Sammlung.map(makeAchievementRow).join('')}
+    <div style="margin:10px 0 6px; color:var(--text-muted); font-size:0.8rem">Progression</div>
+    ${grouped.Progression.map(makeAchievementRow).join('')}
+  `;
+}
 
 function renderIndexList(type) {
   const c = $('wd-index-list'); c.innerHTML = ''; const btns = document.querySelectorAll('#wd-tab-index .wd-mini-btn'); btns.forEach(b => b.classList.remove('wd-active-filter')); if (type === 'weapons') btns[0].classList.add('wd-active-filter'); else if (type === 'armors') btns[1].classList.add('wd-active-filter'); else if (type === 'lore') btns[2].classList.add('wd-active-filter');
@@ -988,17 +1264,17 @@ function renderSkills() {
   SKILL_TIERS.forEach(tier => { treeHtml += `<div style="display:flex; justify-content:space-around; width:100%; position:relative; z-index:2;">`; tier.forEach(skillId => { const t = SKILL_TREE.find(s => s.id === skillId); const rank = p.talents[skillId] || 0; let locked = false; for (let reqId in t.req) { if ((p.talents[reqId] || 0) < t.req[reqId]) locked = true; } let nodeClass = "wd-skill-node"; if (locked) nodeClass += " locked"; else if (rank >= t.max) nodeClass += " maxed"; else if (rank > 0) nodeClass += " active"; else nodeClass += " unlocked"; if (state.selectedSkill === skillId) nodeClass += " selected"; treeHtml += `<div class="${nodeClass}" onclick="selectSkill('${skillId}')" title="${t.name}"><div class="wd-skill-icon">${t.icon}</div><div class="wd-skill-rank">${rank}/${t.max}</div></div>`; }); treeHtml += `</div>`; }); treeHtml += `</div>`; c.innerHTML += treeHtml;
   if (state.selectedSkill) { const t = SKILL_TREE.find(s => s.id === state.selectedSkill); const rank = p.talents[state.selectedSkill] || 0; const pct = (rank / t.max) * 100; let locked = false; let reqText = []; for (let reqId in t.req) { const reqRank = p.talents[reqId] || 0; if (reqRank < t.req[reqId]) { locked = true; const reqNode = SKILL_TREE.find(n => n.id === reqId); reqText.push(`${reqNode.name} (Lvl ${t.req[reqId]})`); } } let detailsHtml = `<div class="wd-skill-detail-card" style="border-left-color: ${locked ? 'var(--hp-glow)' : (rank >= t.max ? 'var(--gold)' : 'var(--rare)')};"><div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;"><div><h4 style="color:var(--text-main); font-size:1.3rem; margin:0; font-family:'Cinzel', serif; text-shadow: 0 2px 4px #000;">${t.icon} ${t.name}</h4><span style="color:var(--accent); font-size:0.8rem; letter-spacing: 1px; text-transform:uppercase;">Rang ${rank} von ${t.max}</span></div></div><div class="wd-bar-bg" style="height:4px; margin-bottom:15px; border-color:var(--border);"><div class="wd-bar-fill" style="width:${pct}%; background: ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'}; box-shadow: 0 0 8px ${rank >= t.max ? 'var(--gold)' : 'var(--rare)'};"></div></div><p style="color:var(--text-muted); font-size:0.95rem; line-height:1.5; margin-bottom:15px; font-style:italic;">"${t.desc}"</p>`; if (locked) { detailsHtml += `<p style="background: rgba(153, 27, 27, 0.2); padding: 8px; border-left: 2px solid var(--hp-glow); color:var(--hp-glow); font-size:0.8rem; margin-bottom:15px; font-weight:bold;">❌ Erfordert: ${reqText.join(', ')}</p>`; } else if (rank >= t.max) { detailsHtml += `<p style="color:var(--gold); font-size:0.8rem; margin-bottom:15px; font-weight:bold; text-shadow: 0 0 5px rgba(212,175,55,0.4);">✔️ Ultimative Meisterschaft erreicht</p>`; } detailsHtml += `<button class="wd-btn" style="width:100%; padding:12px; font-size: 1rem;" ${p.sp <= 0 || rank >= t.max || locked ? 'disabled' : ''} onclick="buyTalent('${t.id}')">${locked ? 'Wissen versiegelt' : (rank >= t.max ? 'Maximiert' : 'Talent studieren (1 SP)')}</button></div>`; c.innerHTML += detailsHtml; }
 }
-function buyTalent(id) { const t = SKILL_TREE.find(x => x.id === id); const rank = p.talents[id] || 0; if(p.sp <= 0 || rank >= t.max) return; for (let reqId in t.req) if ((p.talents[reqId] || 0) < t.req[reqId]) return; playSound('magic'); p.sp--; p.talents[id] = rank + 1; if(t.type === 'hp') { p.maxHp += t.val; p.hp += t.val; } if(t.type === 'mp') { p.maxMp += t.val; p.mp += t.val; } if(t.type === 'atk') { p.baseAtk += t.val; } if(t.type === 'def') { p.baseDef += t.val; } if(t.type === 'dodge') { p.baseDodge += t.val; } if(t.type === 'luck') { p.baseLuck += t.val; } updateHUD(); renderSkills(); }
+function buyTalent(id) { const t = SKILL_TREE.find(x => x.id === id); const rank = p.talents[id] || 0; if(p.sp <= 0 || rank >= t.max) return; for (let reqId in t.req) if ((p.talents[reqId] || 0) < t.req[reqId]) return; playSound('magic'); p.sp--; p.talents[id] = rank + 1; if(t.type === 'hp') { p.maxHp += t.val; p.hp += t.val; } if(t.type === 'mp') { p.maxMp += t.val; p.mp += t.val; } if(t.type === 'atk') { p.baseAtk += t.val; } if(t.type === 'def') { p.baseDef += t.val; } if(t.type === 'dodge') { p.baseDodge += t.val; } if(t.type === 'luck') { p.baseLuck += t.val; } p.metaStats.talentsSpent++; evaluateAchievements(); updateHUD(); renderSkills(); }
 
 function getRandomQuest() { const lvl = p ? p.lvl : 1; const maxXp = p ? p.maxXp : 100; const xpEasy = Math.floor(maxXp * 0.15); const xpMed = Math.floor(maxXp * 0.25); const xpHard = Math.floor(maxXp * 0.40); const questPool = [ { id: "q1_"+makeId(), title: "Säuberung", desc: `Besiege ${4 + lvl} Gegner im Kampf.`, goal: 4 + lvl, req: "kill", rewardGold: 50 + lvl * 15, rewardXP: xpEasy, extra: null }, { id: "q2_"+makeId(), title: "Gieriger Blick", desc: `Öffne ${2 + Math.floor(lvl/4)} Truhen.`, goal: 2 + Math.floor(lvl/4), req: "chest", rewardGold: 80 + lvl * 20, rewardXP: xpMed, extra: {type: 'hp', text: '1x Heiltrank', val: 1} }, { id: "q3_"+makeId(), title: "Kopfgeld", desc: `Besiege 1 Boss-Monster.`, goal: 1, req: "boss", rewardGold: 150 + lvl * 40, rewardXP: xpHard, extra: {type: 'shards', text: `${5 + lvl*2} Arkane Splitter`, val: 5 + lvl*2} }, { id: "q4_"+makeId(), title: "Machtdemonstration", desc: `Nutze deine ultimative Fähigkeit ${3 + Math.floor(lvl/2)} mal.`, goal: 3 + Math.floor(lvl/2), req: "ult", rewardGold: 60 + lvl * 15, rewardXP: xpEasy, extra: {type: 'mp', text: '1x Manatrank', val: 1} }, { id: "q5_"+makeId(), title: "Schmiedekunst", desc: `Zerschlage ${2 + Math.floor(lvl/3)} Items für Splitter.`, goal: 2 + Math.floor(lvl/3), req: "dismantle", rewardGold: 70 + lvl * 20, rewardXP: xpMed, extra: {type: 'chest_wooden', text: '1x Holzkiste', val: 1} }, { id: "q6_"+makeId(), title: "Der unerbittliche Jäger", desc: `Besiege ${8 + lvl*2} Gegner.`, goal: 8 + lvl*2, req: "kill", rewardGold: 180 + lvl * 40, rewardXP: xpHard, extra: {type: 'chest_iron', text: '1x Eisenkiste', val: 1} } ]; return questPool[Math.floor(Math.random() * questPool.length)]; }
 function generateQuestBoard() { state.availQuests = [getRandomQuest(), getRandomQuest(), getRandomQuest()]; }
 function renderQuests() { const board = $('wd-quest-board'); const active = $('wd-quest-active'); if(!board) return; if(p.quest) { const ready = p.quest.progress >= p.quest.goal; const pct = Math.min(100, (p.quest.progress / p.quest.goal) * 100); let extraHTML = p.quest.extra ? `<div class="wd-reward-badge" style="color:#d8b4e2; border-color:rgba(192,132,252,0.3)">🎁 ${p.quest.extra.text}</div>` : ''; active.innerHTML = `<div class="wd-active-quest-box ${ready ? 'ready' : ''}"><div class="wd-aq-header">${ready ? 'Pakt Erfüllt!' : 'Aktiver Pakt'}</div><h4 style="color:var(--text-main); font-size:1.1rem; margin-bottom:5px;">${p.quest.title}</h4><p style="font-size:0.85rem; color:var(--text-muted); font-style:italic; margin-bottom:12px;">${p.quest.desc}</p><div class="wd-quest-rewards" style="justify-content:center; margin-bottom:12px;"><div class="wd-reward-badge" style="color:var(--gold)">🪙 ${p.quest.rewardGold} G</div><div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${p.quest.rewardXP} XP</div>${extraHTML}</div><div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted); font-weight:bold; margin-bottom:6px; font-family:'Cinzel', serif;"><span>Fortschritt</span><span style="color:${ready ? 'var(--xp-glow)' : 'var(--accent)'}">${p.quest.progress} / ${p.quest.goal}</span></div><div class="wd-bar-bg" style="height:8px; margin-bottom:15px; border-color:var(--border-light)"><div class="wd-bar-fill" style="width:${pct}%; background:${ready ? 'linear-gradient(90deg, #065f46, var(--xp-glow))' : 'linear-gradient(90deg, #78350f, var(--accent))'}; box-shadow: 0 0 10px ${ready ? 'var(--xp-glow)' : 'var(--accent)'};"></div></div>${ready ? `<button class="wd-btn" style="width:100%; padding:10px; border-color:var(--xp-glow); color:var(--xp-glow); text-shadow: 0 0 5px rgba(16,185,129,0.5);" onclick="claimQuest()">Belohnung einfordern</button>` : `<button class="wd-mini-btn" style="width:100%; border-style:dashed; opacity:0.7;" onclick="p.quest=null; updateHUD();">Pakt abbrechen</button>`}</div>`; } else { active.innerHTML = `<div style="text-align:center; padding:25px 20px; border:1px dashed var(--border); border-radius:4px; color:var(--text-muted); font-style:italic; background:rgba(0,0,0,0.3)">Kein aktiver Pakt. Wähle unten einen Auftrag vom Brett.</div>`; } board.innerHTML = ''; state.availQuests.forEach(q => { let extraHTML = q.extra ? `<div class="wd-reward-badge" style="color:#d8b4e2">🎁 ${q.extra.text}</div>` : ''; board.innerHTML += `<div class="wd-quest-card"><div style="display:flex; justify-content:space-between; align-items:center;"><div style="flex:1; padding-right:15px;"><div class="wd-quest-title">${q.title}</div><div class="wd-quest-desc">${q.desc}</div><div class="wd-quest-rewards"><div class="wd-reward-badge" style="color:var(--gold)">🪙 ${q.rewardGold}</div><div class="wd-reward-badge" style="color:var(--xp-glow)">✨ ${q.rewardXP}</div>${extraHTML}</div></div><button class="wd-mini-btn" style="padding:10px 15px; height:fit-content;" ${p.quest?'disabled':''} onclick="acceptQuest('${q.id}')">Pakt<br>besiegeln</button></div></div>`; }); }
 function acceptQuest(id) { const q = state.availQuests.find(x => x.id === id); p.quest = JSON.parse(JSON.stringify(q)); p.quest.progress = 0; playSound('magic'); log(`Pakt geschlossen: ${q.title}`, "warn"); updateHUD(); }
 function progressQuest(reqType) { if(!p.quest || p.quest.progress >= p.quest.goal) return; if(p.quest.req === reqType || (p.quest.req === 'kill' && reqType === 'boss')) { p.quest.progress++; if(p.quest.progress >= p.quest.goal) { playSound('level'); log(`Questziel erreicht: ${p.quest.title}!`, "good"); } updateHUD(); } }
-function claimQuest() { if(!p.quest || p.quest.progress < p.quest.goal) return; playSound('quest'); p.gold += p.quest.rewardGold; p.xp += p.quest.rewardXP; let logText = `Pakt erfüllt! +${p.quest.rewardGold}G, +${p.quest.rewardXP}XP`; if(p.quest.extra) { if(p.quest.extra.type === 'hp') p.inv.potions.hp += p.quest.extra.val; else if(p.quest.extra.type === 'mp') p.inv.potions.mp += p.quest.extra.val; else if(p.quest.extra.type === 'shards') p.inv.shards += p.quest.extra.val; else if(p.quest.extra.type === 'chest_wooden') p.inv.chests.wooden += p.quest.extra.val; else if(p.quest.extra.type === 'chest_iron') p.inv.chests.iron += p.quest.extra.val; else if(p.quest.extra.type === 'chest_mystic') p.inv.chests.mystic += p.quest.extra.val; logText += `, +${p.quest.extra.text}`; } log(logText, "good"); const idx = state.availQuests.findIndex(q => q.id === p.quest.id); if(idx !== -1) { state.availQuests[idx] = getRandomQuest(); } else { state.availQuests.push(getRandomQuest()); if (state.availQuests.length > 3) state.availQuests.shift(); } p.quest = null; if(p.xp >= p.maxXp) { playSound('level'); p.xp -= p.maxXp; p.lvl++; p.maxXp = Math.floor(p.maxXp * 1.5); p.maxHp += 15; p.hp = p.maxHp; p.sp += 1; log(`LEVEL UP! Stufe ${p.lvl}.`, "warn"); } updateHUD(); }
+function claimQuest() { if(!p.quest || p.quest.progress < p.quest.goal) return; playSound('quest'); p.gold += p.quest.rewardGold; p.metaStats.goldEarned += p.quest.rewardGold; p.xp += p.quest.rewardXP; p.metaStats.questsCompleted++; let logText = `Pakt erfüllt! +${p.quest.rewardGold}G, +${p.quest.rewardXP}XP`; if(p.quest.extra) { if(p.quest.extra.type === 'hp') p.inv.potions.hp += p.quest.extra.val; else if(p.quest.extra.type === 'mp') p.inv.potions.mp += p.quest.extra.val; else if(p.quest.extra.type === 'shards') { p.inv.shards += p.quest.extra.val; p.metaStats.shardsEarned += p.quest.extra.val; } else if(p.quest.extra.type === 'chest_wooden') p.inv.chests.wooden += p.quest.extra.val; else if(p.quest.extra.type === 'chest_iron') p.inv.chests.iron += p.quest.extra.val; else if(p.quest.extra.type === 'chest_mystic') p.inv.chests.mystic += p.quest.extra.val; logText += `, +${p.quest.extra.text}`; } log(logText, "good"); const idx = state.availQuests.findIndex(q => q.id === p.quest.id); if(idx !== -1) { state.availQuests[idx] = getRandomQuest(); } else { state.availQuests.push(getRandomQuest()); if (state.availQuests.length > 3) state.availQuests.shift(); } p.quest = null; if(p.xp >= p.maxXp) { playSound('level'); p.xp -= p.maxXp; p.lvl++; p.maxXp = Math.floor(p.maxXp * 1.5); p.maxHp += 15; p.hp = p.maxHp; p.sp += 1; log(`LEVEL UP! Stufe ${p.lvl}.`, "warn"); } evaluateAchievements(); updateHUD(); }
 function saveHighscore() { try { let hs = JSON.parse(localStorage.getItem('webDungeonsHighscores') || "[]"); let score = (p.lvl * 1000) + p.gold + (p.runStats.kills * 150) + ((state.dungeon.floor - 1) * 2000); hs.push({ name: p.name, cls: p.cls, lvl: p.lvl, floor: state.dungeon.floor, score: score }); hs.sort((a,b) => b.score - a.score); hs = hs.slice(0, 10); localStorage.setItem('webDungeonsHighscores', JSON.stringify(hs)); return score; } catch(e) { return (p.lvl * 1000) + p.gold + (p.runStats.kills * 150); } }
 function showHighscores() { try { let hs = JSON.parse(localStorage.getItem('webDungeonsHighscores') || "[]"); clearLog(); log("--- HALLE DER GEFALLENEN (TOP 10) ---", "warn"); if(hs.length === 0) log("Es gibt noch keine Helden in den Archiven.", "muted"); else hs.forEach((entry, i) => { log(`${i+1}. ${entry.name} (${entry.cls} Lvl ${entry.lvl}) - Score: ${entry.score}`, i === 0 ? "magic" : "info"); }); } catch(e) { log("Speicherfehler in diesem Browser/Widget.", "bad"); } }
-const CURRENT_SAVE_VERSION = 2;
+const CURRENT_SAVE_VERSION = 3;
 
 function migrateSave(player, gameState, saveVersion = 1) {
   gameState = gameState || {};
@@ -1014,11 +1290,31 @@ function migrateSave(player, gameState, saveVersion = 1) {
     if (!Array.isArray(player.inv.accessories)) player.inv.accessories = [];
   }
 
+  if (saveVersion < 3) {
+    if (!gameState.dungeon) gameState.dungeon = { active: false, type:'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false };
+    if (gameState.dungeon.floorGoldBonus === undefined) gameState.dungeon.floorGoldBonus = 0;
+    if (!gameState.dungeon.runBonuses) gameState.dungeon.runBonuses = { firstSkillFreeAvailable: false, luckBonus: 0, atkBonus: 0, xpBonus: 0 };
+    if (gameState.dungeon.runBonuses.firstSkillFreeAvailable === undefined) gameState.dungeon.runBonuses.firstSkillFreeAvailable = false;
+    if (gameState.dungeon.runBonuses.luckBonus === undefined) gameState.dungeon.runBonuses.luckBonus = 0;
+    if (gameState.dungeon.runBonuses.atkBonus === undefined) gameState.dungeon.runBonuses.atkBonus = 0;
+    if (gameState.dungeon.runBonuses.xpBonus === undefined) gameState.dungeon.runBonuses.xpBonus = 0;
+    if (gameState.dungeon.startBonusChoicePending === undefined) gameState.dungeon.startBonusChoicePending = false;
+    if (!player.fx) player.fx = {};
+    if (player.fx.eventAtkBuff === undefined) player.fx.eventAtkBuff = 1;
+    if (!player.metaBonuses) player.metaBonuses = { xpPct: 0, goldPct: 0, crit: 0, dodge: 0 };
+    if (!player.achievements) player.achievements = { unlocked: [], progress: {} };
+    if (!player.metaStats) player.metaStats = { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 };
+  }
+
   if (player.inv.shards === undefined) player.inv.shards = 0;
   if (player.baseDodge === undefined) player.baseDodge = 0;
   if (player.baseLuck === undefined) player.baseLuck = 0;
   if (!player.prestige) player.prestige = { level: 0, dust: 0, buffs: { xp: 0, gold: 0, stats: 0 } };
   if (player.fx.poison === undefined) { player.fx.poison = 0; player.fx.poisonDmg = 0; player.fx.stun = 0; player.fx.weak = 0; player.fx.regen = 0; player.fx.regenHeal = 0; }
+  if (player.fx.eventAtkBuff === undefined) player.fx.eventAtkBuff = 1;
+  if (!player.metaBonuses) player.metaBonuses = { xpPct: 0, goldPct: 0, crit: 0, dodge: 0 };
+  if (!player.achievements) player.achievements = { unlocked: [], progress: {} };
+  if (!player.metaStats) player.metaStats = { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 };
   if (gameState.firstCombatHintShown === undefined) gameState.firstCombatHintShown = true;
   if (gameState.enemy) { if(gameState.enemy.fx === undefined) gameState.enemy.fx = { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }; if(gameState.enemy.cooldowns === undefined) gameState.enemy.cooldowns = {}; if(gameState.enemy.abilities === undefined) gameState.enemy.abilities = []; }
 
@@ -1033,7 +1329,7 @@ function loadGame() {
     const data = saves[`slot_${slot}`]; p = data.p; state = data.state;
     state = state || {};
     state.discovery = state.discovery || {};
-    state.dungeon = state.dungeon || { active: false, type:'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false };
+    state.dungeon = state.dungeon || { active: false, type:'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false, floorGoldBonus: 0, runBonuses: { firstSkillFreeAvailable: false, luckBonus: 0, atkBonus: 0, xpBonus: 0 }, startBonusChoicePending: false };
     state.availQuests = Array.isArray(state.availQuests) ? state.availQuests : [];
     state.combatStats = state.combatStats || { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 };
     state.lore = Array.isArray(state.lore) ? state.lore : [];
@@ -1044,6 +1340,8 @@ function loadGame() {
 
     state = migrateSave(p, state, data.saveVersion || 1);
     applyLockRecovery(state);
+    ensureMetaSystems();
+    evaluateAchievements();
 
     if (p.eq.weapon) { let invWep = p.inv.weapons.find(i => i.id === p.eq.weapon.id); if (invWep) { if (p.eq.weapon.val > invWep.val) { invWep.val = p.eq.weapon.val; invWep.name = p.eq.weapon.name; invWep.sell = p.eq.weapon.sell; } p.eq.weapon = invWep; } }
     if (p.eq.armor) { let invArm = p.inv.armors.find(i => i.id === p.eq.armor.id); if (invArm) { if (p.eq.armor.val > invArm.val) { invArm.val = p.eq.armor.val; invArm.name = p.eq.armor.name; invArm.sell = p.eq.armor.sell; } p.eq.armor = invArm; } }
