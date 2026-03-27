@@ -1,8 +1,7 @@
-<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Web Dungeons: Eclipse</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Courier+Prime&display=swap');
@@ -258,7 +257,7 @@
           <div class="wd-combatant">
             <div class="wd-combatant-sprite" id="wd-sprite-enemy">👹</div>
             <div class="wd-combatant-hp" id="wd-ui-enemy-hp">HP: 100/100</div>
-            <div id="wd-enemy-effects" style="display:flex; justify-content:center; gap:4px; margin-top:5px; flex-wrap:wrap; min-height: 20px;"></div>
+            <div id="wd-enemy-effects" style="display:flex;justify-content:center;gap:4px;margin-top:5px;flex-wrap:wrap;min-height:20px"></div>
           </div>
         </div>
       </div>
@@ -273,7 +272,7 @@
         <button class="wd-tab-btn" onclick="switchTab('wd-tab-quests', this)">Pakte</button>
         <button class="wd-tab-btn" onclick="switchTab('wd-tab-index', this)">Archiv</button>
       </div>
-      <div id="wd-tab-gear" class="wd-tab-content active" style="overflow-y:auto; max-height:100%;">
+      <div id="wd-tab-gear" class="wd-tab-content active" style="overflow-y:auto;max-height:100%">
         <h3>Aktiv ausgerüstet</h3>
         <div class="wd-eq-slot" id="wd-eq-weapon"><div class="wd-eq-icon">🗡️</div><div class="wd-eq-details"><h4>Waffe</h4><p>Nichts</p></div></div>
         <div class="wd-eq-slot" id="wd-eq-armor"><div class="wd-eq-icon">🛡️</div><div class="wd-eq-details"><h4>Rüstung</h4><p>Nichts</p></div></div>
@@ -380,7 +379,7 @@ const DUNGEON_ENEMIES = [ {n:"Skelett",h:80,a:15,s:"💀",xp:20},{n:"Nekromant",
 const CHEST_DEFS = { 
   wooden: { label: "Holzkiste", icon: "🪵", rewardMult: 0.8, weights: {weapon:25, armor:25, helm:15, accessory:15, gold:10, potions:10} }, 
   iron: { label: "Eisenkiste", icon: "🧰", rewardMult: 1.2, weights: {weapon:25, armor:25, helm:20, accessory:20, gold:5, potions:5} }, 
-  mystic: { label: "Arkankiste", icon: "✨", rewardMult: 1.8, weights: {weapon:30, armor:30, helm:15, accessory:15, trinket:5, gold:5} } 
+  mystic: { label: "Arkankiste", icon: "✨", rewardMult: 1.8, weights: {weapon:30, armor:30, helm:15, accessory:15, gold:10} } 
 };
 
 const WEAPON_POOLS = { Ritter: { common: ["Schildspitze", "Rostiges Schwert", "Eisenflegel"], rare: ["Bastionsäbel", "Silberwacht", "Stahlschwert"], epic: ["Sonnenzorn", "Eidbrecher", "Titanspalter"], legendary: ["Löwenschwur", "Himmelsbrecher", "Aegis-Klinge"] }, Magier: { common: ["Runenfokus", "Aschenstab", "Kupferstab"], rare: ["Frostsigel", "Aetherstab", "Glutstab"], epic: ["Arkanherz", "Flammenkrone", "Sturmrufer"], legendary: ["Weltfunke", "Erzkomet", "Stab der Ewigkeit"] }, Schurke: { common: ["Krähenzahn", "Nachtstahl", "Eisendolch"], rare: ["Nebelklinge", "Schwarzfeder", "Giftdolch"], epic: ["Leerenkralle", "Blutmond", "Nachtschatten"], legendary: ["Nachtfürst", "Rabenurteil", "Seelenfresser"] }, Paladin: { common: ["Weihschwert", "Segenshammer", "Knappenhammer"], rare: ["Sonnenklinge", "Glaubenswacht", "Lichtbringer"], epic: ["Aurora", "Heiligzorn", "Himmelswacht"], legendary: ["Dawnbreaker", "Ewiger Eid", "Gnade der Engel"] }, Waldläufer: { common: ["Jagdspieß", "Waldbogen", "Kupferpfeile"], rare: ["Habichtzahn", "Eibenbogen", "Falkenauge"], epic: ["Sturmfeder", "Wolfsfang", "Donnerspeer"], legendary: ["Alderheart", "Königsjagd", "Sonnenfinsternis"] } };
@@ -650,23 +649,20 @@ function craftItem(inRarity, outRarityEnum, shardCost) {
     }
     p.inv.shards -= shardCost;
     
-    let categories = ['weapon', 'armor', 'helm', 'accessory', 'trinket'];
+    let categories = ['weapon', 'armor', 'helm', 'accessory'];
     let chosenCat = categories[rand(0, categories.length-1)];
     let rewardText, rewardClass;
     
-    if (chosenCat === 'trinket') {
-        const t = Object.assign({}, TRINKETS[rand(0, TRINKETS.length-1)]); t.id = makeId('t'); t.type = 'trinket'; t.sell = 100; p.inv.trinkets.push(t); rewardText = t.name; rewardClass = "r-artefact";
-    } else {
-        let pool, name, val, itemObj; let rarity = outRarityEnum; let rKey = 'r-' + rarity;
-        const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
-        if (chosenCat === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * 1.2 * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); }
-        else if (chosenCat === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * 1.2 * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); }
-        else if (chosenCat === 'helm') { pool = HELM_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(1, 4) + p.lvl * 0.5) * 1.2 * rarityMult); itemObj = { id: makeId('h'), type:'helm', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.helms.push(itemObj); discover('helms', name); }
-        else if (chosenCat === 'accessory') { pool = ACC_POOLS[rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor(rand(1, 3) * rarityMult); itemObj = { id: makeId('acc'), type:'accessory', name, val, rarity: rKey, sell: calculateSellValue(val*2, rKey, 'weapon') }; p.inv.accessories.push(itemObj); discover('accessories', name); }
-        let affix = generateAffix(rKey); if (affix) itemObj.affix = affix;
-        let statSuf = (chosenCat === 'accessory') ? 'LUCK' : (chosenCat === 'weapon' ? 'ATK' : 'RÜS');
-        rewardText = itemObj.name + ` (+${val} ${statSuf})` + (affix ? ' ✧' : ''); rewardClass = rKey;
-    }
+    let pool, name, val, itemObj; let rarity = outRarityEnum; let rKey = 'r-' + rarity;
+    const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
+    if (chosenCat === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * 1.2 * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); }
+    else if (chosenCat === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * 1.2 * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); }
+    else if (chosenCat === 'helm') { pool = HELM_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(1, 4) + p.lvl * 0.5) * 1.2 * rarityMult); itemObj = { id: makeId('h'), type:'helm', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.helms.push(itemObj); discover('helms', name); }
+    else if (chosenCat === 'accessory') { pool = ACC_POOLS[rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor(rand(1, 3) * rarityMult); itemObj = { id: makeId('acc'), type:'accessory', name, val, rarity: rKey, sell: calculateSellValue(val*2, rKey, 'weapon') }; p.inv.accessories.push(itemObj); discover('accessories', name); }
+    let affix = generateAffix(rKey); if (affix) itemObj.affix = affix;
+    let statSuf = (chosenCat === 'accessory') ? 'LUCK' : (chosenCat === 'weapon' ? 'ATK' : 'RÜS');
+    rewardText = itemObj.name + ` (+${val} ${statSuf})` + (affix ? ' ✧' : ''); rewardClass = rKey;
+    
     playSound('magic'); log(`Der Schmelztiegel formt etwas Neues: ${rewardText}!`, "good");
     updateHUD(); visitCrucible();
 }
@@ -939,9 +935,7 @@ async function playChestOpeningAnimation(type, results) {
 }
 function generateChestReward(type) {
   const def = CHEST_DEFS[type]; let rewardText = "", rewardClass = ""; const category = pickByWeights(def.weights);
-  if(category === 'trinket') { 
-      const t = Object.assign({}, TRINKETS[rand(0, TRINKETS.length-1)]); t.id = makeId('t'); t.type = 'trinket'; t.sell = 100; p.inv.trinkets.push(t); rewardText = t.name; rewardClass = "r-artefact"; 
-  } else if (['weapon', 'armor', 'helm', 'accessory'].includes(category)) { 
+  if (['weapon', 'armor', 'helm', 'accessory'].includes(category)) { 
       const rarity = rollRarity(type); let pool, name, val, itemObj;
       const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
       
