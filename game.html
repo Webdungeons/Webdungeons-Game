@@ -975,17 +975,52 @@ function progressQuest(reqType) { if(!p.quest || p.quest.progress >= p.quest.goa
 function claimQuest() { if(!p.quest || p.quest.progress < p.quest.goal) return; playSound('quest'); p.gold += p.quest.rewardGold; p.xp += p.quest.rewardXP; let logText = `Pakt erfüllt! +${p.quest.rewardGold}G, +${p.quest.rewardXP}XP`; if(p.quest.extra) { if(p.quest.extra.type === 'hp') p.inv.potions.hp += p.quest.extra.val; else if(p.quest.extra.type === 'mp') p.inv.potions.mp += p.quest.extra.val; else if(p.quest.extra.type === 'shards') p.inv.shards += p.quest.extra.val; else if(p.quest.extra.type === 'chest_wooden') p.inv.chests.wooden += p.quest.extra.val; else if(p.quest.extra.type === 'chest_iron') p.inv.chests.iron += p.quest.extra.val; else if(p.quest.extra.type === 'chest_mystic') p.inv.chests.mystic += p.quest.extra.val; logText += `, +${p.quest.extra.text}`; } log(logText, "good"); const idx = state.availQuests.findIndex(q => q.id === p.quest.id); if(idx !== -1) { state.availQuests[idx] = getRandomQuest(); } else { state.availQuests.push(getRandomQuest()); if (state.availQuests.length > 3) state.availQuests.shift(); } p.quest = null; if(p.xp >= p.maxXp) { playSound('level'); p.xp -= p.maxXp; p.lvl++; p.maxXp = Math.floor(p.maxXp * 1.5); p.maxHp += 15; p.hp = p.maxHp; p.sp += 1; log(`LEVEL UP! Stufe ${p.lvl}.`, "warn"); } updateHUD(); }
 function saveHighscore() { try { let hs = JSON.parse(localStorage.getItem('webDungeonsHighscores') || "[]"); let score = (p.lvl * 1000) + p.gold + (p.runStats.kills * 150) + ((state.dungeon.floor - 1) * 2000); hs.push({ name: p.name, cls: p.cls, lvl: p.lvl, floor: state.dungeon.floor, score: score }); hs.sort((a,b) => b.score - a.score); hs = hs.slice(0, 10); localStorage.setItem('webDungeonsHighscores', JSON.stringify(hs)); return score; } catch(e) { return (p.lvl * 1000) + p.gold + (p.runStats.kills * 150); } }
 function showHighscores() { try { let hs = JSON.parse(localStorage.getItem('webDungeonsHighscores') || "[]"); clearLog(); log("--- HALLE DER GEFALLENEN (TOP 10) ---", "warn"); if(hs.length === 0) log("Es gibt noch keine Helden in den Archiven.", "muted"); else hs.forEach((entry, i) => { log(`${i+1}. ${entry.name} (${entry.cls} Lvl ${entry.lvl}) - Score: ${entry.score}`, i === 0 ? "magic" : "info"); }); } catch(e) { log("Speicherfehler in diesem Browser/Widget.", "bad"); } }
-function saveGame() { if(!p) return; let slot = prompt(`Spielstand sichern.\nWähle Slot (1-${SAVE_SLOTS}):`, "1"); if(!slot || isNaN(slot) || slot < 1 || slot > SAVE_SLOTS) return; try { let saves = JSON.parse(localStorage.getItem('webDungeonsSaves') || "{}"); saves[`slot_${slot}`] = { p, state, timestamp: new Date().toLocaleString() }; localStorage.setItem('webDungeonsSaves', JSON.stringify(saves)); playSound('magic'); log(`Spielstand auf Slot ${slot} gesichert.`, "good"); } catch(e) { log("Speicherfehler!", "bad"); } }
+const CURRENT_SAVE_VERSION = 2;
+
+function migrateSave(player, gameState, saveVersion = 1) {
+  gameState = gameState || {};
+
+  if (saveVersion < 2) {
+    if (!gameState.discovery) gameState.discovery = {};
+    if (!Array.isArray(gameState.discovery.helms)) gameState.discovery.helms = [];
+    if (!Array.isArray(gameState.discovery.accessories)) gameState.discovery.accessories = [];
+
+    if (!player.eq.helm) player.eq.helm = null;
+    if (!player.eq.accessory) player.eq.accessory = null;
+    if (!Array.isArray(player.inv.helms)) player.inv.helms = [];
+    if (!Array.isArray(player.inv.accessories)) player.inv.accessories = [];
+  }
+
+  if (player.inv.shards === undefined) player.inv.shards = 0;
+  if (player.baseDodge === undefined) player.baseDodge = 0;
+  if (player.baseLuck === undefined) player.baseLuck = 0;
+  if (!player.prestige) player.prestige = { level: 0, dust: 0, buffs: { xp: 0, gold: 0, stats: 0 } };
+  if (player.fx.poison === undefined) { player.fx.poison = 0; player.fx.poisonDmg = 0; player.fx.stun = 0; player.fx.weak = 0; player.fx.regen = 0; player.fx.regenHeal = 0; }
+  if (gameState.firstCombatHintShown === undefined) gameState.firstCombatHintShown = true;
+  if (gameState.enemy) { if(gameState.enemy.fx === undefined) gameState.enemy.fx = { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }; if(gameState.enemy.cooldowns === undefined) gameState.enemy.cooldowns = {}; if(gameState.enemy.abilities === undefined) gameState.enemy.abilities = []; }
+
+  return gameState;
+}
+
+function saveGame() { if(!p) return; let slot = prompt(`Spielstand sichern.\nWähle Slot (1-${SAVE_SLOTS}):`, "1"); if(!slot || isNaN(slot) || slot < 1 || slot > SAVE_SLOTS) return; try { let saves = JSON.parse(localStorage.getItem('webDungeonsSaves') || "{}"); saves[`slot_${slot}`] = { p, state, saveVersion: CURRENT_SAVE_VERSION, timestamp: new Date().toLocaleString() }; localStorage.setItem('webDungeonsSaves', JSON.stringify(saves)); playSound('magic'); log(`Spielstand auf Slot ${slot} gesichert.`, "good"); } catch(e) { log("Speicherfehler!", "bad"); } }
 function loadGame() {
   try {
     let saves = JSON.parse(localStorage.getItem('webDungeonsSaves') || "{}"); let info = "Spielstand laden. Wähle Slot:\n\n"; for(let i=1; i<=SAVE_SLOTS; i++) { let s = saves[`slot_${i}`]; info += `Slot ${i}: ${s ? s.p.name + ' (' + s.p.cls + ' Lvl ' + s.p.lvl + ') - ' + s.timestamp : 'Leer'}\n`; }
     let slot = prompt(info, "1"); if(!slot || !saves[`slot_${slot}`]) { log("Kein gültiger Spielstand.", "bad"); return; }
     const data = saves[`slot_${slot}`]; p = data.p; state = data.state;
+    state = state || {};
+    state.discovery = state.discovery || {};
+    state.dungeon = state.dungeon || { active: false, type:'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false };
+    state.availQuests = Array.isArray(state.availQuests) ? state.availQuests : [];
+    state.combatStats = state.combatStats || { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 };
+    state.lore = Array.isArray(state.lore) ? state.lore : [];
+    if (!Array.isArray(state.discovery.weapons)) state.discovery.weapons = [];
+    if (!Array.isArray(state.discovery.armors)) state.discovery.armors = [];
+    if (!Array.isArray(state.discovery.helms)) state.discovery.helms = [];
+    if (!Array.isArray(state.discovery.accessories)) state.discovery.accessories = [];
+
+    state = migrateSave(p, state, data.saveVersion || 1);
     applyLockRecovery(state);
-    
-    if (!p.eq.helm) p.eq.helm = null; if (!p.eq.accessory) p.eq.accessory = null;
-    if (!p.inv.helms) p.inv.helms = []; if (!p.inv.accessories) p.inv.accessories = [];
-    if (!state.discovery.helms) state.discovery.helms = []; if (!state.discovery.accessories) state.discovery.accessories = [];
 
     if (p.eq.weapon) { let invWep = p.inv.weapons.find(i => i.id === p.eq.weapon.id); if (invWep) { if (p.eq.weapon.val > invWep.val) { invWep.val = p.eq.weapon.val; invWep.name = p.eq.weapon.name; invWep.sell = p.eq.weapon.sell; } p.eq.weapon = invWep; } }
     if (p.eq.armor) { let invArm = p.inv.armors.find(i => i.id === p.eq.armor.id); if (invArm) { if (p.eq.armor.val > invArm.val) { invArm.val = p.eq.armor.val; invArm.name = p.eq.armor.name; invArm.sell = p.eq.armor.sell; } p.eq.armor = invArm; } }
@@ -993,11 +1028,7 @@ function loadGame() {
     if (p.eq.accessory) p.eq.accessory = p.inv.accessories.find(i => i.id === p.eq.accessory.id) || p.eq.accessory;
     if (p.eq.trinket) p.eq.trinket = p.inv.trinkets.find(i => i.id === p.eq.trinket.id) || p.eq.trinket;
 
-    if (!state.dungeon) state.dungeon = { active: false, type:'D1', floor: 1, roomsCleared: 0, roomsPerFloor: 3, bossPending: false, rests: 1, firstEnemyDefeated: false }; if (!state.discovery) state.discovery = { weapons: [], armors: [] }; if (!state.availQuests) generateQuestBoard(); if (state.firstCombatHintShown === undefined) state.firstCombatHintShown = true; if (p.inv.shards === undefined) p.inv.shards = 0; if (p.baseDodge === undefined) p.baseDodge = 0; if (p.baseLuck === undefined) p.baseLuck = 0; if (!p.prestige) p.prestige = { level: 0, dust: 0, buffs: { xp: 0, gold: 0, stats: 0 } };
-    if (p.fx.poison === undefined) { p.fx.poison = 0; p.fx.poisonDmg = 0; p.fx.stun = 0; p.fx.weak = 0; p.fx.regen = 0; p.fx.regenHeal = 0; }
-    if (state.enemy) { if(state.enemy.fx === undefined) state.enemy.fx = { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }; if(state.enemy.cooldowns === undefined) state.enemy.cooldowns = {}; if(state.enemy.abilities === undefined) state.enemy.abilities = []; }
-    if (!state.combatStats) state.combatStats = { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 };
-    if (!state.lore) state.lore = [];
+    if (state.availQuests.length === 0) generateQuestBoard();
     
     $('wd-overlay').style.display = 'none'; log(`Spielstand von Slot ${slot} geladen.`, "magic"); updateHUD(); playSound('magic');
     if(state.enemy) { showCombatStage(true); renderCombatActions(); } else if(state.dungeon.active) { showCombatStage(false); showDungeonMenu(); } else if(state.area) { showCombatStage(false); enterRoom(); } else { goToTown(); }
