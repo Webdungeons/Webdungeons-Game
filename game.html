@@ -910,10 +910,33 @@ function renderInventoryList(type) {
     div.innerHTML = `<div class="wd-list-info"><h4 class="${i.rarity}">${i.name}</h4><p>${statText}${diffText} | Wert: ${i.sell}G ${affixText}</p></div><div class="wd-list-actions">${!isEq ? `<button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="equipItem('${type}', '${i.id}')">Ausrüsten</button><button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="sellItem('${type}', '${i.id}')">Verkaufen</button><button class="wd-mini-btn" ${state.enemy?'disabled':''} onclick="dismantleItem('${type}', '${i.id}')">Zerlegen</button>` : `<span style="font-size:0.75rem; color:var(--gold); font-family:'Cinzel', serif; font-weight:bold;">Aktiv</span>`}</div>`; c.appendChild(div);
   });
 }
-function equipItem(type, id) { const item = p.inv[type].find(i => i.id === id); if(type === 'weapons') p.eq.weapon = JSON.parse(JSON.stringify(item)); else if(type === 'armors') p.eq.armor = JSON.parse(JSON.stringify(item)); else if(type === 'helms') p.eq.helm = JSON.parse(JSON.stringify(item)); else if(type === 'accessories') p.eq.accessory = JSON.parse(JSON.stringify(item)); else if(type === 'trinkets') p.eq.trinket = JSON.parse(JSON.stringify(item)); updateHUD(); renderInventoryList(type); }
+function getInventoryItem(type, id) {
+  const itemList = p.inv[type];
+  if(!Array.isArray(itemList)) return { itemList: null, idx: -1, item: undefined };
+  const idx = itemList.findIndex(i => i.id === id);
+  return { itemList, idx, item: idx === -1 ? undefined : itemList[idx] };
+}
+function equipItem(type, id) {
+  const { item } = getInventoryItem(type, id);
+  if(item === undefined) { log("Item nicht gefunden", "bad"); return; }
+  if(type === 'weapons') p.eq.weapon = JSON.parse(JSON.stringify(item));
+  else if(type === 'armors') p.eq.armor = JSON.parse(JSON.stringify(item));
+  else if(type === 'helms') p.eq.helm = JSON.parse(JSON.stringify(item));
+  else if(type === 'accessories') p.eq.accessory = JSON.parse(JSON.stringify(item));
+  else if(type === 'trinkets') p.eq.trinket = JSON.parse(JSON.stringify(item));
+  updateHUD(); renderInventoryList(type);
+}
 function unequipItem(slot) { p.eq[slot] = null; updateHUD(); if(slot==='trinket') renderInventoryList('trinkets'); if(slot==='helm') renderInventoryList('helms'); if(slot==='accessory') renderInventoryList('accessories'); }
-function sellItem(type, id) { const idx = p.inv[type].findIndex(i => i.id === id); p.gold += p.inv[type][idx].sell; p.inv[type].splice(idx, 1); playSound('coin'); updateHUD(); renderInventoryList(type); }
-function dismantleItem(type, id) { const idx = p.inv[type].findIndex(i => i.id === id); const item = p.inv[type][idx]; const shards = calculateShardValue(item.rarity); if(p.inv.shards === undefined) p.inv.shards = 0; p.inv.shards += shards; progressQuest('dismantle'); p.inv[type].splice(idx, 1); playSound('magic'); log(`${item.name} zerschlagen! +${shards} Arkane Splitter.`, "magic"); updateHUD(); renderInventoryList(type); }
+function sellItem(type, id) {
+  const { itemList, idx, item } = getInventoryItem(type, id);
+  if(itemList === null || idx === -1 || item === undefined) { log("Item nicht gefunden", "bad"); return; }
+  p.gold += item.sell; itemList.splice(idx, 1); playSound('coin'); updateHUD(); renderInventoryList(type);
+}
+function dismantleItem(type, id) {
+  const { itemList, idx, item } = getInventoryItem(type, id);
+  if(itemList === null || idx === -1 || item === undefined) { log("Item nicht gefunden", "bad"); return; }
+  const shards = calculateShardValue(item.rarity); if(p.inv.shards === undefined) p.inv.shards = 0; p.inv.shards += shards; progressQuest('dismantle'); itemList.splice(idx, 1); playSound('magic'); log(`${item.name} zerschlagen! +${shards} Arkane Splitter.`, "magic"); updateHUD(); renderInventoryList(type);
+}
 function chestRewardVisualClass(rewardText, rewardClass='') { const text = (rewardText||'').toLowerCase(); if (text.includes('mana')) return 'reward-mana'; if (text.includes('trank')) return 'reward-potion'; if (text.includes('gold')) return 'reward-gold'; return rewardClass || 'r-common'; }
 function skipChestAnimation() { isSkippingChest = true; }
 async function playChestOpeningAnimation(type, results) {
