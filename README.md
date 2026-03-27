@@ -80,4 +80,4 @@ Das Spiel ist eine reine Single-Page-Application (SPA).
 *Tipp für Zurückkehrende:* Speichere das Spiel regelmäßig im linken Panel unter "Codex sichern", um deinen Fortschritt in einem der 3 Slots zu behalten.
 
 ---
-*Entwickelt von CodetNiemalsHigh | Web Dungeons v1.0 | Eclipse v2.1*
+*Entwickelt von BratwurstPeter1 und T7imon | Web Dungeons | Eclipse /*
