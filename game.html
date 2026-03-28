@@ -18,8 +18,11 @@
   #wd-wrapper h1, #wd-wrapper h2, #wd-wrapper h3, #wd-wrapper h4, #wd-wrapper .btn-main-text, #wd-wrapper .tab-btn { font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 1px; }
   #wd-wrapper ::-webkit-scrollbar { width: 8px; } #wd-wrapper ::-webkit-scrollbar-track { background: #000; border-left: 1px solid var(--border); } #wd-wrapper ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; } #wd-wrapper ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
   #wd-app { display: flex; flex-direction: column; width: 100%; height: 100%; box-shadow: inset 0 0 100px #000; position: relative; }
-  #wd-sidebar-left { position: absolute; top: 12px; left: 12px; width: min(380px, calc(100% - 24px)); max-height: min(46vh, 420px); overflow-y: auto; background: linear-gradient(to right, rgba(10,10,12,0.95), rgba(17,16,21,0.9)); border: 2px ridge var(--border); border-radius: 6px; display: flex; flex-direction: column; padding: 12px 14px; z-index: 24; box-shadow: 0 10px 20px rgba(0,0,0,0.8); }
-  
+  #wd-top-hud { display:grid; grid-template-columns: auto 1fr; gap: 14px 16px; padding: 12px; background: linear-gradient(to bottom, rgba(10,10,12,0.95), rgba(17,16,21,0.9)); border-bottom: 2px ridge var(--border); position: relative; z-index: 24; }
+  .wd-top-hero { display:flex; align-items:center; gap:12px; }
+  .wd-top-bars { display:grid; grid-template-columns: repeat(3,minmax(120px,1fr)); gap:12px; }
+  .wd-top-meta { display:grid; grid-template-columns: repeat(4,minmax(120px,1fr)); gap:10px; grid-column: 1 / -1; align-items: stretch; }
+
   .wd-hero-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
   .wd-hero-avatar { width: 65px; height: 65px; border-radius: 8px; background: #000; border: 2px solid var(--accent); display: grid; place-items: center; font-size: 2.2rem; box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2), 0 0 10px rgba(0,0,0,0.8); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
   .wd-hero-info h2 { font-size: 1.2rem; color: var(--accent); margin-bottom: 4px; text-shadow: 1px 1px 2px #000; }
@@ -36,7 +39,7 @@
   #wd-status-effects { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; min-height: 24px; }
   .wd-effect-chip { font-family: 'Cinzel', serif; font-size: 0.7rem; font-weight: bold; padding: 4px 10px; border-radius: 2px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 2px 4px rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 0.5px;}
   
-  #wd-main-stage { flex: 1; display: flex; flex-direction: column; position: relative; padding-bottom: 170px; }
+  #wd-main-stage { flex: 1; display: flex; flex-direction: column; position: relative; padding-bottom: 170px; min-height: 0; }
   
   #wd-visual-arena { flex: 0 0 70%; min-height: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; border-bottom: 4px ridge var(--border); box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8); transition: background 1s ease; background: radial-gradient(circle at 50% 70%, rgba(200, 100, 30, 0.15) 0%, rgba(0,0,0,0.95) 70%); }
   @keyframes wdBossPulseArena { 0% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(153, 27, 27, 0.2); } 100% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8), inset 0 0 80px rgba(239, 68, 68, 0.4); } }
@@ -67,13 +70,16 @@
   .wd-log-entry { margin-bottom: 8px; animation: wdFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 4px; border-bottom: 1px dotted rgba(255,255,255,0.05); text-shadow: 1px 1px 1px #000;}
   .wd-log-info { color: var(--text-main); } .wd-log-good { color: var(--xp-glow); font-weight: bold; } .wd-log-bad { color: var(--hp-glow); font-weight: bold; } .wd-log-warn { color: var(--accent); } .wd-log-magic { color: #d8b4e2; font-style: italic; text-shadow: 0 0 5px rgba(192, 132, 252, 0.4); }
   
-  #wd-sidebar-right { position: absolute; top: 12px; right: 12px; width: min(420px, calc(100% - 24px)); max-height: min(58vh, 620px); background: linear-gradient(to left, rgba(10,10,12,0.95), rgba(17,16,21,0.92)); border: 2px ridge var(--border); border-radius: 6px; display: flex; flex-direction: column; z-index: 22; box-shadow: -10px 10px 20px rgba(0,0,0,0.8); overflow: hidden; }
-  .wd-tabs { display: flex; gap: 4px; padding: 12px 12px 0 12px; background: rgba(0,0,0,0.8); border-bottom: 3px ridge var(--border); position: relative; }
-  .wd-tab-btn { flex: 1; padding: 12px 4px; background: linear-gradient(180deg, #111015 0%, #050505 100%); border: 1px ridge var(--border); border-bottom: none; border-radius: 6px 6px 0 0; color: var(--text-muted); cursor: pointer; font-size: 0.7rem; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-transform: uppercase; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05); }
-  .wd-tab-btn:hover { color: var(--text-main); background: linear-gradient(180deg, #1c1a22 0%, #0a0a0c 100%); border-color: var(--border-light); }
-  .wd-tab-btn.active { color: var(--accent); border-color: var(--accent); background: linear-gradient(180deg, rgba(212,175,55,0.15) 0%, var(--panel) 100%); text-shadow: 0 0 8px rgba(212, 175, 55, 0.5); padding-bottom: 15px; margin-bottom: -3px; box-shadow: 0 -4px 10px rgba(212, 175, 55, 0.1), inset 0 1px 2px rgba(255,255,255,0.2); z-index: 2; position: relative; }
+  .wd-panel-tabs { display: flex; gap: 6px; padding: 12px; background: rgba(0,0,0,0.65); border-bottom: 2px ridge var(--border); flex-wrap:wrap; }
+  .wd-panel-tab-btn { flex: 1; min-width: 140px; padding: 12px 8px; background: linear-gradient(180deg, #111015 0%, #050505 100%); border: 1px ridge var(--border); border-radius: 6px; color: var(--text-muted); cursor: pointer; font-size: 0.75rem; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-transform: uppercase; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05); }
+  .wd-panel-tab-btn:hover { color: var(--text-main); background: linear-gradient(180deg, #1c1a22 0%, #0a0a0c 100%); border-color: var(--border-light); }
+  .wd-panel-tab-btn.active { color: var(--accent); border-color: var(--accent); background: linear-gradient(180deg, rgba(212,175,55,0.15) 0%, var(--panel) 100%); text-shadow: 0 0 8px rgba(212, 175, 55, 0.5); box-shadow: 0 0 15px rgba(212, 175, 55, 0.15), inset 0 1px 2px rgba(255,255,255,0.2); }
   .wd-tab-content { padding: 20px; overflow-y: auto; flex: 1; display: none; } .wd-tab-content.active { display: block; animation: wdFadeIn 0.4s ease-out;}
-  #wd-sidebar-right h3 { margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+  #wd-panel-shell h3 { margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+  #wd-panel-overlay { position: absolute; inset: 0; z-index: 210; display: none; background: rgba(0,0,0,0.9); backdrop-filter: blur(6px); padding: 24px; }
+  #wd-panel-shell { width: 100%; height: 100%; border: 2px ridge var(--border-light); background: linear-gradient(145deg, rgba(14,12,18,0.98), rgba(4,4,6,0.98)); box-shadow: 0 20px 35px rgba(0,0,0,0.9); display: flex; flex-direction: column; }
+  .wd-panel-header { display:flex; justify-content:space-between; align-items:center; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+  .wd-panel-close { background:#120f12; color:var(--text-main); border:1px solid var(--border-light); border-radius:4px; padding:6px 12px; cursor:pointer; }
   
   .wd-eq-slot { background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 4px; padding: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); transition: transform 0.2s; }
   .wd-eq-slot:hover { transform: translateX(2px); border-color: var(--border-light); }
@@ -184,7 +190,9 @@
   .wd-hud-panel.enemy .wd-hud-name { text-align: right; }
   @media (max-width: 900px) {
     #wd-wrapper { height: auto; min-height: 800px; }
-    #wd-sidebar-left, #wd-sidebar-right { position: static; width: 100%; max-height: none; border-radius: 0; }
+    #wd-top-hud { grid-template-columns: 1fr; }
+    .wd-top-bars, .wd-top-meta { grid-template-columns: repeat(2, 1fr); }
+    #wd-panel-overlay { padding: 10px; }
     #wd-main-stage { min-height: 60vh; padding-bottom: 220px; }
     #wd-combat-hud { position: static; padding: 10px 10px 0; gap: 10px; }
     .wd-hud-panel { width: 50%; }
@@ -230,7 +238,7 @@
   .back-btn:hover:not(:disabled) { background: linear-gradient(180deg, #3d1f1f 0%, #200f0f 100%) !important; border-color: var(--hp-glow) !important; box-shadow: 0 8px 15px rgba(0,0,0,0.8), 0 0 15px rgba(239, 68, 68, 0.3) !important; color: #fff !important; }
 
   /* V1.0: MUTE BUTTON REPOSITIONED TO SIDEBAR */
-  #wd-mute-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; padding: 5px 8px; border-radius: 4px; font-size: 1rem; z-index: 50; transition: all 0.2s; }
+  #wd-mute-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; padding: 5px 8px; border-radius: 4px; font-size: 1rem; z-index: 50; transition: all 0.2s; }
   #wd-mute-btn:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px rgba(212,175,55,0.2); }
 
 </style>
@@ -238,28 +246,32 @@
 <body>
 <div id="wd-wrapper">
   <div id="wd-app">
-    <aside id="wd-sidebar-left">
+    <header id="wd-top-hud">
       <button id="wd-mute-btn" onclick="toggleMute()">🔊</button>
-      <div class="wd-hero-header">
+      <div class="wd-top-hero">
         <div class="wd-hero-avatar" id="wd-ui-avatar">🧙</div>
         <div class="wd-hero-info">
           <h2 id="wd-ui-name">Niemand</h2>
           <p id="wd-ui-class-level">Klasse · Lvl 1</p>
         </div>
       </div>
-      <div class="wd-stat-bar-container"><div class="wd-stat-bar-label"><span>Lebenskraft</span><span id="wd-ui-hp-text">0 / 0</span></div><div class="wd-bar-bg"><div class="wd-bar-fill wd-fill-hp" id="wd-ui-hp-bar" style="width:0%"></div></div></div>
-      <div class="wd-stat-bar-container"><div class="wd-stat-bar-label"><span>Mana / Fokus</span><span id="wd-ui-mp-text">0 / 0</span></div><div class="wd-bar-bg"><div class="wd-bar-fill wd-fill-mp" id="wd-ui-mp-bar" style="width:0%"></div></div></div>
-      <div class="wd-stat-bar-container"><div class="wd-stat-bar-label"><span style="color:var(--text-muted)">Erfahrung</span><span id="wd-ui-xp-text" style="color:var(--text-muted)">0 / 100</span></div><div class="wd-bar-bg" style="height:6px"><div class="wd-bar-fill wd-fill-xp" id="wd-ui-xp-bar" style="width:0%"></div></div></div>
+      <div class="wd-top-bars">
+        <div class="wd-stat-bar-container"><div class="wd-stat-bar-label"><span>Lebenskraft</span><span id="wd-ui-hp-text">0 / 0</span></div><div class="wd-bar-bg"><div class="wd-bar-fill wd-fill-hp" id="wd-ui-hp-bar" style="width:0%"></div></div></div>
+        <div class="wd-stat-bar-container"><div class="wd-stat-bar-label"><span>Mana / Fokus</span><span id="wd-ui-mp-text">0 / 0</span></div><div class="wd-bar-bg"><div class="wd-bar-fill wd-fill-mp" id="wd-ui-mp-bar" style="width:0%"></div></div></div>
+        <div class="wd-stat-bar-container"><div class="wd-stat-bar-label"><span style="color:var(--text-muted)">Erfahrung</span><span id="wd-ui-xp-text" style="color:var(--text-muted)">0 / 100</span></div><div class="wd-bar-bg" style="height:6px"><div class="wd-bar-fill wd-fill-xp" id="wd-ui-xp-bar" style="width:0%"></div></div></div>
+      </div>
       <div class="wd-quick-stats">
         <div class="wd-q-stat"><span>Angriff</span><strong id="wd-ui-atk">0</strong></div><div class="wd-q-stat"><span>Rüstung</span><strong id="wd-ui-def">0</strong></div><div class="wd-q-stat"><span>Gold</span><strong id="wd-ui-gold" style="color:var(--gold)">0</strong></div>
         <div class="wd-q-stat"><span>Ausweichen</span><strong id="wd-ui-dodge">0%</strong></div><div class="wd-q-stat"><span>Glück</span><strong id="wd-ui-luck" style="color:#34d399">0</strong></div><div class="wd-q-stat"><span>Ort</span><strong id="wd-ui-location" style="font-size:0.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Menü</strong></div>
       </div>
-      <div id="wd-status-effects"></div>
-      <div style="margin-top:auto;padding-top:25px;border-top:1px solid var(--border)">
-         <button class="wd-btn" onclick="saveGame()" style="width:100%;margin-bottom:12px;padding:10px">💾 Codex sichern</button>
-         <button class="wd-btn" onclick="loadGame()" style="width:100%;padding:10px">📂 Codex lesen</button>
+      <div class="wd-top-meta">
+        <div class="wd-q-stat"><span>Splitter</span><strong id="wd-ui-shards" style="color:#d8b4e2">0</strong></div>
+        <div class="wd-q-stat"><span>Skillpunkte</span><strong id="wd-ui-sp" style="color:var(--gold)">0</strong></div>
+        <button class="wd-btn" onclick="saveGame()" style="padding:10px">💾 Codex sichern</button>
+        <button class="wd-btn" onclick="loadGame()" style="padding:10px">📂 Codex lesen</button>
       </div>
-    </aside>
+      <div id="wd-status-effects"></div>
+    </header>
     <main id="wd-main-stage">
       <div id="wd-visual-arena">
         <div id="wd-arena-title">Web Dungeons</div>
@@ -287,54 +299,57 @@
       <div id="wd-action-panel"></div>
       <div id="wd-log-container"></div>
     </main>
-    <aside id="wd-sidebar-right">
-      <div class="wd-tabs">
-        <button class="wd-tab-btn active" onclick="switchTab('wd-tab-gear', this)">Ausrüstung</button>
-        <button class="wd-tab-btn" onclick="switchTab('wd-tab-inv', this)">Inventar</button>
-        <button class="wd-tab-btn" onclick="switchTab('wd-tab-skills', this)">Talente</button>
-        <button class="wd-tab-btn" onclick="switchTab('wd-tab-quests', this)">Pakte</button>
-        <button class="wd-tab-btn" onclick="switchTab('wd-tab-index', this)">Archiv</button>
-        <button class="wd-tab-btn" onclick="switchTab('wd-tab-hero', this)">Heldenbuch</button>
-      </div>
-      <div id="wd-tab-gear" class="wd-tab-content active" style="overflow-y:auto;max-height:100%">
-        <h3>Aktiv ausgerüstet</h3>
-        <div class="wd-eq-slot" id="wd-eq-weapon"><div class="wd-eq-icon">🗡️</div><div class="wd-eq-details"><h4>Waffe</h4><p>Nichts</p></div></div>
-        <div class="wd-eq-slot" id="wd-eq-armor"><div class="wd-eq-icon">🛡️</div><div class="wd-eq-details"><h4>Rüstung</h4><p>Nichts</p></div></div>
-        <div class="wd-eq-slot" id="wd-eq-helm"><div class="wd-eq-icon">🪖</div><div class="wd-eq-details"><h4>Helm</h4><p>Nichts</p></div></div>
-        <div class="wd-eq-slot" id="wd-eq-accessory"><div class="wd-eq-icon">📿</div><div class="wd-eq-details"><h4>Accessoire</h4><p>Nichts</p></div></div>
-        <div class="wd-eq-slot" id="wd-eq-trinket"><div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="r-artefact">Artefakt</h4><p>Leerer Sockel</p></div></div>
-      </div>
-      <div id="wd-tab-inv" class="wd-tab-content">
-        <div style="display:flex;justify-content:space-between;margin-bottom:15px;padding:8px 12px;background:rgba(0,0,0,0.5);border:1px ridge var(--border);border-radius:4px">
-          <span style="color:var(--text-muted);font-size:0.85rem;text-transform:uppercase;letter-spacing:1px">Arkane Splitter</span><strong id="wd-ui-shards" style="color:#d8b4e2;font-size:1.1rem;text-shadow:0 0 8px rgba(192, 132, 252, 0.4)">0</strong>
+    <div id="wd-panel-overlay" onclick="closeCodexPanel(event)">
+      <div id="wd-panel-shell" onclick="event.stopPropagation()">
+        <div class="wd-panel-header">
+          <h2 id="wd-panel-title">Kodex</h2>
+          <button class="wd-panel-close" onclick="closeCodexPanel()">✕</button>
         </div>
-        <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:18px">
-           <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('weapons')">Waffen</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('armors')">Rüstung</button>
-           <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('helms')">Helm</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('accessories')">Accs</button>
-           <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('trinkets')">Artefakt</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('consumables')">Beute</button>
+        <div class="wd-panel-tabs">
+          <button class="wd-panel-tab-btn active" data-panel="gear" onclick="openCodexPanel('gear')">Ausrüstung</button>
+          <button class="wd-panel-tab-btn" data-panel="inv" onclick="openCodexPanel('inv')">Inventar</button>
+          <button class="wd-panel-tab-btn" data-panel="skills" onclick="openCodexPanel('skills')">Talente</button>
+          <button class="wd-panel-tab-btn" data-panel="quests" onclick="openCodexPanel('quests')">Pakte</button>
+          <button class="wd-panel-tab-btn" data-panel="index" onclick="openCodexPanel('index')">Archiv</button>
+          <button class="wd-panel-tab-btn" data-panel="hero" onclick="openCodexPanel('hero')">Heldenbuch</button>
         </div>
-        <div id="wd-inv-list"></div>
-      </div>
-      <div id="wd-tab-skills" class="wd-tab-content">
-        <div style="background:rgba(0,0,0,0.5);padding:15px;border-radius:4px;margin-bottom:18px;border:1px ridge var(--border);box-shadow:inset 0 0 10px rgba(0,0,0,0.8);text-align:center">
-            <span style="font-family:'Cinzel', serif;letter-spacing:1px">Freie Skillpunkte:</span> <strong id="wd-ui-sp" style="color:var(--gold);font-size:1.2rem;margin-left:8px">0</strong>
+        <div id="wd-tab-gear" class="wd-tab-content active" style="overflow-y:auto;max-height:100%">
+          <h3>Aktiv ausgerüstet</h3>
+          <div class="wd-eq-slot" id="wd-eq-weapon"><div class="wd-eq-icon">🗡️</div><div class="wd-eq-details"><h4>Waffe</h4><p>Nichts</p></div></div>
+          <div class="wd-eq-slot" id="wd-eq-armor"><div class="wd-eq-icon">🛡️</div><div class="wd-eq-details"><h4>Rüstung</h4><p>Nichts</p></div></div>
+          <div class="wd-eq-slot" id="wd-eq-helm"><div class="wd-eq-icon">🪖</div><div class="wd-eq-details"><h4>Helm</h4><p>Nichts</p></div></div>
+          <div class="wd-eq-slot" id="wd-eq-accessory"><div class="wd-eq-icon">📿</div><div class="wd-eq-details"><h4>Accessoire</h4><p>Nichts</p></div></div>
+          <div class="wd-eq-slot" id="wd-eq-trinket"><div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="r-artefact">Artefakt</h4><p>Leerer Sockel</p></div></div>
         </div>
-        <div id="wd-skill-list"></div>
-      </div>
-      <div id="wd-tab-quests" class="wd-tab-content">
-        <div id="wd-quest-active"></div><hr style="border:none;border-top:1px dashed var(--border);margin:20px 0" /><h3>Verfügbare Pakte</h3><div id="wd-quest-board"></div>
-      </div>
-      <div id="wd-tab-index" class="wd-tab-content">
-        <div id="wd-index-counter" class="wd-index-counter">Archiv noch versiegelt…</div>
-        <div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap">
-           <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('weapons')">Waffen</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('armors')">Rüstung</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('helms')">Helme</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('accessories')">Accessoires</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('lore')">Lore</button>
+        <div id="wd-tab-inv" class="wd-tab-content">
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:18px">
+             <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('weapons')">Waffen</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('armors')">Rüstung</button>
+             <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('helms')">Helm</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('accessories')">Accs</button>
+             <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('trinkets')">Artefakt</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('consumables')">Beute</button>
+          </div>
+          <div id="wd-inv-list"></div>
         </div>
-        <div id="wd-index-list" class="wd-index-grid"></div>
+        <div id="wd-tab-skills" class="wd-tab-content">
+          <div style="background:rgba(0,0,0,0.5);padding:15px;border-radius:4px;margin-bottom:18px;border:1px ridge var(--border);box-shadow:inset 0 0 10px rgba(0,0,0,0.8);text-align:center">
+              <span style="font-family:'Cinzel', serif;letter-spacing:1px">Freie Skillpunkte:</span> <strong id="wd-ui-sp-panel" style="color:var(--gold);font-size:1.2rem;margin-left:8px">0</strong>
+          </div>
+          <div id="wd-skill-list"></div>
+        </div>
+        <div id="wd-tab-quests" class="wd-tab-content">
+          <div id="wd-quest-active"></div><hr style="border:none;border-top:1px dashed var(--border);margin:20px 0" /><h3>Verfügbare Pakte</h3><div id="wd-quest-board"></div>
+        </div>
+        <div id="wd-tab-index" class="wd-tab-content">
+          <div id="wd-index-counter" class="wd-index-counter">Archiv noch versiegelt…</div>
+          <div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap">
+             <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('weapons')">Waffen</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('armors')">Rüstung</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('helms')">Helme</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('accessories')">Accessoires</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('lore')">Lore</button>
+          </div>
+          <div id="wd-index-list" class="wd-index-grid"></div>
+        </div>
+        <div id="wd-tab-hero" class="wd-tab-content">
+          <div id="wd-hero-book"></div>
+        </div>
       </div>
-      <div id="wd-tab-hero" class="wd-tab-content">
-        <div id="wd-hero-book"></div>
-      </div>
-    </aside>
+    </div>
   </div>
   <div id="wd-chest-open-overlay"><div id="wd-chest-open-container"></div><button id="wd-chest-skip-btn" class="wd-btn" style="margin-top:15px;padding:10px 30px;flex-shrink:0" onclick="skipChestAnimation()">Animation überspringen</button></div>
   <div id="wd-overlay"><div class="wd-modal" id="wd-overlay-content"></div></div>
@@ -372,8 +387,8 @@ function playSound(type) {
   else if (type === 'quest') { const freqs = [440, 554.37, 659.25, 880]; freqs.forEach((f, i) => { const {osc} = playOsc('sine', f, t + i*0.1, 0.5, 0.05); osc.start(t + i*0.1); osc.stop(t + i*0.1 + 0.6); }); }
   else if (type === 'phase') { const {osc} = playOsc('sawtooth', 80, t, 1.0, 0.15); osc.frequency.linearRampToValueAtTime(200, t+1.0); osc.start(t); osc.stop(t+1.0); }
 }
-document.addEventListener('mouseover', e => { if (e.target.closest('.wd-btn') || e.target.closest('.wd-mini-btn') || e.target.closest('.wd-tab-btn') || e.target.closest('.wd-skill-node')) { if(!e.target.closest(':disabled') && !e.target.closest('.locked')) playSound('hover'); } });
-document.addEventListener('mousedown', e => { let btn = e.target.closest('.wd-btn') || e.target.closest('.wd-mini-btn') || e.target.closest('.wd-tab-btn'); if (btn) { if(btn.disabled) playSound('error'); else playSound('click'); } });
+document.addEventListener('mouseover', e => { if (e.target.closest('.wd-btn') || e.target.closest('.wd-mini-btn') || e.target.closest('.wd-panel-tab-btn') || e.target.closest('.wd-panel-close') || e.target.closest('.wd-skill-node')) { if(!e.target.closest(':disabled') && !e.target.closest('.locked')) playSound('hover'); } });
+document.addEventListener('mousedown', e => { let btn = e.target.closest('.wd-btn') || e.target.closest('.wd-mini-btn') || e.target.closest('.wd-panel-tab-btn') || e.target.closest('.wd-panel-close'); if (btn) { if(btn.disabled) playSound('error'); else playSound('click'); } });
 const SAVE_SLOTS = 3;
 
 const CLASSES = {
@@ -659,7 +674,28 @@ function trackItemMilestones(item) {
   }
   if (item.type === 'weapon' && rarity === 'rare') p.metaStats.rareWeaponsFound++;
 }
-function switchTab(tabId, element) { document.querySelectorAll('.wd-tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.wd-tab-content').forEach(c => c.classList.remove('active')); if(element) element.classList.add('active'); $(tabId).classList.add('active'); if(tabId === 'wd-tab-inv') renderInventoryList(state.tab); if(tabId === 'wd-tab-skills') renderSkills(); if(tabId === 'wd-tab-quests') renderQuests(); if(tabId === 'wd-tab-index') renderIndexList('weapons'); if(tabId === 'wd-tab-hero') renderHeroBook(); }
+function openCodexPanel(panel, showOverlay = true) {
+  const panelMap = { gear: 'wd-tab-gear', inv: 'wd-tab-inv', skills: 'wd-tab-skills', quests: 'wd-tab-quests', index: 'wd-tab-index', hero: 'wd-tab-hero' };
+  const tabId = panelMap[panel] || panelMap.gear;
+  document.querySelectorAll('.wd-panel-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.panel === panel));
+  document.querySelectorAll('.wd-tab-content').forEach(c => c.classList.remove('active'));
+  const target = $(tabId);
+  if (target) target.classList.add('active');
+  if (showOverlay) $('wd-panel-overlay').style.display = 'block';
+  if(tabId === 'wd-tab-inv') renderInventoryList(state.tab);
+  if(tabId === 'wd-tab-skills') renderSkills();
+  if(tabId === 'wd-tab-quests') renderQuests();
+  if(tabId === 'wd-tab-index') renderIndexList('weapons');
+  if(tabId === 'wd-tab-hero') renderHeroBook();
+}
+function closeCodexPanel(event) {
+  if (event && event.target && event.target.id !== 'wd-panel-overlay') return;
+  $('wd-panel-overlay').style.display = 'none';
+}
+function switchTab(tabId) {
+  const map = { 'wd-tab-gear': 'gear', 'wd-tab-inv': 'inv', 'wd-tab-skills': 'skills', 'wd-tab-quests': 'quests', 'wd-tab-index': 'index', 'wd-tab-hero': 'hero' };
+  openCodexPanel(map[tabId] || 'gear');
+}
 function showToast(msg) { const t = document.createElement('div'); t.textContent = msg; t.style.cssText = "position:absolute; top: 120px; left: 50%; transform: translateX(-50%); background: rgba(30,58,138,0.95); border: 2px solid var(--mp-glow); color: #fff; padding: 12px 25px; border-radius: 6px; z-index: 1000; font-family: 'Cinzel', serif; font-size: 1rem; animation: wdFadeIn 0.3s ease-out; box-shadow: 0 10px 25px rgba(0,0,0,0.9); pointer-events: none; text-shadow: 1px 1px 2px #000;"; $('wd-wrapper').appendChild(t); setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.6s'; setTimeout(() => t.remove(), 600); }, 4500); }
 
 function ensureMetaSystems() {
@@ -814,6 +850,7 @@ function updateHUD() {
   $('wd-ui-dodge').textContent = `${p.baseDodge + bDodge + (p.metaBonuses?.dodge || 0)}%`; $('wd-ui-luck').textContent = totalLuck;
   $('wd-ui-location').textContent = state.dungeon.active ? `${DUNGEONS[state.dungeon.type].name} E${state.dungeon.floor}` : (state.area ? AREAS[state.area].name : "Dorf");
   $('wd-ui-sp').textContent = p.sp;
+  if ($('wd-ui-sp-panel')) $('wd-ui-sp-panel').textContent = p.sp;
   
   $('wd-eq-weapon').innerHTML = p.eq.weapon ? `<div class="wd-eq-icon">${getWepEmoji(p.eq.weapon.name)}</div><div class="wd-eq-details"><h4 class="${p.eq.weapon.rarity}">${p.eq.weapon.name}</h4><p>+${p.eq.weapon.val} ATK ${p.eq.weapon.affix ? `<span style="color:var(--epic)">✧</span>` : ''}</p></div>` : `<div class="wd-eq-icon">🗡️</div><div class="wd-eq-details"><h4>Waffe</h4><p>Nichts</p></div>`;
   $('wd-eq-armor').innerHTML = p.eq.armor ? `<div class="wd-eq-icon">${getArmEmoji(p.eq.armor.name)}</div><div class="wd-eq-details"><h4 class="${p.eq.armor.rarity}">${p.eq.armor.name}</h4><p>+${p.eq.armor.val} RÜS ${p.eq.armor.affix ? `<span style="color:var(--epic)">✧</span>` : ''}</p></div>` : `<div class="wd-eq-icon">🛡️</div><div class="wd-eq-details"><h4>Rüstung</h4><p>Nichts</p></div>`;
@@ -862,6 +899,19 @@ function setActions(buttons) {
     btn.onclick = (e) => { if (b.cost !== undefined && b.current !== undefined && b.current < b.cost) { playSound('error'); btn.classList.remove('wd-error-shake'); void btn.offsetWidth; btn.classList.add('wd-error-shake'); return; } if (b.onclick) b.onclick(); };
     btn.innerHTML = `<span class="wd-btn-main-text">${b.label}</span>${b.sub ? `<span class="wd-btn-sub-text">${b.sub}</span>` : ''}`; c.appendChild(btn);
   });
+  if (p) {
+    [
+      { label: '🎒 Inventar', sub: 'Vollbild öffnen', panel: 'inv' },
+      { label: '🧠 Talente', sub: 'Skillbaum anzeigen', panel: 'skills' },
+      { label: '📜 Quests', sub: 'Pakte verwalten', panel: 'quests' }
+    ].forEach(meta => {
+      const btn = document.createElement('button');
+      btn.className = 'wd-btn';
+      btn.onclick = () => openCodexPanel(meta.panel);
+      btn.innerHTML = `<span class="wd-btn-main-text">${meta.label}</span><span class="wd-btn-sub-text">${meta.sub}</span>`;
+      c.appendChild(btn);
+    });
+  }
 }
 
 function showCombatStage(show) {
@@ -937,7 +987,7 @@ function goToTown() {
       { label: "🗺️ Expedition", sub: "Ressourcen farmen", onclick: showExpeditionSelection }, 
       { label: "🏰 Dungeons", sub: "Endloser Boss-Modus", onclick: showDungeonSelection }, 
       { label: "⚖️ Händlerviertel", sub: "Schmied & Alchemist", onclick: openShopMenu }, 
-      { label: "📜 Questbrett", sub: "Aufträge annehmen", onclick: () => switchTab('wd-tab-quests', document.querySelectorAll('.wd-tab-btn')[3]) },
+      { label: "📜 Questbrett", sub: "Aufträge annehmen", onclick: () => openCodexPanel('quests') },
       { label: "📖 Kompendium", sub: "Hilfe & Wissen", onclick: showHelpCenter }
   ];
   if (p.lvl >= 25 || (p.prestige && p.prestige.level > 0)) { actions.push({ label: "🌌 Astral-Altar", sub: "Wiedergeburt", onclick: showPrestigeMenu }); }
@@ -1328,7 +1378,7 @@ function visualDamage(target, amt, crit) {
 
 function renderInventoryList(type) {
   state.tab = type; const c = $('wd-inv-list'); c.innerHTML = '';
-  const filterBtns = document.querySelectorAll('#wd-tab-inv > div:nth-child(2) .wd-mini-btn'); filterBtns.forEach(b => b.classList.remove('wd-active-filter')); const typeMap = { 'weapons': 0, 'armors': 1, 'helms': 2, 'accessories': 3, 'trinkets': 4, 'consumables': 5 }; if(filterBtns[typeMap[type]]) filterBtns[typeMap[type]].classList.add('wd-active-filter');
+  const filterBtns = document.querySelectorAll('#wd-tab-inv > div:nth-child(1) .wd-mini-btn'); filterBtns.forEach(b => b.classList.remove('wd-active-filter')); const typeMap = { 'weapons': 0, 'armors': 1, 'helms': 2, 'accessories': 3, 'trinkets': 4, 'consumables': 5 }; if(filterBtns[typeMap[type]]) filterBtns[typeMap[type]].classList.add('wd-active-filter');
   if(type === 'consumables') {
     c.innerHTML = `<div class="wd-list-item"><div class="wd-list-info"><h4>Heiltränke</h4><p>Stellt 50 HP her</p></div><div class="wd-list-actions"><span style="font-weight:bold">${p.inv.potions.hp}x</span><button class="wd-mini-btn" onclick="usePotion('hp')">Nutzen</button></div></div><div class="wd-list-item"><div class="wd-list-info"><h4>Manatränke</h4><p>Stellt 40 MP her</p></div><div class="wd-list-actions"><span style="font-weight:bold">${p.inv.potions.mp}x</span><button class="wd-mini-btn" onclick="usePotion('mp')">Nutzen</button></div></div>`;
     Object.keys(CHEST_DEFS).forEach(k => { const amt = p.inv.chests[k]; c.innerHTML += `<div class="wd-list-item"><div class="wd-list-info"><h4>${CHEST_DEFS[k].icon} ${CHEST_DEFS[k].label}</h4></div><div class="wd-list-actions"><span style="font-weight:bold; color:var(--gold)">${amt}x</span><div style="display:flex; gap:4px;"><button class="wd-mini-btn" ${amt<=0 || state.enemy || state.lock ? 'disabled':''} onclick="openChest('${k}', 1)">1x</button><button class="wd-mini-btn" ${amt<3 || state.enemy || state.lock ? 'disabled':''} onclick="openChest('${k}', 3)">3x</button></div></div></div>`; }); return;
