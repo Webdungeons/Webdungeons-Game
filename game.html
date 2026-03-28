@@ -57,12 +57,12 @@
   .wd-floor-intro-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Cinzel', serif; font-size: 4rem; color: var(--accent); font-weight: bold; text-shadow: 0 0 30px rgba(212,175,55,0.6), 0 5px 10px #000; z-index: 20; pointer-events: none; opacity: 0; animation: wdFloorIntro 3.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; white-space: nowrap; }
 
   .wd-combatant-hp { margin-top: 15px; background: rgba(0,0,0,0.8); padding: 6px 15px; border-radius: 4px; border: 1px ridge var(--border); font-weight: bold; font-family: 'Cinzel', serif; letter-spacing: 1px; color: var(--hp-glow); box-shadow: 0 5px 15px rgba(0,0,0,0.9); }
-  #wd-action-panel { position: absolute; left: 0; right: 0; bottom: 0; padding: 15px 20px calc(15px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; background: rgba(10,10,12,0.95); min-height: 150px; max-height: 170px; overflow-y: auto; border-top: 3px ridge var(--border); box-shadow: 0 -12px 24px rgba(0,0,0,0.8), inset 0 20px 20px -20px rgba(0,0,0,0.8); transition: all 0.3s ease; z-index: 25; }
-  #wd-codex-shortcuts { position: absolute; left: 0; right: 0; bottom: 170px; display: flex; gap: 8px; padding: 8px 20px; z-index: 26; }
-  .wd-codex-btn { flex: 1; background: linear-gradient(180deg, #2e2738 0%, #17131f 100%); border: 1px solid rgba(212,175,55,0.28); color: #efe6d4; padding: 9px 10px; border-radius: 10px; font-family: 'Cinzel', serif; font-size: 0.83rem; cursor: pointer; transition: all 0.2s; }
+  #wd-action-panel { position: absolute; left: 0; right: 0; bottom: 0; padding: 16px 22px calc(16px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; background: rgba(10,10,12,0.95); min-height: 170px; max-height: 210px; overflow-y: auto; border-top: 3px ridge var(--border); box-shadow: 0 -12px 24px rgba(0,0,0,0.8), inset 0 20px 20px -20px rgba(0,0,0,0.8); transition: all 0.3s ease; z-index: 25; }
+  #wd-codex-shortcuts { position: absolute; left: 0; right: 0; bottom: 210px; display: flex; gap: 10px; padding: 10px 22px; z-index: 26; }
+  .wd-codex-btn { flex: 1; background: linear-gradient(180deg, #2e2738 0%, #17131f 100%); border: 1px solid rgba(212,175,55,0.28); color: #efe6d4; min-height: 46px; padding: 10px 12px; border-radius: 10px; font-family: 'Cinzel', serif; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; }
   .wd-codex-btn:hover { border-color: var(--accent); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 16px rgba(0,0,0,0.45); }
   
-  .wd-btn { background: linear-gradient(180deg, #2b2533 0%, #15121b 100%); border: 1px solid rgba(212,175,55,0.35); color: #e9dfce; padding: 14px 10px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; box-shadow: 0 6px 14px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08); }
+  .wd-btn { background: linear-gradient(180deg, #2b2533 0%, #15121b 100%); border: 1px solid rgba(212,175,55,0.35); color: #e9dfce; min-height: 62px; padding: 14px 12px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; box-shadow: 0 6px 14px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08); }
   .wd-btn:hover:not(:disabled) { background: linear-gradient(180deg, #352d3f 0%, #1c1724 100%); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.55), 0 0 14px rgba(212,175,55,0.2); color: #fff; }
   .wd-btn:active:not(:disabled) { transform: translateY(0); box-shadow: inset 0 2px 6px rgba(0,0,0,0.6); }
   .wd-btn:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(1); box-shadow: none; border-color: var(--border); background: #0a0a0c;}
@@ -73,8 +73,8 @@
   .wd-log-entry { margin-bottom: 8px; animation: wdFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 4px; border-bottom: 1px dotted rgba(255,255,255,0.05); text-shadow: 1px 1px 1px #000;}
   .wd-log-info { color: var(--text-main); } .wd-log-good { color: var(--xp-glow); font-weight: bold; } .wd-log-bad { color: var(--hp-glow); font-weight: bold; } .wd-log-warn { color: var(--accent); } .wd-log-magic { color: #d8b4e2; font-style: italic; text-shadow: 0 0 5px rgba(192, 132, 252, 0.4); }
   
-  .wd-panel-tabs { display: flex; gap: 6px; padding: 12px; background: rgba(0,0,0,0.65); border-bottom: 2px ridge var(--border); flex-wrap:wrap; }
-  .wd-panel-tab-btn { flex: 1; min-width: 140px; padding: 11px 8px; background: linear-gradient(180deg, #221d2b 0%, #0f0c14 100%); border: 1px solid rgba(212,175,55,0.22); border-radius: 10px; color: var(--text-muted); cursor: pointer; font-size: 0.75rem; transition: all 0.2s ease; text-transform: uppercase; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05); }
+  .wd-panel-tabs { display: flex; gap: 10px; padding: 14px; background: rgba(0,0,0,0.65); border-bottom: 2px ridge var(--border); flex-wrap:wrap; }
+  .wd-panel-tab-btn { flex: 1; min-width: 152px; min-height: 44px; padding: 11px 10px; background: linear-gradient(180deg, #221d2b 0%, #0f0c14 100%); border: 1px solid rgba(212,175,55,0.22); border-radius: 10px; color: var(--text-muted); cursor: pointer; font-size: 0.78rem; transition: all 0.2s ease; text-transform: uppercase; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05); }
   .wd-panel-tab-btn:hover { color: var(--text-main); background: linear-gradient(180deg, #2e2738 0%, #181420 100%); border-color: var(--accent); }
   .wd-panel-tab-btn.active { color: #fff; border-color: var(--accent); background: linear-gradient(180deg, rgba(212,175,55,0.28) 0%, rgba(40,32,20,0.95) 100%); text-shadow: 0 0 8px rgba(212,175,55,0.45); box-shadow: 0 0 14px rgba(212,175,55,0.25); }
   .wd-tab-content { padding: 20px; overflow-y: auto; flex: 1; display: none; } .wd-tab-content.active { display: block; animation: wdFadeIn 0.4s ease-out;}
@@ -84,6 +84,7 @@
   .wd-panel-header { display:flex; justify-content:space-between; align-items:center; padding: 14px 16px; border-bottom: 1px solid var(--border); }
   .wd-panel-close { background: linear-gradient(180deg, #3a1f25, #221016); color:#ffd7d7; border:1px solid rgba(239,68,68,0.5); border-radius:8px; padding:7px 13px; cursor:pointer; font-weight:700; }
   .wd-panel-close:hover { background: linear-gradient(180deg, #4a252d, #2c141b); color:#fff; border-color: var(--hp-glow); }
+  .wd-sp-display { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 4px; margin-bottom: 18px; border: 1px ridge var(--border); box-shadow: inset 0 0 10px rgba(0,0,0,0.8); text-align: center; }
   
   .wd-eq-slot { background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 4px; padding: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); transition: transform 0.2s; }
   .wd-eq-slot:hover { transform: translateX(2px); border-color: var(--border-light); }
@@ -198,11 +199,11 @@
     .wd-top-meta { grid-template-columns: repeat(2, 1fr); }
     #wd-panel-overlay { padding: 10px; }
     #wd-panel-shell { width: 96vw; height: 84vh; }
-    #wd-codex-shortcuts { bottom: 220px; padding: 8px 10px; }
+    #wd-codex-shortcuts { bottom: 230px; padding: 8px 10px; }
     #wd-main-stage { min-height: 60vh; padding-bottom: 220px; }
     #wd-combat-hud { position: static; padding: 10px 10px 0; gap: 10px; }
     .wd-hud-panel { width: 50%; }
-    #wd-action-panel { grid-template-columns: repeat(2, 1fr); min-height: 190px; max-height: 220px; }
+    #wd-action-panel { grid-template-columns: repeat(2, 1fr); min-height: 210px; max-height: 250px; }
   }
 
   @keyframes wdErrorShake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); border-color: var(--hp-glow); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); color: var(--hp-glow); } 40%, 80% { transform: translateX(5px); border-color: var(--hp-glow); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); color: var(--hp-glow); } }
@@ -309,7 +310,7 @@
       <div id="wd-panel-shell" onclick="event.stopPropagation()">
         <div class="wd-panel-header">
           <h2 id="wd-panel-title">Kodex</h2>
-          <button class="wd-panel-close" onclick="closeCodexPanel()">✕</button>
+          <button class="wd-panel-close" onclick="closeCodexPanel()" aria-label="Schließen">✕</button>
         </div>
         <div class="wd-panel-tabs">
           <button class="wd-panel-tab-btn active" data-panel="gear" onclick="openCodexPanel('gear')">Ausrüstung</button>
@@ -336,7 +337,7 @@
           <div id="wd-inv-list"></div>
         </div>
         <div id="wd-tab-skills" class="wd-tab-content">
-          <div style="background:rgba(0,0,0,0.5);padding:15px;border-radius:4px;margin-bottom:18px;border:1px ridge var(--border);box-shadow:inset 0 0 10px rgba(0,0,0,0.8);text-align:center">
+          <div class="wd-sp-display">
               <span style="font-family:'Cinzel', serif;letter-spacing:1px">Freie Skillpunkte:</span> <strong id="wd-ui-sp-panel" style="color:var(--gold);font-size:1.2rem;margin-left:8px">0</strong>
           </div>
           <div id="wd-skill-list"></div>
@@ -395,6 +396,11 @@ function playSound(type) {
 }
 document.addEventListener('mouseover', e => { if (e.target.closest('.wd-btn') || e.target.closest('.wd-mini-btn') || e.target.closest('.wd-panel-tab-btn') || e.target.closest('.wd-panel-close') || e.target.closest('.wd-skill-node')) { if(!e.target.closest(':disabled') && !e.target.closest('.locked')) playSound('hover'); } });
 document.addEventListener('mousedown', e => { let btn = e.target.closest('.wd-btn') || e.target.closest('.wd-mini-btn') || e.target.closest('.wd-panel-tab-btn') || e.target.closest('.wd-panel-close'); if (btn) { if(btn.disabled) playSound('error'); else playSound('click'); } });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && $('wd-panel-overlay').style.display !== 'none' && $('wd-panel-overlay').style.display !== '') {
+    closeCodexPanel();
+  }
+});
 const SAVE_SLOTS = 3;
 
 const CLASSES = {
@@ -681,26 +687,26 @@ function trackItemMilestones(item) {
   if (item.type === 'weapon' && rarity === 'rare') p.metaStats.rareWeaponsFound++;
 }
 function openCodexPanel(panel, showOverlay = true) {
-  const panelMap = { gear: 'wd-tab-gear', inv: 'wd-tab-inv', skills: 'wd-tab-skills', quests: 'wd-tab-quests', index: 'wd-tab-index', hero: 'wd-tab-hero' };
-  const tabId = panelMap[panel] || panelMap.gear;
-  document.querySelectorAll('.wd-panel-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.panel === panel));
+  const normalized = panel || 'gear';
+  const tabId = `wd-tab-${normalized}`;
+  document.querySelectorAll('.wd-panel-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.panel === normalized));
   document.querySelectorAll('.wd-tab-content').forEach(c => c.classList.remove('active'));
-  const target = $(tabId);
+  const target = $(tabId) || $('wd-tab-gear');
   if (target) target.classList.add('active');
   if (showOverlay) $('wd-panel-overlay').style.display = 'flex';
-  if(tabId === 'wd-tab-inv') renderInventoryList(state.tab);
-  if(tabId === 'wd-tab-skills') renderSkills();
-  if(tabId === 'wd-tab-quests') renderQuests();
-  if(tabId === 'wd-tab-index') renderIndexList('weapons');
-  if(tabId === 'wd-tab-hero') renderHeroBook();
+  if(target.id === 'wd-tab-inv') renderInventoryList(state.tab);
+  if(target.id === 'wd-tab-skills') renderSkills();
+  if(target.id === 'wd-tab-quests') renderQuests();
+  if(target.id === 'wd-tab-index') renderIndexList('weapons');
+  if(target.id === 'wd-tab-hero') renderHeroBook();
 }
 function closeCodexPanel(event) {
   if (event && event.target && event.target.id !== 'wd-panel-overlay') return;
   $('wd-panel-overlay').style.display = 'none';
 }
 function switchTab(tabId) {
-  const map = { 'wd-tab-gear': 'gear', 'wd-tab-inv': 'inv', 'wd-tab-skills': 'skills', 'wd-tab-quests': 'quests', 'wd-tab-index': 'index', 'wd-tab-hero': 'hero' };
-  openCodexPanel(map[tabId] || 'gear');
+  const panel = (tabId || '').replace('wd-tab-', '');
+  openCodexPanel(panel || 'gear');
 }
 function showToast(msg) { const t = document.createElement('div'); t.textContent = msg; t.style.cssText = "position:absolute; top: 120px; left: 50%; transform: translateX(-50%); background: rgba(30,58,138,0.95); border: 2px solid var(--mp-glow); color: #fff; padding: 12px 25px; border-radius: 6px; z-index: 1000; font-family: 'Cinzel', serif; font-size: 1rem; animation: wdFadeIn 0.3s ease-out; box-shadow: 0 10px 25px rgba(0,0,0,0.9); pointer-events: none; text-shadow: 1px 1px 2px #000;"; $('wd-wrapper').appendChild(t); setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.6s'; setTimeout(() => t.remove(), 600); }, 4500); }
 
