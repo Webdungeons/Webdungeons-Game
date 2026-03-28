@@ -88,7 +88,10 @@
   .wd-index-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .wd-index-item { background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 2px; padding: 10px; font-size: 0.8rem; text-align: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); transition: all 0.2s; }
   .wd-index-item:hover:not(.undiscovered) { transform: scale(1.05); border-color: var(--border-light); background: rgba(0,0,0,0.6); }
-  .wd-index-item.undiscovered { opacity: 0.2; filter: grayscale(1); }
+  .wd-index-item.undiscovered { opacity: 1; filter: grayscale(1); background: linear-gradient(180deg, rgba(8,8,10,0.95), rgba(0,0,0,0.98)); border: 1px dashed rgba(255,255,255,0.12); box-shadow: inset 0 0 25px rgba(0,0,0,0.9); }
+  .wd-index-item.undiscovered h4 { color: #9b1c1c !important; letter-spacing: 2px; font-size: 0.92rem; text-shadow: 0 0 8px rgba(239, 68, 68, 0.25); }
+  .wd-index-item.undiscovered span { color: var(--text-muted) !important; opacity: 0.8; }
+  .wd-index-counter { margin-bottom: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; background: rgba(0,0,0,0.45); color: var(--text-muted); font-size: 0.8rem; letter-spacing: 0.5px; }
   .wd-index-item h4 { font-size: 0.8rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .wd-index-item span { font-style: italic; font-size: 0.75rem;}
   
@@ -302,8 +305,9 @@
         <div id="wd-quest-active"></div><hr style="border:none;border-top:1px dashed var(--border);margin:20px 0" /><h3>Verfügbare Pakte</h3><div id="wd-quest-board"></div>
       </div>
       <div id="wd-tab-index" class="wd-tab-content">
-        <div style="display:flex;gap:6px;margin-bottom:18px">
-           <button class="wd-mini-btn" style="flex:1" onclick="renderIndexList('weapons')">Waffen</button><button class="wd-mini-btn" style="flex:1" onclick="renderIndexList('armors')">Rüstung</button><button class="wd-mini-btn" style="flex:1" onclick="renderIndexList('lore')">Lore</button>
+        <div id="wd-index-counter" class="wd-index-counter">Archiv noch versiegelt…</div>
+        <div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap">
+           <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('weapons')">Waffen</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('armors')">Rüstung</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('helms')">Helme</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('accessories')">Accessoires</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('lore')">Lore</button>
         </div>
         <div id="wd-index-list" class="wd-index-grid"></div>
       </div>
@@ -584,6 +588,8 @@ const ACHIEVEMENTS = [
 
   { id: 's_leg_1', cat: 'Sammlung', title: "Erste legendäre Waffe", desc: "1 legendäres Item gefunden.", type: 'legendaryFound', target: 1, bonus: { type: 'luck', val: 1, text: "+1 Glück" } },
   { id: 's_leg_5', cat: 'Sammlung', title: "Goldene Sammlung", desc: "5 legendäre Items gefunden.", type: 'legendaryFound', target: 5, bonus: { type: 'baseAtk', val: 1, text: "+1 Basis-ATK" } },
+  { id: 's_leg_weapon_1', cat: 'Sammlung', title: "Legendenschmied", desc: "1 legendäre Waffe gefunden.", type: 'legendaryWeaponsFound', target: 1, bonus: { type: 'crit', val: 0.01, text: "+1% Krit-Chance" } },
+  { id: 's_rare_weapon_10', cat: 'Sammlung', title: "Klinge der Seltenheit", desc: "10 seltene Waffen gefunden.", type: 'rareWeaponsFound', target: 10, bonus: { type: 'baseAtk', val: 1, text: "+1 Basis-ATK" } },
   { id: 's_art_1', cat: 'Sammlung', title: "Artefaktjäger", desc: "Erstes Artefakt gefunden.", type: 'artefactsFound', target: 1, bonus: { type: 'xpPct', val: 0.03, text: "+3% XP" } },
   { id: 's_chest_25', cat: 'Sammlung', title: "Truhenknacker", desc: "25 Truhen geöffnet.", type: 'chestsOpened', target: 25, bonus: { type: 'goldPct', val: 0.03, text: "+3% Gold" } },
   { id: 's_dism_30', cat: 'Sammlung', title: "Schrottkönig", desc: "30 Items zerlegt.", type: 'itemsDismantled', target: 30, bonus: { type: 'def', val: 1, text: "+1 Basis-Rüstung" } },
@@ -624,6 +630,15 @@ function calculateSellValue(val, rar, type) { const base = type === 'weapon' ? 2
 function calculateShardValue(rar) { return { 'r-common':1, 'r-rare':3, 'r-shop':2, 'r-epic':10, 'r-legendary':25, 'r-mythic':40, 'r-artefact':50 }[rar] || 1; }
 function rollRarity(chestType) { const r = Math.random() + ((p && p.baseLuck) ? p.baseLuck * 0.001 : 0); if (chestType === 'wooden') { return r>=0.9995?'mythic':r>=0.998?'legendary':r>=0.95?'epic':r>=0.75?'rare':'common'; } else if (chestType === 'iron') { return r>=0.999?'mythic':r>=0.995?'legendary':r>=0.9?'epic':r>=0.6?'rare':'common'; } else { return r>=0.997?'mythic':r>=0.99?'legendary':r>=0.85?'epic':r>=0.45?'rare':'common'; } }
 function discover(type, name) { if(!state.discovery[type].includes(name)) { state.discovery[type].push(name); evaluateAchievements(); } }
+function trackItemMilestones(item) {
+  if (!item || !p) return;
+  const rarity = (item.rarity || '').replace('r-', '');
+  if (rarity === 'legendary') {
+    p.metaStats.legendaryFound++;
+    if (item.type === 'weapon') p.metaStats.legendaryWeaponsFound++;
+  }
+  if (item.type === 'weapon' && rarity === 'rare') p.metaStats.rareWeaponsFound++;
+}
 function switchTab(tabId, element) { document.querySelectorAll('.wd-tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.wd-tab-content').forEach(c => c.classList.remove('active')); if(element) element.classList.add('active'); $(tabId).classList.add('active'); if(tabId === 'wd-tab-inv') renderInventoryList(state.tab); if(tabId === 'wd-tab-skills') renderSkills(); if(tabId === 'wd-tab-quests') renderQuests(); if(tabId === 'wd-tab-index') renderIndexList('weapons'); if(tabId === 'wd-tab-hero') renderHeroBook(); }
 function showToast(msg) { const t = document.createElement('div'); t.textContent = msg; t.style.cssText = "position:absolute; top: 120px; left: 50%; transform: translateX(-50%); background: rgba(30,58,138,0.95); border: 2px solid var(--mp-glow); color: #fff; padding: 12px 25px; border-radius: 6px; z-index: 1000; font-family: 'Cinzel', serif; font-size: 1rem; animation: wdFadeIn 0.3s ease-out; box-shadow: 0 10px 25px rgba(0,0,0,0.9); pointer-events: none; text-shadow: 1px 1px 2px #000;"; $('wd-wrapper').appendChild(t); setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.6s'; setTimeout(() => t.remove(), 600); }, 4500); }
 
@@ -631,7 +646,8 @@ function ensureMetaSystems() {
   if (!p) return;
   if (!p.metaBonuses) p.metaBonuses = { xpPct: 0, goldPct: 0, crit: 0, dodge: 0 };
   if (!p.achievements) p.achievements = { unlocked: [], progress: {} };
-  if (!p.metaStats) p.metaStats = { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 };
+  if (!p.metaStats) p.metaStats = { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, legendaryWeaponsFound: 0, rareWeaponsFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 };
+  p.metaStats = Object.assign({ kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, legendaryWeaponsFound: 0, rareWeaponsFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 }, p.metaStats);
 }
 
 function getAchievementProgress(def) {
@@ -843,7 +859,7 @@ function createPlayer(cls, existingPrestige = null, preserveName = null) {
     fx: { shield: 0, dodge: 0, combo: 0, bossBuff: false, poison: 0, poisonDmg: 0, stun: 0, weak: 0, regen: 0, regenHeal: 0, eventAtkBuff: 1 }, talents: {}, quest: null, runStats: { kills: 0 }, prestige: prestige,
     metaBonuses: { xpPct: 0, goldPct: 0, crit: 0, dodge: 0 },
     achievements: { unlocked: [], progress: {} },
-    metaStats: { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 }
+    metaStats: { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, legendaryWeaponsFound: 0, rareWeaponsFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 }
   };
   if (name === "CodetNiemalsHigh") { p.gold = 99999999; p.inv.chests = { wooden: 50, iron: 50, mystic: 50 }; }
   p.inv.weapons.push(p.eq.weapon); p.inv.armors.push(p.eq.armor); state.discovery = { weapons: [p.eq.weapon.name], armors: [p.eq.armor.name], helms: [], accessories: [] }; state.lore = []; state.selectedSkill = "t_hp1"; 
@@ -942,10 +958,10 @@ function craftItem(inRarity, outRarityEnum, shardCost) {
     
     let pool, name, val, itemObj; let rarity = outRarityEnum; let rKey = 'r-' + rarity;
     const rarityMult = rarity==='mythic'?3.2 : rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
-    if (chosenCat === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * 1.2 * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); }
-    else if (chosenCat === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * 1.2 * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); }
-    else if (chosenCat === 'helm') { pool = HELM_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(1, 4) + p.lvl * 0.5) * 1.2 * rarityMult); itemObj = { id: makeId('h'), type:'helm', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.helms.push(itemObj); discover('helms', name); }
-    else if (chosenCat === 'accessory') { pool = ACC_POOLS[rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor(rand(1, 3) * rarityMult); itemObj = { id: makeId('acc'), type:'accessory', name, val, rarity: rKey, sell: calculateSellValue(val*2, rKey, 'weapon') }; p.inv.accessories.push(itemObj); discover('accessories', name); }
+    if (chosenCat === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * 1.2 * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); trackItemMilestones(itemObj); }
+    else if (chosenCat === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * 1.2 * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); trackItemMilestones(itemObj); }
+    else if (chosenCat === 'helm') { pool = HELM_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(1, 4) + p.lvl * 0.5) * 1.2 * rarityMult); itemObj = { id: makeId('h'), type:'helm', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.helms.push(itemObj); discover('helms', name); trackItemMilestones(itemObj); }
+    else if (chosenCat === 'accessory') { pool = ACC_POOLS[rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor(rand(1, 3) * rarityMult); itemObj = { id: makeId('acc'), type:'accessory', name, val, rarity: rKey, sell: calculateSellValue(val*2, rKey, 'weapon') }; p.inv.accessories.push(itemObj); discover('accessories', name); trackItemMilestones(itemObj); }
     let affix = generateAffix(rKey); if (affix) itemObj.affix = affix;
     let statSuf = (chosenCat === 'accessory') ? 'LUCK' : (chosenCat === 'weapon' ? 'ATK' : 'RÜS');
     rewardText = itemObj.name + ` (+${val} ${statSuf})` + (affix ? ' ✧' : ''); rewardClass = rKey;
@@ -1333,10 +1349,10 @@ function generateChestReward(type) {
       const rarity = rollRarity(type); let pool, name, val, itemObj;
       const rarityMult = rarity==='mythic'?3.2 : rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
       
-      if (category === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * def.rewardMult * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); if (rarity === 'legendary') p.metaStats.legendaryFound++; }
-      else if (category === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * def.rewardMult * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); if (rarity === 'legendary') p.metaStats.legendaryFound++; }
-      else if (category === 'helm') { pool = HELM_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(1, 4) + p.lvl * 0.5) * def.rewardMult * rarityMult); itemObj = { id: makeId('h'), type:'helm', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.helms.push(itemObj); discover('helms', name); if (rarity === 'legendary') p.metaStats.legendaryFound++; }
-      else if (category === 'accessory') { pool = ACC_POOLS[rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor(rand(1, 3) * rarityMult); itemObj = { id: makeId('acc'), type:'accessory', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val*2, 'r-'+rarity, 'weapon') }; p.inv.accessories.push(itemObj); discover('accessories', name); if (rarity === 'legendary') p.metaStats.legendaryFound++; }
+      if (category === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * def.rewardMult * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); trackItemMilestones(itemObj); }
+      else if (category === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * def.rewardMult * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); trackItemMilestones(itemObj); }
+      else if (category === 'helm') { pool = HELM_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(1, 4) + p.lvl * 0.5) * def.rewardMult * rarityMult); itemObj = { id: makeId('h'), type:'helm', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.helms.push(itemObj); discover('helms', name); trackItemMilestones(itemObj); }
+      else if (category === 'accessory') { pool = ACC_POOLS[rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor(rand(1, 3) * rarityMult); itemObj = { id: makeId('acc'), type:'accessory', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val*2, 'r-'+rarity, 'weapon') }; p.inv.accessories.push(itemObj); discover('accessories', name); trackItemMilestones(itemObj); }
       
       let affix = generateAffix('r-'+rarity); if (affix) itemObj.affix = affix;
       let statSuf = (category === 'accessory') ? 'LUCK' : (category === 'weapon' ? 'ATK' : 'RÜS');
@@ -1413,9 +1429,51 @@ function renderHeroBook() {
 }
 
 function renderIndexList(type) {
-  const c = $('wd-index-list'); c.innerHTML = ''; const btns = document.querySelectorAll('#wd-tab-index .wd-mini-btn'); btns.forEach(b => b.classList.remove('wd-active-filter')); if (type === 'weapons') btns[0].classList.add('wd-active-filter'); else if (type === 'armors') btns[1].classList.add('wd-active-filter'); else if (type === 'lore') btns[2].classList.add('wd-active-filter');
-  if (type === 'lore') { c.style.gridTemplateColumns = "1fr"; if (!state.lore || state.lore.length === 0) { c.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding: 20px; font-style:italic;">Die Seiten dieses Folianten sind leer. Besiege Bosse, um ihr Wissen zu stehlen.</p>'; return; } state.lore.forEach(l => { c.innerHTML += `<div class="wd-quest-card" style="cursor:default; margin-bottom:8px;"><div class="wd-quest-title" style="color:var(--epic)">${l.name}</div><div class="wd-quest-desc" style="color:var(--text-main); font-family:'Lora', serif;">${l.text}</div></div>`; }); c.style.gridTemplateColumns = "repeat(2, 1fr)"; return; }
-  const items = type === 'weapons' ? WEAPON_POOLS[p.cls] : ARMOR_POOLS[p.cls]; const discovered = state.discovery[type] || []; for(let rarity in items) { items[rarity].forEach(name => { const isKnown = discovered.includes(name); c.innerHTML += `<div class="wd-index-item ${isKnown ? '' : 'undiscovered'}" style="border-color: ${isKnown ? `var(--${rarity})` : 'var(--border)'}"><h4 style="color: ${isKnown ? `var(--${rarity})` : 'var(--text-muted)'}">${isKnown ? name : '???'}</h4><span style="color:var(--text-muted)">${rarityLabel(rarity)}</span></div>`; }); }
+  const c = $('wd-index-list');
+  const counter = $('wd-index-counter');
+  c.innerHTML = '';
+
+  const btns = document.querySelectorAll('#wd-tab-index .wd-mini-btn');
+  const filterOrder = ['weapons', 'armors', 'helms', 'accessories', 'lore'];
+  btns.forEach((b, idx) => b.classList.toggle('wd-active-filter', filterOrder[idx] === type));
+
+  if (type === 'lore') {
+    c.style.gridTemplateColumns = "1fr";
+    if (counter) counter.textContent = `Lore-Einträge entdeckt: ${(state.lore || []).length}`;
+    if (!state.lore || state.lore.length === 0) {
+      c.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding: 20px; font-style:italic;">Die Seiten dieses Folianten sind leer. Besiege Bosse, um ihr Wissen zu stehlen.</p>';
+      return;
+    }
+    state.lore.forEach(l => {
+      c.innerHTML += `<div class="wd-quest-card" style="cursor:default; margin-bottom:8px;"><div class="wd-quest-title" style="color:var(--epic)">${l.name}</div><div class="wd-quest-desc" style="color:var(--text-main); font-family:'Lora', serif;">${l.text}</div></div>`;
+    });
+    return;
+  }
+
+  c.style.gridTemplateColumns = "repeat(2, 1fr)";
+  const poolByType = {
+    weapons: WEAPON_POOLS[p.cls],
+    armors: ARMOR_POOLS[p.cls],
+    helms: HELM_POOLS[p.cls],
+    accessories: ACC_POOLS
+  };
+
+  const items = poolByType[type] || {};
+  const discovered = state.discovery[type] || [];
+  let total = 0;
+  let found = 0;
+
+  for (const rarity in items) {
+    items[rarity].forEach(name => {
+      total++;
+      const isKnown = discovered.includes(name);
+      if (isKnown) found++;
+      c.innerHTML += `<div class="wd-index-item ${isKnown ? '' : 'undiscovered'}" style="border-color: ${isKnown ? `var(--${rarity})` : 'var(--border)'}"><h4 style="color: ${isKnown ? `var(--${rarity})` : 'var(--text-muted)'}">${isKnown ? name : '❓❓❓ GEHEIMNIS ❓❓❓'}</h4><span style="color:var(--text-muted)">${rarityLabel(rarity)}</span></div>`;
+    });
+  }
+
+  const labels = { weapons: 'Waffen', armors: 'Rüstungen', helms: 'Helme', accessories: 'Accessoires' };
+  if (counter) counter.textContent = `${labels[type]} entdeckt: ${found} / ${total}`;
 }
 function selectSkill(id) { state.selectedSkill = id; playSound('click'); renderSkills(); }
 function renderSkills() {
@@ -1462,7 +1520,8 @@ function migrateSave(player, gameState, saveVersion = 1) {
     if (player.fx.eventAtkBuff === undefined) player.fx.eventAtkBuff = 1;
     if (!player.metaBonuses) player.metaBonuses = { xpPct: 0, goldPct: 0, crit: 0, dodge: 0 };
     if (!player.achievements) player.achievements = { unlocked: [], progress: {} };
-    if (!player.metaStats) player.metaStats = { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 };
+    if (!player.metaStats) player.metaStats = { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, legendaryWeaponsFound: 0, rareWeaponsFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 };
+    player.metaStats = Object.assign({ kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, legendaryWeaponsFound: 0, rareWeaponsFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 }, player.metaStats);
   }
 
   if (player.inv.shards === undefined) player.inv.shards = 0;
@@ -1473,7 +1532,8 @@ function migrateSave(player, gameState, saveVersion = 1) {
   if (player.fx.eventAtkBuff === undefined) player.fx.eventAtkBuff = 1;
   if (!player.metaBonuses) player.metaBonuses = { xpPct: 0, goldPct: 0, crit: 0, dodge: 0 };
   if (!player.achievements) player.achievements = { unlocked: [], progress: {} };
-  if (!player.metaStats) player.metaStats = { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 };
+  if (!player.metaStats) player.metaStats = { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, legendaryWeaponsFound: 0, rareWeaponsFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 };
+  player.metaStats = Object.assign({ kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, legendaryWeaponsFound: 0, rareWeaponsFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 }, player.metaStats);
   if (gameState.firstCombatHintShown === undefined) gameState.firstCombatHintShown = true;
   if (gameState.enemy) { if(gameState.enemy.fx === undefined) gameState.enemy.fx = { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }; if(gameState.enemy.cooldowns === undefined) gameState.enemy.cooldowns = {}; if(gameState.enemy.abilities === undefined) gameState.enemy.abilities = []; }
 
