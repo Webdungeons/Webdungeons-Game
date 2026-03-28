@@ -57,12 +57,12 @@
   .wd-floor-intro-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Cinzel', serif; font-size: 4rem; color: var(--accent); font-weight: bold; text-shadow: 0 0 30px rgba(212,175,55,0.6), 0 5px 10px #000; z-index: 20; pointer-events: none; opacity: 0; animation: wdFloorIntro 3.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; white-space: nowrap; }
 
   .wd-combatant-hp { margin-top: 15px; background: rgba(0,0,0,0.8); padding: 6px 15px; border-radius: 4px; border: 1px ridge var(--border); font-weight: bold; font-family: 'Cinzel', serif; letter-spacing: 1px; color: var(--hp-glow); box-shadow: 0 5px 15px rgba(0,0,0,0.9); }
-  #wd-action-panel { position: absolute; left: 0; right: 0; bottom: 0; padding: 16px 22px calc(16px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; background: rgba(10,10,12,0.95); min-height: 170px; max-height: 210px; overflow-y: auto; border-top: 3px ridge var(--border); box-shadow: 0 -12px 24px rgba(0,0,0,0.8), inset 0 20px 20px -20px rgba(0,0,0,0.8); transition: all 0.3s ease; z-index: 25; }
-  #wd-codex-shortcuts { position: absolute; left: 0; right: 0; bottom: 210px; display: flex; gap: 10px; padding: 10px 22px; z-index: 26; }
-  .wd-codex-btn { flex: 1; background: linear-gradient(180deg, #2e2738 0%, #17131f 100%); border: 1px solid rgba(212,175,55,0.28); color: #efe6d4; min-height: 46px; padding: 10px 12px; border-radius: 10px; font-family: 'Cinzel', serif; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; }
+  #wd-action-panel { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 24px calc(18px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; background: rgba(10,10,12,0.95); min-height: 190px; max-height: 245px; overflow-y: auto; border-top: 3px ridge var(--border); box-shadow: 0 -12px 24px rgba(0,0,0,0.8), inset 0 20px 20px -20px rgba(0,0,0,0.8); transition: all 0.3s ease; z-index: 25; }
+  #wd-codex-shortcuts { position: absolute; left: 0; right: 0; bottom: 248px; display: flex; gap: 12px; padding: 10px 24px; z-index: 26; }
+  .wd-codex-btn { flex: 1; background: linear-gradient(180deg, #2e2738 0%, #17131f 100%); border: 1px solid rgba(212,175,55,0.28); color: #efe6d4; min-height: 50px; padding: 11px 14px; border-radius: 10px; font-family: 'Cinzel', serif; font-size: 0.92rem; cursor: pointer; transition: all 0.2s; }
   .wd-codex-btn:hover { border-color: var(--accent); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 16px rgba(0,0,0,0.45); }
   
-  .wd-btn { background: linear-gradient(180deg, #2b2533 0%, #15121b 100%); border: 1px solid rgba(212,175,55,0.35); color: #e9dfce; min-height: 62px; padding: 14px 12px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; box-shadow: 0 6px 14px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08); }
+  .wd-btn { background: linear-gradient(180deg, #2b2533 0%, #15121b 100%); border: 1px solid rgba(212,175,55,0.35); color: #e9dfce; min-height: 70px; padding: 16px 14px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; box-shadow: 0 6px 14px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08); }
   .wd-btn:hover:not(:disabled) { background: linear-gradient(180deg, #352d3f 0%, #1c1724 100%); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.55), 0 0 14px rgba(212,175,55,0.2); color: #fff; }
   .wd-btn:active:not(:disabled) { transform: translateY(0); box-shadow: inset 0 2px 6px rgba(0,0,0,0.6); }
   .wd-btn:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(1); box-shadow: none; border-color: var(--border); background: #0a0a0c;}
@@ -73,28 +73,29 @@
   .wd-log-entry { margin-bottom: 8px; animation: wdFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 4px; border-bottom: 1px dotted rgba(255,255,255,0.05); text-shadow: 1px 1px 1px #000;}
   .wd-log-info { color: var(--text-main); } .wd-log-good { color: var(--xp-glow); font-weight: bold; } .wd-log-bad { color: var(--hp-glow); font-weight: bold; } .wd-log-warn { color: var(--accent); } .wd-log-magic { color: #d8b4e2; font-style: italic; text-shadow: 0 0 5px rgba(192, 132, 252, 0.4); }
   
-  .wd-panel-tabs { display: flex; gap: 10px; padding: 14px; background: rgba(0,0,0,0.65); border-bottom: 2px ridge var(--border); flex-wrap:wrap; }
-  .wd-panel-tab-btn { flex: 1; min-width: 152px; min-height: 44px; padding: 11px 10px; background: linear-gradient(180deg, #221d2b 0%, #0f0c14 100%); border: 1px solid rgba(212,175,55,0.22); border-radius: 10px; color: var(--text-muted); cursor: pointer; font-size: 0.78rem; transition: all 0.2s ease; text-transform: uppercase; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05); }
+  .wd-panel-tabs { display: grid; grid-template-columns: repeat(6, minmax(130px, 1fr)); gap: 12px; padding: 16px; background: rgba(0,0,0,0.65); border-bottom: 2px ridge var(--border); }
+  .wd-panel-tab-btn { min-width: 0; min-height: 50px; padding: 12px 12px; background: linear-gradient(180deg, #221d2b 0%, #0f0c14 100%); border: 1px solid rgba(212,175,55,0.22); border-radius: 10px; color: var(--text-muted); cursor: pointer; font-size: 0.83rem; transition: all 0.2s ease; text-transform: uppercase; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05); letter-spacing: 0.6px; }
   .wd-panel-tab-btn:hover { color: var(--text-main); background: linear-gradient(180deg, #2e2738 0%, #181420 100%); border-color: var(--accent); }
   .wd-panel-tab-btn.active { color: #fff; border-color: var(--accent); background: linear-gradient(180deg, rgba(212,175,55,0.28) 0%, rgba(40,32,20,0.95) 100%); text-shadow: 0 0 8px rgba(212,175,55,0.45); box-shadow: 0 0 14px rgba(212,175,55,0.25); }
-  .wd-tab-content { padding: 20px; overflow-y: auto; flex: 1; display: none; } .wd-tab-content.active { display: block; animation: wdFadeIn 0.4s ease-out;}
+  .wd-tab-content { padding: 26px; overflow-y: auto; flex: 1; display: none; } .wd-tab-content.active { display: block; animation: wdFadeIn 0.4s ease-out;}
   #wd-panel-shell h3 { margin-bottom: 15px; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
   #wd-panel-overlay { position: absolute; inset: 0; z-index: 210; display: none; background: rgba(0,0,0,0.72); backdrop-filter: blur(4px); padding: 24px; align-items: center; justify-content: center; }
   #wd-panel-shell { width: min(1120px, 94vw); height: min(82vh, 900px); border: 2px solid rgba(212,175,55,0.45); border-radius: 14px; background: linear-gradient(145deg, rgba(20,18,28,0.98), rgba(7,7,10,0.98)); box-shadow: 0 28px 60px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.05) inset; display: flex; flex-direction: column; overflow: hidden; }
-  .wd-panel-header { display:flex; justify-content:space-between; align-items:center; padding: 14px 16px; border-bottom: 1px solid var(--border); }
-  .wd-panel-close { background: linear-gradient(180deg, #3a1f25, #221016); color:#ffd7d7; border:1px solid rgba(239,68,68,0.5); border-radius:8px; padding:7px 13px; cursor:pointer; font-weight:700; }
+  .wd-panel-header { display:flex; justify-content:space-between; align-items:center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .wd-panel-close { background: linear-gradient(180deg, #3a1f25, #221016); color:#ffd7d7; border:1px solid rgba(239,68,68,0.5); border-radius:8px; padding:9px 14px; cursor:pointer; font-weight:700; font-size: 0.95rem; }
   .wd-panel-close:hover { background: linear-gradient(180deg, #4a252d, #2c141b); color:#fff; border-color: var(--hp-glow); }
   .wd-sp-display { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 4px; margin-bottom: 18px; border: 1px ridge var(--border); box-shadow: inset 0 0 10px rgba(0,0,0,0.8); text-align: center; }
+  .wd-codex-filter-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 22px; }
   
   .wd-eq-slot { background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 4px; padding: 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); transition: transform 0.2s; }
   .wd-eq-slot:hover { transform: translateX(2px); border-color: var(--border-light); }
   .wd-eq-icon { width: 45px; height: 45px; background: #000; border-radius: 4px; display: grid; place-items: center; font-size: 1.4rem; border: 1px ridge var(--border-light); box-shadow: 2px 2px 5px rgba(0,0,0,0.8); }
   .wd-eq-details h4 { font-size: 0.95rem; margin-bottom: 4px; } .wd-eq-details p { font-size: 0.8rem; color: var(--text-muted); font-style: italic;}
-  .wd-list-item { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 4px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.3); transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
+  .wd-list-item { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.3); transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
   .wd-list-item:hover { transform: translateX(4px) scale(1.01); border-color: var(--border-light); background: rgba(0,0,0,0.5); box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.3); }
   .wd-list-info h4 { font-size: 0.95rem; margin-bottom: 4px;} .wd-list-info p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.3; }
   .wd-list-actions { display: flex; gap: 6px; flex-direction: column; align-items: flex-end; }
-  .wd-mini-btn { background: linear-gradient(180deg, #2a2431 0%, #14111a 100%); border: 1px solid rgba(212,175,55,0.25); color: var(--text-main); padding: 7px 12px; border-radius: 8px; cursor: pointer; font-size: 0.75rem; transition: 0.2s; white-space: nowrap; font-family: 'Cinzel', serif; font-weight: bold; letter-spacing: 0.5px; }
+  .wd-mini-btn { background: linear-gradient(180deg, #2a2431 0%, #14111a 100%); border: 1px solid rgba(212,175,55,0.25); color: var(--text-main); min-height: 40px; padding: 9px 14px; border-radius: 8px; cursor: pointer; font-size: 0.82rem; transition: 0.2s; white-space: nowrap; font-family: 'Cinzel', serif; font-weight: bold; letter-spacing: 0.5px; }
   .wd-mini-btn:hover:not(:disabled) { border-color: var(--accent); color: #fff; box-shadow: 0 0 10px rgba(212,175,55,0.25); } .wd-mini-btn:disabled { opacity: 0.3; cursor: not-allowed; }
   
   .wd-index-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -199,11 +200,13 @@
     .wd-top-meta { grid-template-columns: repeat(2, 1fr); }
     #wd-panel-overlay { padding: 10px; }
     #wd-panel-shell { width: 96vw; height: 84vh; }
-    #wd-codex-shortcuts { bottom: 230px; padding: 8px 10px; }
-    #wd-main-stage { min-height: 60vh; padding-bottom: 220px; }
+    .wd-panel-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .wd-codex-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #wd-codex-shortcuts { bottom: 270px; padding: 8px 10px; }
+    #wd-main-stage { min-height: 60vh; padding-bottom: 260px; }
     #wd-combat-hud { position: static; padding: 10px 10px 0; gap: 10px; }
-    .wd-hud-panel { width: 50%; }
-    #wd-action-panel { grid-template-columns: repeat(2, 1fr); min-height: 210px; max-height: 250px; }
+    .wd-hud-panel { width: 100%; }
+    #wd-action-panel { grid-template-columns: repeat(2, 1fr); min-height: 240px; max-height: 300px; }
   }
 
   @keyframes wdErrorShake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); border-color: var(--hp-glow); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); color: var(--hp-glow); } 40%, 80% { transform: translateX(5px); border-color: var(--hp-glow); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); color: var(--hp-glow); } }
@@ -329,10 +332,10 @@
           <div class="wd-eq-slot" id="wd-eq-trinket"><div class="wd-eq-icon">💍</div><div class="wd-eq-details"><h4 class="r-artefact">Artefakt</h4><p>Leerer Sockel</p></div></div>
         </div>
         <div id="wd-tab-inv" class="wd-tab-content">
-          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:18px">
-             <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('weapons')">Waffen</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('armors')">Rüstung</button>
-             <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('helms')">Helm</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('accessories')">Accs</button>
-             <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('trinkets')">Artefakt</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderInventoryList('consumables')">Beute</button>
+          <div class="wd-codex-filter-grid">
+             <button class="wd-mini-btn" onclick="renderInventoryList('weapons')">Waffen</button><button class="wd-mini-btn" onclick="renderInventoryList('armors')">Rüstung</button>
+             <button class="wd-mini-btn" onclick="renderInventoryList('helms')">Helm</button><button class="wd-mini-btn" onclick="renderInventoryList('accessories')">Accs</button>
+             <button class="wd-mini-btn" onclick="renderInventoryList('trinkets')">Artefakt</button><button class="wd-mini-btn" onclick="renderInventoryList('consumables')">Beute</button>
           </div>
           <div id="wd-inv-list"></div>
         </div>
@@ -347,8 +350,8 @@
         </div>
         <div id="wd-tab-index" class="wd-tab-content">
           <div id="wd-index-counter" class="wd-index-counter">Archiv noch versiegelt…</div>
-          <div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap">
-             <button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('weapons')">Waffen</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('armors')">Rüstung</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('helms')">Helme</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('accessories')">Accessoires</button><button class="wd-mini-btn" style="flex:1 1 30%" onclick="renderIndexList('lore')">Lore</button>
+          <div class="wd-codex-filter-grid">
+             <button class="wd-mini-btn" onclick="renderIndexList('weapons')">Waffen</button><button class="wd-mini-btn" onclick="renderIndexList('armors')">Rüstung</button><button class="wd-mini-btn" onclick="renderIndexList('helms')">Helme</button><button class="wd-mini-btn" onclick="renderIndexList('accessories')">Accessoires</button><button class="wd-mini-btn" onclick="renderIndexList('lore')">Lore</button>
           </div>
           <div id="wd-index-list" class="wd-index-grid"></div>
         </div>
