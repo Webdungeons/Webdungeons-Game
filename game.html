@@ -10,7 +10,7 @@
     --text-main: #d1c7b7; --text-muted: #8c8273; --accent: #d4af37; 
     --hp: #991b1b; --hp-bg: #2a0808; --hp-glow: #ef4444; --mp: #1e3a8a; --mp-bg: #091124; --mp-glow: #3b82f6;
     --gold: #d4af37; --xp: #065f46; --xp-glow: #10b981; --common: #a3a3a3; --rare: #60a5fa; --epic: #c084fc;
-    --legendary: #fbbf24; --artefact: #f43f5e; --shop: #34d399;
+    --legendary: #fbbf24; --mythic: #a21caf; --artefact: #f43f5e; --shop: #34d399;
   }
   #wd-wrapper, #wd-wrapper * { box-sizing: border-box; margin: 0; padding: 0; }
   #wd-wrapper { font-family: 'Lora', serif; background-color: var(--bg); color: var(--text-main); height: 800px; width: 100%; display: flex; overflow: hidden; font-size: 15px; position: relative; background: radial-gradient(circle at center, rgba(17,16,21,1) 0%, rgba(0,0,0,1) 100%); }
@@ -92,7 +92,7 @@
   .wd-index-item h4 { font-size: 0.8rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .wd-index-item span { font-style: italic; font-size: 0.75rem;}
   
-  .r-common { color: var(--common); } .r-rare { color: var(--rare); } .r-epic { color: var(--epic); } .r-legendary { color: var(--legendary); text-shadow: 0 0 8px rgba(251, 191, 36, 0.4); } .r-artefact { color: var(--artefact); text-shadow: 0 0 8px rgba(244, 63, 94, 0.4); } .r-shop { color: var(--shop); }
+  .r-common { color: var(--common); } .r-rare { color: var(--rare); } .r-epic { color: var(--epic); } .r-legendary { color: var(--legendary); text-shadow: 0 0 8px rgba(251, 191, 36, 0.4); } .r-mythic { color: var(--mythic); text-shadow: 0 0 10px rgba(162, 28, 175, 0.55); } .r-artefact { color: var(--artefact); text-shadow: 0 0 8px rgba(244, 63, 94, 0.4); } .r-shop { color: var(--shop); }
   
   @keyframes wdDangerPulse { 0% { box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.3); } 100% { box-shadow: inset 0 0 70px rgba(239, 68, 68, 0.7), 0 0 20px rgba(239, 68, 68, 0.4); border-color: rgba(239, 68, 68, 0.9); } }
   .wd-danger-pulse { animation: wdDangerPulse 0.8s infinite alternate !important; }
@@ -386,10 +386,169 @@ const CHEST_DEFS = {
   mystic: { label: "Arkankiste", icon: "✨", rewardMult: 1.8, weights: {weapon:30, armor:30, helm:15, accessory:15, gold:10} } 
 };
 
-const WEAPON_POOLS = { Ritter: { common: ["Schildspitze", "Rostiges Schwert", "Eisenflegel"], rare: ["Bastionsäbel", "Silberwacht", "Stahlschwert"], epic: ["Sonnenzorn", "Eidbrecher", "Titanspalter"], legendary: ["Löwenschwur", "Himmelsbrecher", "Aegis-Klinge"] }, Magier: { common: ["Runenfokus", "Aschenstab", "Kupferstab"], rare: ["Frostsigel", "Aetherstab", "Glutstab"], epic: ["Arkanherz", "Flammenkrone", "Sturmrufer"], legendary: ["Weltfunke", "Erzkomet", "Stab der Ewigkeit"] }, Schurke: { common: ["Krähenzahn", "Nachtstahl", "Eisendolch"], rare: ["Nebelklinge", "Schwarzfeder", "Giftdolch"], epic: ["Leerenkralle", "Blutmond", "Nachtschatten"], legendary: ["Nachtfürst", "Rabenurteil", "Seelenfresser"] }, Paladin: { common: ["Weihschwert", "Segenshammer", "Knappenhammer"], rare: ["Sonnenklinge", "Glaubenswacht", "Lichtbringer"], epic: ["Aurora", "Heiligzorn", "Himmelswacht"], legendary: ["Dawnbreaker", "Ewiger Eid", "Gnade der Engel"] }, Waldläufer: { common: ["Jagdspieß", "Waldbogen", "Kupferpfeile"], rare: ["Habichtzahn", "Eibenbogen", "Falkenauge"], epic: ["Sturmfeder", "Wolfsfang", "Donnerspeer"], legendary: ["Alderheart", "Königsjagd", "Sonnenfinsternis"] } };
-const ARMOR_POOLS = { Ritter: { common: ["Eisenpanzer", "Kettenhemd", "Milizbrustpanzer"], rare: ["Schildmantel", "Plattenrock", "Stahlwams"], epic: ["Königswache", "Drachenschuppe", "Mithrilhemd"], legendary: ["Titanwall", "Aegis", "Drachenherz-Rüstung"] }, Magier: { common: ["Leinenrobe", "Schülergewand", "Flickengewand"], rare: ["Kristallrobe", "Zaubertunika", "Elementarmantel"], epic: ["Leerenrobe", "Erzmagierrobe", "Schattenzwirnrobe"], legendary: ["Kosmosgewand", "Zeitweberrobe", "Dimensionsgewand"] }, Schurke: { common: ["Lederwams", "Straßenkleidung", "Schmugglergewand"], rare: ["Schwarzleder", "Schleicheranzug", "Nebelmantel"], epic: ["Phantomhaut", "Blutgewand", "Nachtschattengewand"], legendary: ["Rabenhaut", "Meuchelmörderkutte", "Umhang des Phantoms"] }, Paladin: { common: ["Pilgerpanzer", "Klerikerwams", "Eisenwams"], rare: ["Heiligplatte", "Tempelritterrüstung", "Kreuzfahrerpanzer"], epic: ["Seraphhaut", "Sonnenwall", "Inquisitorenrüstung"], legendary: ["Ewiglicht", "Himmelsfestung", "Rüstung der Erlösung"] }, Waldläufer: { common: ["Pfadmantel", "Fellrüstung", "Raues Leder"], rare: ["Eichenhaut", "Wildnisleder", "Späherpanzer"], epic: ["Nebelfell", "Sturmmantel", "Windläuferpanzer"], legendary: ["Herbststurm", "Waldläuferkönig-Panzer", "Umhang der Bestie"] } };
-const HELM_POOLS = { Ritter: { common: ["Eisenhelm", "Lederkappe"], rare: ["Ritterhelm", "Stahlvisier"], epic: ["Königshelm", "Drachenkrone"], legendary: ["Titanhelm", "Aegis-Krone"] }, Magier: { common: ["Stoffkapuze", "Leinenhut"], rare: ["Zauberhut", "Seidenkapuze"], epic: ["Erzmagier-Hut", "Schattenkrone"], legendary: ["Kosmoskrone", "Zeitweber-Kapuze"] }, Schurke: { common: ["Lederkappe", "Stirnband"], rare: ["Schattenmaske", "Diebeshaube"], epic: ["Phantomkapuze", "Vipernmaske"], legendary: ["Rabenmaske", "Antlitz der Leere"] }, Paladin: { common: ["Eisenkappe", "Pilgerhut"], rare: ["Heiligvisier", "Kreuzritterhelm"], epic: ["Sonnenhelm", "Inquisitoren-Krone"], legendary: ["Himmelskrone", "Halo des Lichts"] }, Waldläufer: { common: ["Jägerkapuze", "Fellmütze"], rare: ["Späherhut", "Wildniskapuze"], epic: ["Drachenschuppen-Kapuze", "Sturmfänger"], legendary: ["Herbststurm-Kapuze", "Auge des Adlers"] } };
-const ACC_POOLS = { common: ["Kupferring", "Knochenamulett", "Lederband"], rare: ["Silberring", "Wolfszahn-Amulett", "Schattenring"], epic: ["Goldamulett", "Rubinring", "Drachenauge"], legendary: ["Königsring", "Sternen-Amulett", "Ring der Ewigkeit"] };
+const LOOT_PYRAMID_COUNTS = { common: 45, rare: 22, epic: 12, legendary: 5, mythic: 2 };
+
+function composeLootNames(prefixes, nouns, count) {
+  const names = [];
+  for (let i = 0; i < prefixes.length && names.length < count; i++) {
+    for (let j = 0; j < nouns.length && names.length < count; j++) {
+      names.push(`${prefixes[i]} ${nouns[j]}`);
+    }
+  }
+  return names;
+}
+
+function buildClassLootPool(theme) {
+  const c = LOOT_PYRAMID_COUNTS;
+  return {
+    common: composeLootNames(theme.commonPrefixes, theme.nouns, c.common),
+    rare: composeLootNames(theme.rarePrefixes, theme.nouns, c.rare),
+    epic: composeLootNames(theme.epicPrefixes, theme.nouns, c.epic),
+    legendary: theme.legendary.slice(0, c.legendary),
+    mythic: theme.mythic.slice(0, c.mythic)
+  };
+}
+
+const WEAPON_THEMES = {
+  Ritter: {
+    nouns: ["Klinge", "Langschwert", "Säbel", "Morgenstern", "Hellebarde", "Kriegshammer", "Wachschwert", "Streitkolben", "Bastardschwert", "Turmspeer"],
+    commonPrefixes: ["Gesplitterte", "Rostige", "Stumpfe", "Einfache", "Miliz-", "Verbeulte", "Knappe", "Rußige", "Abgenutzte"],
+    rarePrefixes: ["Bastion-", "Wacht-", "Banner-", "Silber-", "Lanzen-", "Eid-", "Steinwall-"],
+    epicPrefixes: ["Löwenherz-", "Kronen-", "Ahnenschwur-", "Dämmerwall-", "Sonnenklingen-"],
+    legendary: ["Auge des Drachen", "Löwenschwur", "Himmelsbrecher", "Aegis-Klinge", "Krone von Altdor"],
+    mythic: ["Eid der Erstkönige", "Sternenspalter von Aurel"]
+  },
+  Magier: {
+    nouns: ["Stab", "Fokus", "Zepter", "Runenkristall", "Aetherstab", "Spruchlanze", "Glyphenzweig", "Aschenrute", "Siegelstab", "Sternenfibel"],
+    commonPrefixes: ["Rissiger", "Rußiger", "Schlichter", "Staubiger", "Kalter", "Flackernder", "Wandernder", "Zerkratzter", "Lehrlings-"],
+    rarePrefixes: ["Frost-", "Glut-", "Mond-", "Runen-", "Nebel-", "Donner-", "Aether-"],
+    epicPrefixes: ["Arkanherz-", "Sternenruf-", "Leeren-", "Astral-", "Weltenfunken-"],
+    legendary: ["Weltfunke", "Erzkomet", "Stab der Ewigkeit", "Sphäre der Konvergenz", "Zunge des Kometen"],
+    mythic: ["Chronik des Nullpunkts", "Auge der Siebten Sphäre"]
+  },
+  Schurke: {
+    nouns: ["Dolch", "Klinge", "Stichmesser", "Kurzschwert", "Giftzahn", "Wurfklinge", "Nadel", "Faustklinge", "Schattensichel", "Nachtzahn"],
+    commonPrefixes: ["Verkratzter", "Stumpfer", "Grauer", "Leiser", "Geborgter", "Dunkler", "Abgewetzter", "Straßen-", "Rissiger"],
+    rarePrefixes: ["Nebel-", "Raben-", "Gift-", "Mond-", "Schwarzfeder-", "Dämmer-", "Pirscher-"],
+    epicPrefixes: ["Nachtschatten-", "Blutmond-", "Leeren-", "Krähenfluch-", "Phantom-"],
+    legendary: ["Nachtfürst", "Rabenurteil", "Seelenfresser", "Maske des Letzten Schnitts", "Klinge ohne Echo"],
+    mythic: ["Atem des Vergessens", "Herz der Schwarzen Stunde"]
+  },
+  Paladin: {
+    nouns: ["Weihklinge", "Urteilshammer", "Segensstab", "Lichtspeer", "Tempelschwert", "Gelübdehammer", "Reliquienklinge", "Kreuzer", "Sonnenflegel", "Hoffnungsspeer"],
+    commonPrefixes: ["Schlichter", "Pilger-", "Kerzenruß-", "Verbeulter", "Junger", "Schmaler", "Abgenutzter", "Novizen-", "Blasser"],
+    rarePrefixes: ["Licht-", "Morgen-", "Segen-", "Gelübde-", "Dom-", "Wächter-", "Aurora-"],
+    epicPrefixes: ["Heiligzorn-", "Seraphen-", "Sonnenwall-", "Glaubensfeuer-", "Himmelswacht-"],
+    legendary: ["Dawnbreaker", "Ewiger Eid", "Gnade der Engel", "Fanal der Morgenwacht", "Urteil von Sanctum"],
+    mythic: ["Träne der Morgensternin", "Siegel der Ersten Kathedrale"]
+  },
+  Waldläufer: {
+    nouns: ["Bogen", "Jagdspeer", "Kurzbogen", "Waldmesser", "Pfeilwerfer", "Langbogen", "Hakenmesser", "Windlanze", "Pfadklinge", "Dornenstab"],
+    commonPrefixes: ["Gesplitterter", "Knotiger", "Moosiger", "Rauer", "Kalter", "Junger", "Abgespannter", "Fahlgrüner", "Verwitterter"],
+    rarePrefixes: ["Habicht-", "Eiben-", "Wind-", "Wolfs-", "Farn-", "Späher-", "Falken-"],
+    epicPrefixes: ["Sturmfeder-", "Mondwald-", "Donnerpfad-", "Nebeljäger-", "Wipfelsturm-"],
+    legendary: ["Alderheart", "Königsjagd", "Sonnenfinsternis", "Auge des Nordforsts", "Schwur der Hirschkönigin"],
+    mythic: ["Wurzel des Weltbaums", "Flüstern der Uralten Jagd"]
+  }
+};
+
+const ARMOR_THEMES = {
+  Ritter: {
+    nouns: ["Brustpanzer", "Kettenhemd", "Schulterplatte", "Panzer", "Plattenwams", "Armschiene", "Harnisch", "Wappenrock", "Brigantine", "Korsett"],
+    commonPrefixes: ["Einfacher", "Verbeulter", "Rostiger", "Miliz-", "Schwerer", "Staubiger", "Abgenutzter", "Rekrut-", "Narbiger"],
+    rarePrefixes: ["Schild-", "Ordens-", "Banner-", "Silber-", "Bastion-", "Wacht-", "Steinwall-"],
+    epicPrefixes: ["Kronen-", "Löwenherz-", "Ahneneid-", "Sonnenwall-", "Drachenwacht-"],
+    legendary: ["Titanwall", "Aegis", "Drachenherz-Rüstung", "Harnisch von Greifhall", "Ewiger Löwenpanzer"],
+    mythic: ["Wall der Ersten Legion", "Eidstahl des Morgenkaisers"]
+  },
+  Magier: {
+    nouns: ["Robe", "Mantel", "Gewand", "Seidenhaut", "Sternentuch", "Runenkleid", "Aethergewand", "Nebelrobe", "Schattenzwirn", "Schleier"],
+    commonPrefixes: ["Leinen-", "Schlichte", "Geflickte", "Staubige", "Aschene", "Lehrlings-", "Rissige", "Blasse", "Kühle"],
+    rarePrefixes: ["Kristall-", "Runen-", "Mond-", "Frost-", "Flammen-", "Aether-", "Glyphen-"],
+    epicPrefixes: ["Astral-", "Leeren-", "Erzmagier-", "Sternen-", "Zeitfaden-"],
+    legendary: ["Kosmosgewand", "Zeitweberrobe", "Dimensionsgewand", "Mantel der Spiegelnacht", "Robe des Sternensiegs"],
+    mythic: ["Schleier der Unendlichkeit", "Robe des Nullorakels"]
+  },
+  Schurke: {
+    nouns: ["Lederwams", "Mantel", "Schattenhaut", "Straßengewand", "Banditenjacke", "Pirscherweste", "Schleichkorsett", "Diebeshemd", "Nebelumhang", "Nachtrock"],
+    commonPrefixes: ["Abgewetztes", "Dunkles", "Rissiges", "Leises", "Staubiges", "Graues", "Verstohlenes", "Flicken-", "Gassen-"],
+    rarePrefixes: ["Nebel-", "Schwarzleder-", "Krähen-", "Mond-", "Gift-", "Schatten-", "Raben-"],
+    epicPrefixes: ["Phantom-", "Nachtschatten-", "Leeren-", "Blutmond-", "Geistertanz-"],
+    legendary: ["Rabenhaut", "Meuchelmörderkutte", "Umhang des Phantoms", "Weste der Stummen Gasse", "Nachtmantel des Endschritts"],
+    mythic: ["Haut des Schattenfürsten", "Mantel der Lautlosen Stunde"]
+  },
+  Paladin: {
+    nouns: ["Panzer", "Klerikerwams", "Tempelrüstung", "Glaubensharnisch", "Schildrock", "Lichtmantel", "Kreuzerplatte", "Pilgerkorsett", "Urteilsbrust", "Domharnisch"],
+    commonPrefixes: ["Pilger-", "Schlichter", "Abgenutzter", "Blasser", "Kerzenruß-", "Eiserner", "Novizen-", "Wachs-", "Verbeulter"],
+    rarePrefixes: ["Heilig-", "Sonnen-", "Dom-", "Kreuzfahrer-", "Gelübde-", "Wächter-", "Aurora-"],
+    epicPrefixes: ["Seraphen-", "Himmels-", "Inquisitoren-", "Urteils-", "Gnaden-"],
+    legendary: ["Ewiglicht", "Himmelsfestung", "Rüstung der Erlösung", "Panzer des Morgenurteils", "Aegis der Sieben Gelübde"],
+    mythic: ["Domwall von Heliand", "Rüstung des Erstmartyrs"]
+  },
+  Waldläufer: {
+    nouns: ["Leder", "Pfadmantel", "Späherweste", "Wildnispanzer", "Jägerrock", "Dornenwams", "Fellweste", "Waldhaut", "Moosumhang", "Windmantel"],
+    commonPrefixes: ["Raues", "Moosiges", "Abgewetztes", "Verwittertes", "Kühles", "Junges", "Fahlgrünes", "Knotiges", "Stilles"],
+    rarePrefixes: ["Eichen-", "Habicht-", "Späher-", "Farn-", "Wolfs-", "Wind-", "Falken-"],
+    epicPrefixes: ["Nebel-", "Sturmläufer-", "Mondwald-", "Wipfel-", "Dornenkronen-"],
+    legendary: ["Herbststurm", "Waldläuferkönig-Panzer", "Umhang der Bestie", "Haut des Silbertals", "Mantel der Hirschwache"],
+    mythic: ["Rüstung des Weltforstes", "Fell des Urhirsches"]
+  }
+};
+
+const HELM_THEMES = {
+  Ritter: {
+    nouns: ["Helm", "Stahlvisier", "Topfhelm", "Kettenhaube", "Wachhelm", "Schädelkappe", "Bügelhelm", "Schuppenhelm", "Tartschelhaube", "Plattenhaube"],
+    commonPrefixes: ["Schlichter", "Verbeulter", "Rostiger", "Miliz-", "Staubiger", "Abgenutzter", "Rekruten-", "Narbiger", "Stumpfer"],
+    rarePrefixes: ["Ritter-", "Banner-", "Ordens-", "Bastion-", "Silber-", "Wacht-", "Eid-"],
+    epicPrefixes: ["Königs-", "Löwen-", "Drachen-", "Kronen-", "Ahnenschwur-"],
+    legendary: ["Titanhelm", "Aegis-Krone", "Visier des Himmelswalls", "Krone von Greifenwacht", "Helm des Goldenen Eids"],
+    mythic: ["Haupt der Ersten Wache", "Sternenvisier von Aurel"]
+  },
+  Magier: {
+    nouns: ["Kapuze", "Hut", "Haube", "Sternenreif", "Runenkrone", "Nebelkappe", "Schleier", "Seidenhaube", "Arkanhut", "Fokusreif"],
+    commonPrefixes: ["Stoff-", "Schlichte", "Staubige", "Lehrlings-", "Rissige", "Blasse", "Leinene", "Kühle", "Aschene"],
+    rarePrefixes: ["Zauber-", "Runen-", "Kristall-", "Mond-", "Frost-", "Aether-", "Glyphen-"],
+    epicPrefixes: ["Erzmagier-", "Astral-", "Leeren-", "Zeitfaden-", "Sternen-"],
+    legendary: ["Kosmoskrone", "Zeitweber-Kapuze", "Reif der Spiegelsterne", "Haube der Dimensionsfalte", "Krone des Astralrates"],
+    mythic: ["Schleier der Siebten Bahn", "Krone des Nullorakels"]
+  },
+  Schurke: {
+    nouns: ["Maske", "Kapuze", "Haube", "Stirnreif", "Schattenkappe", "Nachtmaske", "Diebeshaube", "Pirscherkapuze", "Rabenvisier", "Gassenhaube"],
+    commonPrefixes: ["Lederne", "Graue", "Rissige", "Abgewetzte", "Leise", "Dunkle", "Straßen-", "Stumpfe", "Staubige"],
+    rarePrefixes: ["Schatten-", "Nebel-", "Raben-", "Gift-", "Mond-", "Schwarzfeder-", "Pirscher-"],
+    epicPrefixes: ["Phantom-", "Nachtschatten-", "Leeren-", "Blutmond-", "Geistertanz-"],
+    legendary: ["Rabenmaske", "Antlitz der Leere", "Kapuze des Letzten Schritts", "Visier des stillen Echos", "Maske der roten Gasse"],
+    mythic: ["Gesicht der Schwarzen Stunde", "Haube des Vergessenen Pfads"]
+  },
+  Paladin: {
+    nouns: ["Helm", "Visier", "Kreuzerhelm", "Pilgerhaube", "Lichtreif", "Sonnenhelm", "Urteilsmaske", "Domkrone", "Wächterhaube", "Gelübdevisier"],
+    commonPrefixes: ["Schlichter", "Pilger-", "Abgenutzter", "Blasser", "Kerzenruß-", "Eiserner", "Novizen-", "Wachs-", "Verbeulter"],
+    rarePrefixes: ["Heilig-", "Sonnen-", "Dom-", "Kreuzritter-", "Gelübde-", "Wächter-", "Aurora-"],
+    epicPrefixes: ["Inquisitoren-", "Himmels-", "Seraphen-", "Urteils-", "Gnaden-"],
+    legendary: ["Himmelskrone", "Halo des Lichts", "Visier der Morgenwacht", "Krone von Sanctum", "Helm des ewigen Urteils"],
+    mythic: ["Gloriole des Erstmartyrs", "Krone der Sieben Morgen"]
+  },
+  Waldläufer: {
+    nouns: ["Kapuze", "Hut", "Jägerhaube", "Fellmütze", "Späherreif", "Waldhaube", "Mooskappe", "Wipfelreif", "Sturmhaube", "Dornenkranz"],
+    commonPrefixes: ["Junge", "Moosige", "Verwitterte", "Rauhe", "Kühle", "Abgewetzte", "Fahlgrüne", "Knotige", "Stille"],
+    rarePrefixes: ["Späher-", "Habicht-", "Eiben-", "Falken-", "Wolfs-", "Wind-", "Farn-"],
+    epicPrefixes: ["Sturmfänger-", "Nebel-", "Mondwald-", "Wipfel-", "Dornenkronen-"],
+    legendary: ["Herbststurm-Kapuze", "Auge des Adlers", "Haube des Nordforsts", "Kranz der Hirschjägerin", "Reif der Silberlichtung"],
+    mythic: ["Blick des Weltforstes", "Krone der Uralten Jagd"]
+  }
+};
+
+const WEAPON_POOLS = Object.fromEntries(Object.entries(WEAPON_THEMES).map(([cls, theme]) => [cls, buildClassLootPool(theme)]));
+const ARMOR_POOLS = Object.fromEntries(Object.entries(ARMOR_THEMES).map(([cls, theme]) => [cls, buildClassLootPool(theme)]));
+const HELM_POOLS = Object.fromEntries(Object.entries(HELM_THEMES).map(([cls, theme]) => [cls, buildClassLootPool(theme)]));
+
+const ACC_POOLS = {
+  common: composeLootNames(["Kupferner", "Staubiger", "Schlichter", "Verkratzter", "Abgenutzter", "Matte", "Rissiger", "Alte", "Blasser"], ["Ring", "Anhänger", "Talisman", "Armreif", "Amulett"], LOOT_PYRAMID_COUNTS.common),
+  rare: composeLootNames(["Silberner", "Mond", "Wolfszahn", "Schatten", "Runen", "Achat", "Nebel"], ["Ring", "Anhänger", "Talisman", "Armreif", "Amulett"], LOOT_PYRAMID_COUNTS.rare),
+  epic: composeLootNames(["Goldener", "Drachen", "Sternen", "Sonnen", "Leeren"], ["Ring", "Anhänger", "Talisman", "Armreif", "Amulett"], LOOT_PYRAMID_COUNTS.epic),
+  legendary: ["Königsring", "Sternen-Amulett", "Ring der Ewigkeit", "Herz der Titanin", "Auge des Drachen"],
+  mythic: ["Siegel der Weltenachse", "Amulett des ersten Funkens"]
+};
 
 const SHOP_WEAPONS = { Ritter: [{name:"Breitschwert",dmg:13,cost:150}, {name:"Bastion-Axt",dmg:22,cost:360}, {name:"Ritter-Großschwert",dmg:35,cost:650}], Magier: [{name:"Runenstab",dmg:13,cost:150}, {name:"Fokuszepter",dmg:22,cost:360}, {name:"Meisterstab",dmg:35,cost:650}], Schurke: [{name:"Eisendolch",dmg:13,cost:150}, {name:"Nachtklinge",dmg:22,cost:360}, {name:"Korsarendolch",dmg:35,cost:650}], Paladin: [{name:"Glaubensklinge",dmg:12,cost:150}, {name:"Lichtstreitkolben",dmg:22,cost:360}, {name:"Richtschwert",dmg:34,cost:650}], Waldläufer: [{name:"Jagdbogen",dmg:12,cost:150}, {name:"Stachelset",dmg:22,cost:360}, {name:"Meisterbogen",dmg:34,cost:650}] };
 const SHOP_ARMORS = { Ritter: [{name:"Turmschild-Panzer",def:5,cost:140}, {name:"Ordensharnisch",def:8,cost:330}, {name:"Plattenrüstung",def:15,cost:600}], Magier: [{name:"Runenrobe",def:3,cost:140}, {name:"Astralmantel",def:5,cost:330}, {name:"Seidenrobe",def:10,cost:600}], Schurke: [{name:"Jägerleder",def:4,cost:140}, {name:"Schattenweste",def:6,cost:330}, {name:"Meisterleder",def:12,cost:600}], Paladin: [{name:"Kapellenpanzer",def:4,cost:140}, {name:"Sonnensegel",def:7,cost:330}, {name:"Inquisitorenrüstung",def:14,cost:600}], Waldläufer: [{name:"Pfadleder",def:4,cost:140}, {name:"Jägerhaut",def:6,cost:330}, {name:"Drachenleder",def:12,cost:600}] };
@@ -461,9 +620,9 @@ function makeId(prefix) { return prefix + '_' + Date.now().toString(36) + '_' + 
 function getWepEmoji(n) { const l=(n||'').toLowerCase(); return l.includes('stab')?'🪄':l.includes('bogen')?'🏹':l.includes('axt')?'🪓':'🗡️'; }
 function getArmEmoji(n) { const l=(n||'').toLowerCase(); return l.includes('robe')?'🥼':l.includes('panzer')?'🛡️':'👕'; }
 function pickByWeights(weights) { let t=0; for(let k in weights) t+=weights[k]; let r=Math.random()*t; for(let k in weights){r-=weights[k]; if(r<=0) return k;} }
-function calculateSellValue(val, rar, type) { const base = type === 'weapon' ? 2.5 : 2.0; const m = { 'r-common':1, 'r-rare':1.5, 'r-shop':2, 'r-epic':2.5, 'r-legendary':4, 'r-artefact':5 }[rar] || 1; return Math.floor((val * base * m) * (1 + val * 0.02)); }
-function calculateShardValue(rar) { return { 'r-common':1, 'r-rare':3, 'r-shop':2, 'r-epic':10, 'r-legendary':25, 'r-artefact':50 }[rar] || 1; }
-function rollRarity(chestType) { const r = Math.random() + ((p && p.baseLuck) ? p.baseLuck * 0.001 : 0); if (chestType === 'wooden') { return r>=0.998?'legendary':r>=0.95?'epic':r>=0.75?'rare':'common'; } else if (chestType === 'iron') { return r>=0.995?'legendary':r>=0.9?'epic':r>=0.6?'rare':'common'; } else { return r>=0.99?'legendary':r>=0.85?'epic':r>=0.45?'rare':'common'; } }
+function calculateSellValue(val, rar, type) { const base = type === 'weapon' ? 2.5 : 2.0; const m = { 'r-common':1, 'r-rare':1.5, 'r-shop':2, 'r-epic':2.5, 'r-legendary':4, 'r-mythic':6, 'r-artefact':5 }[rar] || 1; return Math.floor((val * base * m) * (1 + val * 0.02)); }
+function calculateShardValue(rar) { return { 'r-common':1, 'r-rare':3, 'r-shop':2, 'r-epic':10, 'r-legendary':25, 'r-mythic':40, 'r-artefact':50 }[rar] || 1; }
+function rollRarity(chestType) { const r = Math.random() + ((p && p.baseLuck) ? p.baseLuck * 0.001 : 0); if (chestType === 'wooden') { return r>=0.9995?'mythic':r>=0.998?'legendary':r>=0.95?'epic':r>=0.75?'rare':'common'; } else if (chestType === 'iron') { return r>=0.999?'mythic':r>=0.995?'legendary':r>=0.9?'epic':r>=0.6?'rare':'common'; } else { return r>=0.997?'mythic':r>=0.99?'legendary':r>=0.85?'epic':r>=0.45?'rare':'common'; } }
 function discover(type, name) { if(!state.discovery[type].includes(name)) { state.discovery[type].push(name); evaluateAchievements(); } }
 function switchTab(tabId, element) { document.querySelectorAll('.wd-tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.wd-tab-content').forEach(c => c.classList.remove('active')); if(element) element.classList.add('active'); $(tabId).classList.add('active'); if(tabId === 'wd-tab-inv') renderInventoryList(state.tab); if(tabId === 'wd-tab-skills') renderSkills(); if(tabId === 'wd-tab-quests') renderQuests(); if(tabId === 'wd-tab-index') renderIndexList('weapons'); if(tabId === 'wd-tab-hero') renderHeroBook(); }
 function showToast(msg) { const t = document.createElement('div'); t.textContent = msg; t.style.cssText = "position:absolute; top: 120px; left: 50%; transform: translateX(-50%); background: rgba(30,58,138,0.95); border: 2px solid var(--mp-glow); color: #fff; padding: 12px 25px; border-radius: 6px; z-index: 1000; font-family: 'Cinzel', serif; font-size: 1rem; animation: wdFadeIn 0.3s ease-out; box-shadow: 0 10px 25px rgba(0,0,0,0.9); pointer-events: none; text-shadow: 1px 1px 2px #000;"; $('wd-wrapper').appendChild(t); setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.6s'; setTimeout(() => t.remove(), 600); }, 4500); }
@@ -538,7 +697,7 @@ const AFFIX_TYPES = ['atk', 'def', 'crit', 'dodge', 'luck'];
 function generateAffix(rarity) {
    if (Math.random() > 0.3) return null; 
    let type = AFFIX_TYPES[rand(0, AFFIX_TYPES.length-1)];
-   let mult = rarity === 'r-legendary' ? 3 : (rarity === 'r-epic' ? 2 : 1);
+   let mult = rarity === 'r-mythic' ? 4 : (rarity === 'r-legendary' ? 3 : (rarity === 'r-epic' ? 2 : 1));
    let val, label;
    if (type === 'atk') { val = rand(1,3)*mult; label = `+${val} ATK`; }
    if (type === 'def') { val = rand(1,2)*mult; label = `+${val} RÜS`; }
@@ -782,7 +941,7 @@ function craftItem(inRarity, outRarityEnum, shardCost) {
     let rewardText, rewardClass;
     
     let pool, name, val, itemObj; let rarity = outRarityEnum; let rKey = 'r-' + rarity;
-    const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
+    const rarityMult = rarity==='mythic'?3.2 : rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
     if (chosenCat === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * 1.2 * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); }
     else if (chosenCat === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * 1.2 * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); }
     else if (chosenCat === 'helm') { pool = HELM_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(1, 4) + p.lvl * 0.5) * 1.2 * rarityMult); itemObj = { id: makeId('h'), type:'helm', name, val, rarity: rKey, sell: calculateSellValue(val, rKey, 'armor') }; p.inv.helms.push(itemObj); discover('helms', name); }
@@ -1153,7 +1312,7 @@ function chestRewardVisualClass(rewardText, rewardClass='') { const text = (rewa
 function skipChestAnimation() { isSkippingChest = true; }
 async function playChestOpeningAnimation(type, results) {
   const overlay = $('wd-chest-open-overlay'); const container = $('wd-chest-open-container'); const def = CHEST_DEFS[type]; isSkippingChest = false;
-  const filler = [ {title:'Rostiges Schwert', sub:'Gewöhnlich', cls:'r-common'}, {title:'Stabile Klinge', sub:'Selten', cls:'r-rare'}, {title:'Arkantrank', sub:'Mana', cls:'reward-mana'}, {title:'Heiltrank', sub:'Leben', cls:'reward-potion'}, {title:'Königsreif', sub:'Episch', cls:'r-epic'}, {title:'Goldschatz', sub:'Gold', cls:'reward-gold'}, {title:'Götterklinge', sub:'Legendär', cls:'r-legendary'} ];
+  const filler = [ {title:'Rostiges Schwert', sub:'Gewöhnlich', cls:'r-common'}, {title:'Stabile Klinge', sub:'Selten', cls:'r-rare'}, {title:'Arkantrank', sub:'Mana', cls:'reward-mana'}, {title:'Heiltrank', sub:'Leben', cls:'reward-potion'}, {title:'Königsreif', sub:'Episch', cls:'r-epic'}, {title:'Goldschatz', sub:'Gold', cls:'reward-gold'}, {title:'Götterklinge', sub:'Legendär', cls:'r-legendary'}, {title:'Sternensiegel', sub:'Mytisch', cls:'r-mythic'} ];
   container.innerHTML = ''; const tracks = []; const winnerEls = []; const resultEls = []; const totalItems = 75; const winnerIndex = 65;
   results.forEach((res, index) => {
     const rewardText = res.rewardText; const rewardClass = res.rewardClass; const rewardVisual = chestRewardVisualClass(rewardText, rewardClass); const card = document.createElement('div'); card.className = 'wd-chest-open-card';
@@ -1172,7 +1331,7 @@ function generateChestReward(type) {
   const def = CHEST_DEFS[type]; let rewardText = "", rewardClass = ""; const category = pickByWeights(def.weights);
   if (['weapon', 'armor', 'helm', 'accessory'].includes(category)) { 
       const rarity = rollRarity(type); let pool, name, val, itemObj;
-      const rarityMult = rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
+      const rarityMult = rarity==='mythic'?3.2 : rarity==='legendary'?2.5 : rarity==='epic'?1.8 : rarity==='rare'?1.3 : 1;
       
       if (category === 'weapon') { pool = WEAPON_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(4, 10) + p.lvl * 1.5) * def.rewardMult * rarityMult); itemObj = { id: makeId('w'), type:'weapon', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'weapon') }; p.inv.weapons.push(itemObj); discover('weapons', name); if (rarity === 'legendary') p.metaStats.legendaryFound++; }
       else if (category === 'armor') { pool = ARMOR_POOLS[p.cls][rarity]; name = pool[rand(0, pool.length-1)]; val = Math.floor((rand(2, 6) + p.lvl) * def.rewardMult * rarityMult); itemObj = { id: makeId('a'), type:'armor', name, val, rarity: 'r-'+rarity, sell: calculateSellValue(val, 'r-'+rarity, 'armor') }; p.inv.armors.push(itemObj); discover('armors', name); if (rarity === 'legendary') p.metaStats.legendaryFound++; }
@@ -1187,7 +1346,7 @@ function generateChestReward(type) {
   else { const g = Math.floor(rand(50, 150) * def.rewardMult); p.gold += g; p.metaStats.goldEarned += g; rewardText = `${g} Gold`; rewardClass = 'reward-gold'; } return { rewardText, rewardClass };
 }
 async function openChest(type, count = 1) { if(p.inv.chests[type] < count || state.lock || state.enemy) return; state.lock = true; p.inv.chests[type] -= count; let results = []; for(let i=0; i<count; i++) { progressQuest('chest'); results.push(generateChestReward(type)); } p.metaStats.chestsOpened += count; evaluateAchievements(); updateHUD(); renderInventoryList('consumables'); await playChestOpeningAnimation(type, results); if (count === 1) { log(`Kiste geöffnet: ${results[0].rewardText}`, "good"); } else { log(`${count} Kisten geöffnet!`, "good"); } state.lock = false; renderInventoryList('consumables'); }
-function rarityLabel(r) { const labels = { common: 'Gewöhnlich', rare: 'Selten', epic: 'Episch', legendary: 'Legendär' }; return labels[r] || r; }
+function rarityLabel(r) { const labels = { common: 'Gewöhnlich', rare: 'Selten', epic: 'Episch', legendary: 'Legendär', mythic: 'Mytisch' }; return labels[r] || r; }
 
 function renderHeroBook() {
   const container = $('wd-hero-book');
