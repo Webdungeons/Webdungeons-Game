@@ -13,11 +13,12 @@
     --legendary: #fbbf24; --mythic: #a21caf; --artefact: #f43f5e; --shop: #34d399;
   }
   #wd-wrapper, #wd-wrapper * { box-sizing: border-box; margin: 0; padding: 0; }
-  #wd-wrapper { font-family: 'Lora', serif; background-color: var(--bg); color: var(--text-main); height: 800px; width: 100%; display: flex; overflow: hidden; font-size: 15px; position: relative; background: radial-gradient(circle at center, rgba(17,16,21,1) 0%, rgba(0,0,0,1) 100%); }
+  body { margin: 0; background: var(--bg); }
+  #wd-wrapper { font-family: 'Lora', serif; background-color: var(--bg); color: var(--text-main); height: 100vh; min-height: 800px; width: 100%; display: flex; overflow: hidden; font-size: 15px; position: relative; background: radial-gradient(circle at center, rgba(17,16,21,1) 0%, rgba(0,0,0,1) 100%); }
   #wd-wrapper h1, #wd-wrapper h2, #wd-wrapper h3, #wd-wrapper h4, #wd-wrapper .btn-main-text, #wd-wrapper .tab-btn { font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 1px; }
   #wd-wrapper ::-webkit-scrollbar { width: 8px; } #wd-wrapper ::-webkit-scrollbar-track { background: #000; border-left: 1px solid var(--border); } #wd-wrapper ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; } #wd-wrapper ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
-  #wd-app { display: flex; width: 100%; height: 100%; box-shadow: inset 0 0 100px #000; }
-  #wd-sidebar-left { width: 300px; background: linear-gradient(to right, #0a0a0c, var(--panel)); border-right: 3px ridge var(--border); display: flex; flex-direction: column; padding: 25px 20px; z-index: 10; box-shadow: 10px 0 20px rgba(0,0,0,0.8); position:relative; }
+  #wd-app { display: flex; flex-direction: column; width: 100%; height: 100%; box-shadow: inset 0 0 100px #000; position: relative; }
+  #wd-sidebar-left { position: absolute; top: 12px; left: 12px; width: min(380px, calc(100% - 24px)); max-height: min(46vh, 420px); overflow-y: auto; background: linear-gradient(to right, rgba(10,10,12,0.95), rgba(17,16,21,0.9)); border: 2px ridge var(--border); border-radius: 6px; display: flex; flex-direction: column; padding: 12px 14px; z-index: 24; box-shadow: 0 10px 20px rgba(0,0,0,0.8); }
   
   .wd-hero-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
   .wd-hero-avatar { width: 65px; height: 65px; border-radius: 8px; background: #000; border: 2px solid var(--accent); display: grid; place-items: center; font-size: 2.2rem; box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2), 0 0 10px rgba(0,0,0,0.8); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
@@ -35,9 +36,9 @@
   #wd-status-effects { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; min-height: 24px; }
   .wd-effect-chip { font-family: 'Cinzel', serif; font-size: 0.7rem; font-weight: bold; padding: 4px 10px; border-radius: 2px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 2px 4px rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 0.5px;}
   
-  #wd-main-stage { flex: 1; display: flex; flex-direction: column; position: relative; }
+  #wd-main-stage { flex: 1; display: flex; flex-direction: column; position: relative; padding-bottom: 170px; }
   
-  #wd-visual-arena { flex: 0.5; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; border-bottom: 4px ridge var(--border); box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8); transition: background 1s ease; background: radial-gradient(circle at 50% 70%, rgba(200, 100, 30, 0.15) 0%, rgba(0,0,0,0.95) 70%); }
+  #wd-visual-arena { flex: 0 0 70%; min-height: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; border-bottom: 4px ridge var(--border); box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8); transition: background 1s ease; background: radial-gradient(circle at 50% 70%, rgba(200, 100, 30, 0.15) 0%, rgba(0,0,0,0.95) 70%); }
   @keyframes wdBossPulseArena { 0% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(153, 27, 27, 0.2); } 100% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8), inset 0 0 80px rgba(239, 68, 68, 0.4); } }
   .wd-arena-boss { animation: wdBossPulseArena 2s infinite alternate !important; }
   
@@ -53,7 +54,7 @@
   .wd-floor-intro-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Cinzel', serif; font-size: 4rem; color: var(--accent); font-weight: bold; text-shadow: 0 0 30px rgba(212,175,55,0.6), 0 5px 10px #000; z-index: 20; pointer-events: none; opacity: 0; animation: wdFloorIntro 3.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; white-space: nowrap; }
 
   .wd-combatant-hp { margin-top: 15px; background: rgba(0,0,0,0.8); padding: 6px 15px; border-radius: 4px; border: 1px ridge var(--border); font-weight: bold; font-family: 'Cinzel', serif; letter-spacing: 1px; color: var(--hp-glow); box-shadow: 0 5px 15px rgba(0,0,0,0.9); }
-  #wd-action-panel { padding: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; background: rgba(10,10,12,0.6); max-height: 280px; overflow-y: auto; box-shadow: inset 0 20px 20px -20px rgba(0,0,0,0.8); transition: all 0.3s ease; }
+  #wd-action-panel { position: absolute; left: 0; right: 0; bottom: 0; padding: 15px 20px calc(15px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; background: rgba(10,10,12,0.95); min-height: 150px; max-height: 170px; overflow-y: auto; border-top: 3px ridge var(--border); box-shadow: 0 -12px 24px rgba(0,0,0,0.8), inset 0 20px 20px -20px rgba(0,0,0,0.8); transition: all 0.3s ease; z-index: 25; }
   
   .wd-btn { background: linear-gradient(180deg, #242228 0%, #111015 100%); border: 2px ridge var(--border-light); color: var(--text-main); padding: 14px 10px; border-radius: 4px; cursor: pointer; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.05); }
   .wd-btn:hover:not(:disabled) { background: linear-gradient(180deg, #2c2a32 0%, #1a181f 100%); border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.15), inset 0 1px 1px rgba(255,255,255,0.1); color: #fff; }
@@ -62,11 +63,11 @@
   .wd-btn-main-text { font-size: 1.05rem; text-shadow: 1px 1px 2px #000; } 
   .wd-btn-sub-text { font-family: 'Lora', serif; font-size: 0.75rem; color: var(--text-muted); font-style: italic; }
   
-  #wd-log-container { flex: 0.5; padding: 20px 25px; overflow-y: auto; background: rgba(5,5,5,0.85); border-top: 3px ridge var(--border); font-family: 'Courier Prime', 'Consolas', monospace; line-height: 1.6; font-size: 0.95rem; box-shadow: inset 0 0 30px #000; }
+  #wd-log-container { flex: 1 1 auto; padding: 16px 25px; overflow-y: auto; background: rgba(5,5,5,0.88); border-top: 3px ridge var(--border); font-family: 'Courier Prime', 'Consolas', monospace; line-height: 1.6; font-size: 0.9rem; box-shadow: inset 0 0 30px #000; }
   .wd-log-entry { margin-bottom: 8px; animation: wdFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 4px; border-bottom: 1px dotted rgba(255,255,255,0.05); text-shadow: 1px 1px 1px #000;}
   .wd-log-info { color: var(--text-main); } .wd-log-good { color: var(--xp-glow); font-weight: bold; } .wd-log-bad { color: var(--hp-glow); font-weight: bold; } .wd-log-warn { color: var(--accent); } .wd-log-magic { color: #d8b4e2; font-style: italic; text-shadow: 0 0 5px rgba(192, 132, 252, 0.4); }
   
-  #wd-sidebar-right { width: 380px; background: linear-gradient(to left, #0a0a0c, var(--panel)); border-left: 3px ridge var(--border); display: flex; flex-direction: column; z-index: 10; box-shadow: -10px 0 20px rgba(0,0,0,0.8); }
+  #wd-sidebar-right { position: absolute; top: 12px; right: 12px; width: min(420px, calc(100% - 24px)); max-height: min(58vh, 620px); background: linear-gradient(to left, rgba(10,10,12,0.95), rgba(17,16,21,0.92)); border: 2px ridge var(--border); border-radius: 6px; display: flex; flex-direction: column; z-index: 22; box-shadow: -10px 10px 20px rgba(0,0,0,0.8); overflow: hidden; }
   .wd-tabs { display: flex; gap: 4px; padding: 12px 12px 0 12px; background: rgba(0,0,0,0.8); border-bottom: 3px ridge var(--border); position: relative; }
   .wd-tab-btn { flex: 1; padding: 12px 4px; background: linear-gradient(180deg, #111015 0%, #050505 100%); border: 1px ridge var(--border); border-bottom: none; border-radius: 6px 6px 0 0; color: var(--text-muted); cursor: pointer; font-size: 0.7rem; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-transform: uppercase; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05); }
   .wd-tab-btn:hover { color: var(--text-main); background: linear-gradient(180deg, #1c1a22 0%, #0a0a0c 100%); border-color: var(--border-light); }
@@ -175,12 +176,19 @@
   .wd-aq-header { font-family: 'Cinzel', serif; color: var(--accent); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; display: inline-block; border-bottom: 1px solid var(--accent); padding-bottom: 4px; }
   .wd-active-quest-box.ready .wd-aq-header { color: var(--xp-glow); border-color: var(--xp-glow); }
 
+
+  #wd-combat-hud { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: space-between; pointer-events: none; padding: 0 24px; z-index: 18; }
+  .wd-hud-panel { width: min(320px, 42vw); background: rgba(0,0,0,0.7); border: 1px solid var(--border-light); border-radius: 6px; padding: 8px 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.7); backdrop-filter: blur(2px); }
+  .wd-hud-panel.enemy { margin-left: auto; }
+  .wd-hud-name { font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; }
+  .wd-hud-panel.enemy .wd-hud-name { text-align: right; }
   @media (max-width: 900px) {
     #wd-wrapper { height: auto; min-height: 800px; }
-    #wd-app { flex-direction: column; overflow: auto; }
-    #wd-sidebar-left, #wd-sidebar-right { width: 100%; border: none; border-bottom: 3px ridge var(--border); box-shadow: none; }
-    #wd-main-stage { min-height: 60vh; }
-    #wd-action-panel { grid-template-columns: repeat(2, 1fr); }
+    #wd-sidebar-left, #wd-sidebar-right { position: static; width: 100%; max-height: none; border-radius: 0; }
+    #wd-main-stage { min-height: 60vh; padding-bottom: 220px; }
+    #wd-combat-hud { position: static; padding: 10px 10px 0; gap: 10px; }
+    .wd-hud-panel { width: 50%; }
+    #wd-action-panel { grid-template-columns: repeat(2, 1fr); min-height: 190px; max-height: 220px; }
   }
 
   @keyframes wdErrorShake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); border-color: var(--hp-glow); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); color: var(--hp-glow); } 40%, 80% { transform: translateX(5px); border-color: var(--hp-glow); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); color: var(--hp-glow); } }
@@ -255,6 +263,18 @@
     <main id="wd-main-stage">
       <div id="wd-visual-arena">
         <div id="wd-arena-title">Web Dungeons</div>
+        <div id="wd-combat-hud">
+          <div class="wd-hud-panel">
+            <div class="wd-hud-name" id="wd-ui-player-hud-name">Held</div>
+            <div class="wd-stat-bar-container" style="margin-bottom:8px"><div class="wd-stat-bar-label"><span>HP</span><span id="wd-ui-player-hud-hp-text">0 / 0</span></div><div class="wd-bar-bg"><div class="wd-bar-fill wd-fill-hp" id="wd-ui-player-hud-hp-bar" style="width:0%"></div></div></div>
+            <div class="wd-stat-bar-container" style="margin-bottom:0"><div class="wd-stat-bar-label"><span>MP</span><span id="wd-ui-player-hud-mp-text">0 / 0</span></div><div class="wd-bar-bg"><div class="wd-bar-fill wd-fill-mp" id="wd-ui-player-hud-mp-bar" style="width:0%"></div></div></div>
+          </div>
+          <div class="wd-hud-panel enemy">
+            <div class="wd-hud-name" id="wd-ui-enemy-name">Kein Gegner</div>
+            <div class="wd-stat-bar-container" style="margin-bottom:8px"><div class="wd-stat-bar-label"><span>HP</span><span id="wd-ui-enemy-hud-hp-text">0 / 0</span></div><div class="wd-bar-bg"><div class="wd-bar-fill wd-fill-hp" id="wd-ui-enemy-hud-hp-bar" style="width:0%"></div></div></div>
+            <div class="wd-stat-bar-container" style="margin-bottom:0"><div class="wd-stat-bar-label"><span>MP</span><span id="wd-ui-enemy-hud-mp-text">0 / 0</span></div><div class="wd-bar-bg"><div class="wd-bar-fill wd-fill-mp" id="wd-ui-enemy-hud-mp-bar" style="width:0%"></div></div></div>
+          </div>
+        </div>
         <div class="wd-combat-stage" id="wd-combat-stage">
           <div class="wd-combatant"><div class="wd-combatant-sprite" id="wd-sprite-hero">🧙</div></div>
           <div class="wd-combatant">
@@ -723,6 +743,33 @@ function generateAffix(rarity) {
    return { type, val, label };
 }
 
+function updateEnemyHUD() {
+  const eName = $('wd-ui-enemy-name');
+  const eHpText = $('wd-ui-enemy-hud-hp-text'); const eHpBar = $('wd-ui-enemy-hud-hp-bar');
+  const eMpText = $('wd-ui-enemy-hud-mp-text'); const eMpBar = $('wd-ui-enemy-hud-mp-bar');
+  if (!eName || !eHpText || !eHpBar || !eMpText || !eMpBar) return;
+
+  if (state.enemy) {
+    const hp = Math.max(0, state.enemy.h);
+    const maxH = Math.max(1, state.enemy.maxH || hp || 1);
+    const maxM = Math.max(1, state.enemy.maxM || state.enemy.maxH || 1);
+    const mp = Math.max(0, Math.min(maxM, state.enemy.m ?? maxM));
+    eName.textContent = state.enemy.n;
+    eHpText.textContent = `${hp} / ${maxH}`;
+    eHpBar.style.width = `${(hp / maxH) * 100}%`;
+    eMpText.textContent = `${mp} / ${maxM}`;
+    eMpBar.style.width = `${(mp / maxM) * 100}%`;
+    $('wd-ui-enemy-hp').textContent = `HP: ${hp}/${maxH}`;
+  } else {
+    eName.textContent = 'Kein Gegner';
+    eHpText.textContent = '0 / 0';
+    eHpBar.style.width = '0%';
+    eMpText.textContent = '0 / 0';
+    eMpBar.style.width = '0%';
+    $('wd-ui-enemy-hp').textContent = 'HP: 0/0';
+  }
+}
+
 function updateHUD() {
   if (!p) return;
   ensureMetaSystems();
@@ -752,6 +799,11 @@ function updateHUD() {
   $('wd-ui-name').textContent = p.name; $('wd-ui-class-level').textContent = `${p.cls} · Level ${p.lvl}`; $('wd-ui-avatar').textContent = CLASSES[p.cls].avatar;
   $('wd-ui-hp-text').textContent = `${Math.max(0, p.hp)} / ${p.maxHp}`; $('wd-ui-hp-bar').style.width = `${Math.max(0, (p.hp/p.maxHp)*100)}%`;
   $('wd-ui-mp-text').textContent = `${p.mp} / ${p.maxMp}`; $('wd-ui-mp-bar').style.width = `${(p.mp/p.maxMp)*100}%`;
+  $('wd-ui-player-hud-name').textContent = `${p.name} · Lvl ${p.lvl}`;
+  $('wd-ui-player-hud-hp-text').textContent = `${Math.max(0, p.hp)} / ${p.maxHp}`;
+  $('wd-ui-player-hud-hp-bar').style.width = `${Math.max(0, (p.hp/p.maxHp)*100)}%`;
+  $('wd-ui-player-hud-mp-text').textContent = `${p.mp} / ${p.maxMp}`;
+  $('wd-ui-player-hud-mp-bar').style.width = `${(p.mp/p.maxMp)*100}%`;
   $('wd-ui-xp-text').textContent = `${p.xp} / ${p.maxXp}`; $('wd-ui-xp-bar').style.width = `${(p.xp/p.maxXp)*100}%`;
   
   $('wd-ui-atk').textContent = totalAtk; 
@@ -773,6 +825,8 @@ function updateHUD() {
   if(p.fx.shield > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--rare)">Schild (${p.fx.shield})</span>`; if(p.fx.dodge > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--xp-glow)">Waldläufer-Ausw. (${p.fx.dodge})</span>`; if(p.fx.combo > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--hp-glow)">Combo (${p.fx.combo})</span>`; if(p.fx.bossBuff) fxHtml += `<span class="wd-effect-chip" style="color:var(--gold)">Boss-Segen</span>`;
   if(p.fx.poison > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--hp-glow); border-color:var(--hp-glow)">Vergiftet (${p.fx.poison})</span>`; if(p.fx.stun > 0) fxHtml += `<span class="wd-effect-chip" style="color:#d4d4d8; border-color:#d4d4d8">Betäubt (${p.fx.stun})</span>`; if(p.fx.weak > 0) fxHtml += `<span class="wd-effect-chip" style="color:#fcd34d; border-color:#fcd34d">Geschwächt (${p.fx.weak})</span>`; if(p.fx.regen > 0) fxHtml += `<span class="wd-effect-chip" style="color:var(--xp-glow); border-color:var(--xp-glow)">Regeneration (${p.fx.regen})</span>`;
   $('wd-status-effects').innerHTML = fxHtml;
+
+  updateEnemyHUD();
 
   const eFxContainer = $('wd-enemy-effects');
   if (eFxContainer) {
@@ -818,7 +872,7 @@ function showCombatStage(show) {
   if (state.dungeon && state.dungeon.active) { arena.style.background = DUNGEONS[state.dungeon.type].bg; } else if (state.area) { arena.style.background = AREAS[state.area].bg; } else { arena.style.background = "radial-gradient(circle at 50% 70%, rgba(20, 20, 25, 0.2) 0%, rgba(0,0,0,0.95) 70%)"; }
 
   if(show && state.enemy) {
-    $('wd-ui-enemy-hp').textContent = `HP: ${Math.max(0, state.enemy.h)}/${state.enemy.maxH}`;
+    updateEnemyHUD();
     let el = $('wd-sprite-enemy'); el.textContent = state.enemy.s; el.classList.remove('wd-enemy-dead'); 
     if(state.enemy.boss && state.enemy.phase === 2) { el.classList.add('wd-boss-phase-2'); arena.classList.add('wd-arena-boss'); } else { el.classList.remove('wd-boss-phase-2'); arena.classList.remove('wd-arena-boss'); }
     $('wd-sprite-hero').textContent = CLASSES[p.cls].avatar;
@@ -1065,7 +1119,7 @@ function spawnEnemy(mult, forceBoss=false) {
   const h = Math.floor(t.h * diff * mult * levelScale); const a = Math.floor(t.a * diff * mult * levelScale); let xp = Math.floor((t.xp || 20) * Math.pow(diff, 1.3) * mult * (isBoss ? 5 : (isElite ? 2.5 : 1)) * (1 + (p.lvl * 0.15)));
   
   state.combatStats = { dmgDealt: 0, dmgTaken: 0, dodges: 0, crits: 0 };
-  state.enemy = { n: (isBoss?"BOSS: ":"")+t.n, s: t.s, h, maxH: h, a, xp, boss: isBoss, elite: isElite, phase: 1, lootMult, fx: { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }, cooldowns: {}, abilities: [] };
+  state.enemy = { n: (isBoss?"BOSS: ":"")+t.n, s: t.s, h, maxH: h, m: 100, maxM: 100, a, xp, boss: isBoss, elite: isElite, phase: 1, lootMult, fx: { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }, cooldowns: {}, abilities: [] };
   if(t.lore) state.enemy.lore = t.lore;
 
   let areaKey = state.area || 'Dungeon'; let abilityPool = AREA_ABILITIES[areaKey] || AREA_ABILITIES['Dungeon'];
@@ -1143,7 +1197,9 @@ async function doAttack(type) {
 
   visualHit('hero', 'right'); await sleep(200); playSound(isCrit ? 'crit' : 'hit');
   state.combatStats.dmgDealt += dmg; if (isCrit) state.combatStats.crits++;
-  state.enemy.h -= dmg; visualDamage('enemy', dmg, isCrit); log(`Treffer für ${dmg}! ${isCrit?'(Krit)':''}`, isCrit?'warn':'info');
+  state.enemy.h -= dmg;
+  state.enemy.m = Math.max(0, Math.min(state.enemy.maxM || 100, (state.enemy.m ?? (state.enemy.maxM || 100)) - (type === 'ult' ? 18 : type === 'skill' ? 10 : 6)));
+  visualDamage('enemy', dmg, isCrit); log(`Treffer für ${dmg}! ${isCrit?'(Krit)':''}`, isCrit?'warn':'info');
   await checkBossPhase();
   if (state.enemy.mutator && state.enemy.mutator.id === 'thorns' && state.enemy.h > 0) { let thornsDmg = Math.max(1, Math.floor(dmg * 0.1)); p.hp -= thornsDmg; state.combatStats.dmgTaken += thornsDmg; visualDamage('hero', thornsDmg, false); log(`Dornenrüstung wirft ${thornsDmg} Schaden zurück!`, "bad"); }
   if(p.eq.trinket && p.eq.trinket.effect === 'lifesteal') { p.hp = Math.min(p.maxHp, p.hp + Math.floor(dmg * 0.2)); }
@@ -1162,7 +1218,7 @@ async function enemyTurn() {
   let atkMultiplier = state.enemy.fx.atkBuff || 1.0; state.enemy.fx.atkBuff = 1.0; let skipAttack = false;
 
   if (chosenAbility) {
-      let ab = ENEMY_ABILITIES[chosenAbility]; state.enemy.cooldowns[chosenAbility] = ab.cd; log(`${state.enemy.n} nutzt ${ab.name}!`, "bad");
+      let ab = ENEMY_ABILITIES[chosenAbility]; state.enemy.cooldowns[chosenAbility] = ab.cd; state.enemy.m = Math.max(0, (state.enemy.m ?? state.enemy.maxM) - 16); log(`${state.enemy.n} nutzt ${ab.name}!`, "bad");
       if (ab.type === 'buff') { state.enemy.fx.atkBuff = 1.5; playSound('magic'); skipAttack = true; } 
       else if (ab.type === 'heal') { let healAmt = Math.floor(state.enemy.maxH * 0.25); state.enemy.h = Math.min(state.enemy.maxH, state.enemy.h + healAmt); playSound('heal'); visualDamage('enemy', -healAmt, false); skipAttack = true; } 
       else if (ab.type === 'poison') { p.fx.poison = 3; p.fx.poisonDmg = Math.max(1, Math.floor(state.enemy.a * 0.3)); playSound('hurt'); atkMultiplier = 0.5; } 
@@ -1176,7 +1232,7 @@ async function enemyTurn() {
       let def = p.baseDef + (p.eq.armor ? p.eq.armor.val : 0) + (p.eq.helm ? p.eq.helm.val : 0) + (p.bonusStats ? p.bonusStats.def : 0); if(p.eq.trinket && p.eq.trinket.effect==='armor') def = Math.floor(def * 1.25);
       let mitigation = Math.min(0.85, def / (def + 40)); eDmg = Math.max(1, Math.floor(eDmg * (1 - mitigation)));
       if(p.fx.shield > 0) { eDmg = Math.floor(eDmg * 0.5); p.fx.shield--; }
-      playSound('hurt'); p.hp -= eDmg; visualDamage('hero', eDmg, false); state.combatStats.dmgTaken += eDmg;
+      playSound('hurt'); p.hp -= eDmg; state.enemy.m = Math.min(state.enemy.maxM || 100, (state.enemy.m ?? 0) + 8); visualDamage('hero', eDmg, false); state.combatStats.dmgTaken += eDmg;
       let hitStr = chosenAbility ? `mit ${ENEMY_ABILITIES[chosenAbility].name}` : `trifft`; log(`${state.enemy.n} ${hitStr} für ${eDmg}.`, "bad");
       if (!chosenAbility && Math.random() < 0.15 && p.hp > 0) {
           let eff = ['poison', 'weak', 'stun'][Math.floor(Math.random() * 3)];
@@ -1262,7 +1318,7 @@ function usePotion(type) {
 
 function visualHit(target, dir) { const el = $(`wd-sprite-${target}`); if(!el) return; el.classList.remove('wd-anim-atk-right', 'wd-anim-atk-left'); void el.offsetWidth; el.classList.add(dir === 'right' ? 'wd-anim-atk-right' : 'wd-anim-atk-left'); }
 function visualDamage(target, amt, crit) {
-  const el = $(`wd-sprite-${target}`); if(target === 'enemy') $('wd-ui-enemy-hp').textContent = `HP: ${Math.max(0, state.enemy.h)}/${state.enemy.maxH}`;
+  const el = $(`wd-sprite-${target}`); if(target === 'enemy') updateEnemyHUD();
   if(!el) return; el.classList.remove('wd-anim-hurt'); void el.offsetWidth; el.classList.add('wd-anim-hurt');
   if (amt !== 0) {
     const isHeal = amt < 0; const displayAmt = isHeal ? `+${Math.abs(amt)}` : `-${amt}${crit?'!':''}`; const color = isHeal ? 'var(--xp-glow)' : (crit ? 'var(--gold)' : 'var(--hp-glow)');
@@ -1535,7 +1591,7 @@ function migrateSave(player, gameState, saveVersion = 1) {
   if (!player.metaStats) player.metaStats = { kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, legendaryWeaponsFound: 0, rareWeaponsFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 };
   player.metaStats = Object.assign({ kills: 0, bossKills: 0, critHits: 0, dodges: 0, legendaryFound: 0, legendaryWeaponsFound: 0, rareWeaponsFound: 0, artefactsFound: 0, chestsOpened: 0, itemsDismantled: 0, shardsEarned: 0, goldEarned: 0, talentsSpent: 0, questsCompleted: 0, prestiges: 0, maxDungeonFloor: 1 }, player.metaStats);
   if (gameState.firstCombatHintShown === undefined) gameState.firstCombatHintShown = true;
-  if (gameState.enemy) { if(gameState.enemy.fx === undefined) gameState.enemy.fx = { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }; if(gameState.enemy.cooldowns === undefined) gameState.enemy.cooldowns = {}; if(gameState.enemy.abilities === undefined) gameState.enemy.abilities = []; }
+  if (gameState.enemy) { if(gameState.enemy.fx === undefined) gameState.enemy.fx = { poison:0, poisonDmg:0, stun:0, weak:0, regen:0, regenHeal:0, atkBuff:1.0 }; if(gameState.enemy.cooldowns === undefined) gameState.enemy.cooldowns = {}; if(gameState.enemy.abilities === undefined) gameState.enemy.abilities = []; if(gameState.enemy.maxM === undefined) gameState.enemy.maxM = 100; if(gameState.enemy.m === undefined) gameState.enemy.m = gameState.enemy.maxM; }
 
   return gameState;
 }
