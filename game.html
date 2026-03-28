@@ -39,7 +39,7 @@
   #wd-status-effects { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; min-height: 20px; }
   .wd-effect-chip { font-family: 'Cinzel', serif; font-size: 0.7rem; font-weight: bold; padding: 4px 10px; border-radius: 2px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 2px 4px rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 0.5px;}
   
-  #wd-main-stage { flex: 1; display: flex; flex-direction: column; position: relative; padding-bottom: 170px; min-height: 0; }
+  #wd-main-stage { --wd-log-panel-width: min(520px, 34vw); flex: 1; display: flex; flex-direction: column; position: relative; padding-bottom: 170px; min-height: 0; }
   
   #wd-visual-arena { flex: 0 0 70%; min-height: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; border-bottom: 4px ridge var(--border); box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8); transition: background 1s ease; background: radial-gradient(circle at 50% 70%, rgba(200, 100, 30, 0.15) 0%, rgba(0,0,0,0.95) 70%); }
   @keyframes wdBossPulseArena { 0% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(153, 27, 27, 0.2); } 100% { box-shadow: inset 0 -20px 50px rgba(0,0,0,0.8), inset 0 0 80px rgba(239, 68, 68, 0.4); } }
@@ -57,8 +57,8 @@
   .wd-floor-intro-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Cinzel', serif; font-size: 4rem; color: var(--accent); font-weight: bold; text-shadow: 0 0 30px rgba(212,175,55,0.6), 0 5px 10px #000; z-index: 20; pointer-events: none; opacity: 0; animation: wdFloorIntro 3.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; white-space: nowrap; }
 
   .wd-combatant-hp { margin-top: 15px; background: rgba(0,0,0,0.8); padding: 6px 15px; border-radius: 4px; border: 1px ridge var(--border); font-weight: bold; font-family: 'Cinzel', serif; letter-spacing: 1px; color: var(--hp-glow); box-shadow: 0 5px 15px rgba(0,0,0,0.9); }
-  #wd-action-panel { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 24px calc(18px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; background: rgba(10,10,12,0.95); min-height: 190px; max-height: 245px; overflow-y: auto; border-top: 3px ridge var(--border); box-shadow: 0 -12px 24px rgba(0,0,0,0.8), inset 0 20px 20px -20px rgba(0,0,0,0.8); transition: all 0.3s ease; z-index: 25; }
-  #wd-codex-shortcuts { position: absolute; left: 0; right: 0; bottom: 248px; display: flex; gap: 12px; padding: 10px 24px; z-index: 26; }
+  #wd-action-panel { position: absolute; left: 0; right: calc(var(--wd-log-panel-width) + 18px); bottom: 0; padding: 18px 24px calc(18px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; background: rgba(10,10,12,0.95); min-height: 190px; max-height: 245px; overflow-y: auto; border-top: 3px ridge var(--border); box-shadow: 0 -12px 24px rgba(0,0,0,0.8), inset 0 20px 20px -20px rgba(0,0,0,0.8); transition: all 0.3s ease; z-index: 25; }
+  #wd-codex-shortcuts { position: absolute; left: 0; right: calc(var(--wd-log-panel-width) + 18px); bottom: 248px; display: flex; gap: 12px; padding: 10px 24px; z-index: 26; }
   .wd-codex-btn { flex: 1; background: linear-gradient(180deg, #2e2738 0%, #17131f 100%); border: 1px solid rgba(212,175,55,0.28); color: #efe6d4; min-height: 50px; padding: 11px 14px; border-radius: 10px; font-family: 'Cinzel', serif; font-size: 0.92rem; cursor: pointer; transition: all 0.2s; }
   .wd-codex-btn:hover { border-color: var(--accent); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 16px rgba(0,0,0,0.45); }
   
@@ -69,7 +69,7 @@
   .wd-btn-main-text { font-size: 1.05rem; text-shadow: 1px 1px 2px #000; } 
   .wd-btn-sub-text { font-family: 'Lora', serif; font-size: 0.75rem; color: var(--text-muted); font-style: italic; }
   
-  #wd-log-container { flex: 1 1 auto; padding: 16px 25px; overflow-y: auto; background: rgba(5,5,5,0.88); border-top: 3px ridge var(--border); font-family: 'Courier Prime', 'Consolas', monospace; line-height: 1.6; font-size: 0.9rem; box-shadow: inset 0 0 30px #000; }
+  #wd-log-container { position: absolute; top: 52%; right: 12px; width: var(--wd-log-panel-width); bottom: 12px; padding: 14px 16px; overflow-y: auto; background: rgba(5,5,5,0.9); border: 2px ridge var(--border); border-radius: 8px; font-family: 'Courier Prime', 'Consolas', monospace; line-height: 1.55; font-size: 0.88rem; box-shadow: inset 0 0 24px #000, 0 8px 18px rgba(0,0,0,0.6); }
   .wd-log-entry { margin-bottom: 8px; animation: wdFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 4px; border-bottom: 1px dotted rgba(255,255,255,0.05); text-shadow: 1px 1px 1px #000;}
   .wd-log-info { color: var(--text-main); } .wd-log-good { color: var(--xp-glow); font-weight: bold; } .wd-log-bad { color: var(--hp-glow); font-weight: bold; } .wd-log-warn { color: var(--accent); } .wd-log-magic { color: #d8b4e2; font-style: italic; text-shadow: 0 0 5px rgba(192, 132, 252, 0.4); }
   
@@ -202,11 +202,12 @@
     #wd-panel-shell { width: 96vw; height: 84vh; }
     .wd-panel-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .wd-codex-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    #wd-codex-shortcuts { bottom: 270px; padding: 8px 10px; }
     #wd-main-stage { min-height: 60vh; padding-bottom: 260px; }
+    #wd-log-container { position: static; width: auto; height: 180px; border-radius: 0; border-left: none; border-right: none; top: auto; right: auto; bottom: auto; }
+    #wd-codex-shortcuts { left: 0; right: 0; bottom: 270px; padding: 8px 10px; }
     #wd-combat-hud { position: static; padding: 10px 10px 0; gap: 10px; }
     .wd-hud-panel { width: 100%; }
-    #wd-action-panel { grid-template-columns: repeat(2, 1fr); min-height: 240px; max-height: 300px; }
+    #wd-action-panel { left: 0; right: 0; grid-template-columns: repeat(2, 1fr); min-height: 240px; max-height: 300px; }
   }
 
   @keyframes wdErrorShake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); border-color: var(--hp-glow); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); color: var(--hp-glow); } 40%, 80% { transform: translateX(5px); border-color: var(--hp-glow); box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); color: var(--hp-glow); } }
