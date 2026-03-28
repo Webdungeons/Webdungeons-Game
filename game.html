@@ -18,10 +18,10 @@
   #wd-wrapper h1, #wd-wrapper h2, #wd-wrapper h3, #wd-wrapper h4, #wd-wrapper .btn-main-text, #wd-wrapper .tab-btn { font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 1px; }
   #wd-wrapper ::-webkit-scrollbar { width: 8px; } #wd-wrapper ::-webkit-scrollbar-track { background: #000; border-left: 1px solid var(--border); } #wd-wrapper ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; } #wd-wrapper ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
   #wd-app { display: flex; flex-direction: column; width: 100%; height: 100%; box-shadow: inset 0 0 100px #000; position: relative; }
-  #wd-top-hud { display:grid; grid-template-columns: auto 1fr; gap: 14px 16px; padding: 12px; background: linear-gradient(to bottom, rgba(10,10,12,0.95), rgba(17,16,21,0.9)); border-bottom: 2px ridge var(--border); position: relative; z-index: 24; }
+  #wd-top-hud { position: absolute; top: 12px; left: 12px; width: min(420px, calc(100% - 24px)); max-height: min(52vh, 470px); overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 12px; background: linear-gradient(to right, rgba(10,10,12,0.94), rgba(17,16,21,0.9)); border: 2px ridge var(--border); border-radius: 6px; box-shadow: 0 10px 20px rgba(0,0,0,0.8); z-index: 24; }
   .wd-top-hero { display:flex; align-items:center; gap:12px; }
-  .wd-top-bars { display:grid; grid-template-columns: repeat(3,minmax(120px,1fr)); gap:12px; }
-  .wd-top-meta { display:grid; grid-template-columns: repeat(4,minmax(120px,1fr)); gap:10px; grid-column: 1 / -1; align-items: stretch; }
+  .wd-top-bars { display:grid; grid-template-columns: 1fr; gap:8px; }
+  .wd-top-meta { display:grid; grid-template-columns: repeat(2,minmax(100px,1fr)); gap:8px; align-items: stretch; }
 
   .wd-hero-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
   .wd-hero-avatar { width: 65px; height: 65px; border-radius: 8px; background: #000; border: 2px solid var(--accent); display: grid; place-items: center; font-size: 2.2rem; box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2), 0 0 10px rgba(0,0,0,0.8); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
@@ -32,11 +32,11 @@
   .wd-bar-bg { width: 100%; height: 14px; background: #000; border-radius: 3px; overflow: hidden; border: 1px solid #222; box-shadow: inset 0 2px 5px rgba(0,0,0,0.8), 0 1px 1px rgba(255,255,255,0.05); }
   .wd-bar-fill { height: 100%; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: inset 0 -3px 5px rgba(0,0,0,0.4), inset 0 3px 5px rgba(255,255,255,0.2); }
   .wd-fill-hp { background: linear-gradient(90deg, #7f1d1d, var(--hp-glow)); } .wd-fill-mp { background: linear-gradient(90deg, #1e3a8a, var(--mp-glow)); } .wd-fill-xp { background: linear-gradient(90deg, #065f46, var(--xp-glow)); }
-  .wd-quick-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; padding-top: 20px; border-top: 1px solid var(--border); }
-  .wd-q-stat { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 4px; text-align: center; border: 1px ridge var(--border); box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+  .wd-quick-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .wd-q-stat { background: rgba(0,0,0,0.4); padding: 7px; border-radius: 4px; text-align: center; border: 1px ridge var(--border); box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
   .wd-q-stat span { display: block; font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 4px; }
   .wd-q-stat strong { font-size: 1.1rem; text-shadow: 1px 1px 0 #000; }
-  #wd-status-effects { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; min-height: 24px; }
+  #wd-status-effects { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; min-height: 20px; }
   .wd-effect-chip { font-family: 'Cinzel', serif; font-size: 0.7rem; font-weight: bold; padding: 4px 10px; border-radius: 2px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 2px 4px rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 0.5px;}
   
   #wd-main-stage { flex: 1; display: flex; flex-direction: column; position: relative; padding-bottom: 170px; min-height: 0; }
@@ -58,6 +58,9 @@
 
   .wd-combatant-hp { margin-top: 15px; background: rgba(0,0,0,0.8); padding: 6px 15px; border-radius: 4px; border: 1px ridge var(--border); font-weight: bold; font-family: 'Cinzel', serif; letter-spacing: 1px; color: var(--hp-glow); box-shadow: 0 5px 15px rgba(0,0,0,0.9); }
   #wd-action-panel { position: absolute; left: 0; right: 0; bottom: 0; padding: 15px 20px calc(15px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; background: rgba(10,10,12,0.95); min-height: 150px; max-height: 170px; overflow-y: auto; border-top: 3px ridge var(--border); box-shadow: 0 -12px 24px rgba(0,0,0,0.8), inset 0 20px 20px -20px rgba(0,0,0,0.8); transition: all 0.3s ease; z-index: 25; }
+  #wd-codex-shortcuts { position: absolute; left: 0; right: 0; bottom: 170px; display: flex; gap: 8px; padding: 8px 20px; z-index: 26; }
+  .wd-codex-btn { flex: 1; background: rgba(0,0,0,0.8); border: 1px ridge var(--border-light); color: var(--text-main); padding: 8px 10px; border-radius: 4px; font-family: 'Cinzel', serif; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+  .wd-codex-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
   
   .wd-btn { background: linear-gradient(180deg, #242228 0%, #111015 100%); border: 2px ridge var(--border-light); color: var(--text-main); padding: 14px 10px; border-radius: 4px; cursor: pointer; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.05); }
   .wd-btn:hover:not(:disabled) { background: linear-gradient(180deg, #2c2a32 0%, #1a181f 100%); border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.15), inset 0 1px 1px rgba(255,255,255,0.1); color: #fff; }
@@ -190,9 +193,10 @@
   .wd-hud-panel.enemy .wd-hud-name { text-align: right; }
   @media (max-width: 900px) {
     #wd-wrapper { height: auto; min-height: 800px; }
-    #wd-top-hud { grid-template-columns: 1fr; }
-    .wd-top-bars, .wd-top-meta { grid-template-columns: repeat(2, 1fr); }
+    #wd-top-hud { width: calc(100% - 20px); left: 10px; top: 10px; max-height: 40vh; }
+    .wd-top-meta { grid-template-columns: repeat(2, 1fr); }
     #wd-panel-overlay { padding: 10px; }
+    #wd-codex-shortcuts { bottom: 220px; padding: 8px 10px; }
     #wd-main-stage { min-height: 60vh; padding-bottom: 220px; }
     #wd-combat-hud { position: static; padding: 10px 10px 0; gap: 10px; }
     .wd-hud-panel { width: 50%; }
@@ -295,6 +299,11 @@
             <div id="wd-enemy-effects" style="display:flex;justify-content:center;gap:4px;margin-top:5px;flex-wrap:wrap;min-height:20px"></div>
           </div>
         </div>
+      </div>
+      <div id="wd-codex-shortcuts">
+        <button class="wd-codex-btn" onclick="openCodexPanel('inv')">🎒 Inventar</button>
+        <button class="wd-codex-btn" onclick="openCodexPanel('skills')">🧠 Talente</button>
+        <button class="wd-codex-btn" onclick="openCodexPanel('quests')">📜 Quests</button>
       </div>
       <div id="wd-action-panel"></div>
       <div id="wd-log-container"></div>
@@ -899,19 +908,6 @@ function setActions(buttons) {
     btn.onclick = (e) => { if (b.cost !== undefined && b.current !== undefined && b.current < b.cost) { playSound('error'); btn.classList.remove('wd-error-shake'); void btn.offsetWidth; btn.classList.add('wd-error-shake'); return; } if (b.onclick) b.onclick(); };
     btn.innerHTML = `<span class="wd-btn-main-text">${b.label}</span>${b.sub ? `<span class="wd-btn-sub-text">${b.sub}</span>` : ''}`; c.appendChild(btn);
   });
-  if (p) {
-    [
-      { label: '🎒 Inventar', sub: 'Vollbild öffnen', panel: 'inv' },
-      { label: '🧠 Talente', sub: 'Skillbaum anzeigen', panel: 'skills' },
-      { label: '📜 Quests', sub: 'Pakte verwalten', panel: 'quests' }
-    ].forEach(meta => {
-      const btn = document.createElement('button');
-      btn.className = 'wd-btn';
-      btn.onclick = () => openCodexPanel(meta.panel);
-      btn.innerHTML = `<span class="wd-btn-main-text">${meta.label}</span><span class="wd-btn-sub-text">${meta.sub}</span>`;
-      c.appendChild(btn);
-    });
-  }
 }
 
 function showCombatStage(show) {
